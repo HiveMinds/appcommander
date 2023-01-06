@@ -38,7 +38,7 @@ def parse_cli_args() -> argparse.Namespace:
     # Run run on a particular run_settings json file.
     parser.add_argument(
         "-s",
-        "--script",
+        "--script-path",
         action="store",
         type=str,
         help=(
