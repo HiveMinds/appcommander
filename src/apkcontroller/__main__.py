@@ -1,6 +1,7 @@
 """Entry point for this project, runs the project code based on the cli command
 that invokes this script."""
 
+
 from src.apkcontroller.verification.arg_verification import verify_args
 
 from .arg_parser.arg_parser import parse_cli_args
