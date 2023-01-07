@@ -2,6 +2,7 @@
 that invokes this script."""
 
 
+from src.apkcontroller.scripts.org_torproject_android import Apk_script
 from src.apkcontroller.verification.arg_verification import verify_args
 
 from .arg_parser.arg_parser import parse_cli_args
@@ -15,3 +16,4 @@ verify_args(
 process_args(
     args,
 )
+apk_script = Apk_script()

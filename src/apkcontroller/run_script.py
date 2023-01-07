@@ -1,11 +1,12 @@
 """Starts a script to control an app."""
 
-
 from typeguard import typechecked
+
+from src.apkcontroller.scripts.org_torproject_android import Apk_script
 
 
 @typechecked
-def run_script(script: str) -> None:
+def run_script(script: Apk_script) -> None:
     """Runs the incoming script on the phone."""
     # Script folder structure:
     # app_scripts/app_name/version
@@ -32,4 +33,4 @@ def run_script(script: str) -> None:
     # Find button.
     # Click button.
     # Recursively go to next screen.
-    print(script)
+    print(f"TODO: run script:{script}")
