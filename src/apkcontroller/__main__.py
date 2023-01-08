@@ -2,8 +2,7 @@
 that invokes this script."""
 
 
-from uiautomator import device
-
+from src.apkcontroller.run_script import run_script
 from src.apkcontroller.scripts.org_torproject_android.v16_6_3_RC_1 import (
     Apk_script,
 )
@@ -20,4 +19,9 @@ verify_args(
 process_args(
     args,
 )
-apk_script = Apk_script(device=device)
+apk_script = Apk_script()
+# TODO: only if device is connected pass device.
+# apk_script = Apk_script(device=device)
+
+print("")
+run_script(apk_script)

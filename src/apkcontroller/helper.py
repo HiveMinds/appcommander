@@ -1,6 +1,7 @@
 """Contains helper functions that are used throughout this repository."""
 import json
 import os
+import subprocess  # nosec
 from pathlib import Path
 from typing import TYPE_CHECKING, Dict, List, Union
 
@@ -132,6 +133,51 @@ def export_screen_data_if_valid(
     """Checks whether the required objects are in the actual screen, and if
     they are, it exports the data of the screen in json format and as a
     screenshot."""
-    for screen in screen_objects:
-        if screen.is_expected_screen(device=device):
-            screen.export_screen_data(device=device, overwrite=overwrite)
+    if device is not None:
+        for screen in screen_objects:
+            if screen.is_expected_screen(device=device):
+                screen.export_screen_data(device=device, overwrite=overwrite)
+
+
+@typechecked
+def run_bash_command(
+    await_compilation: bool, bash_command: str, verbose: bool
+) -> None:
+    """Runs a bash command."""
+    if await_compilation:
+        if verbose:
+            subprocess.call(bash_command, shell=True)  # nosec
+        else:
+            subprocess.call(  # nosec
+                bash_command,
+                shell=True,
+                stderr=subprocess.DEVNULL,
+                stdout=subprocess.DEVNULL,
+            )
+    else:
+        if verbose:
+            # pylint: disable=R1732
+            subprocess.Popen(bash_command, shell=True)  # nosec
+        else:
+            # pylint: disable=R1732
+            subprocess.Popen(  # nosec
+                bash_command,
+                shell=True,
+                stderr=subprocess.DEVNULL,
+                stdout=subprocess.DEVNULL,
+            )
+
+
+@typechecked
+def launch_app(app_name: str) -> None:
+    """Launches app on phone."""
+
+    # TODO: verify phone is connected.
+
+    # Launc the app on phone.
+    command = f'adb shell monkey -p "{app_name}" 1 &>/dev/null'
+    run_bash_command(
+        await_compilation=True, bash_command=command, verbose=True
+    )
+
+    # TODO: verify app is laucned

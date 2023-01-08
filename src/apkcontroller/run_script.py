@@ -1,7 +1,9 @@
 """Starts a script to control an app."""
 
+
 from typeguard import typechecked
 
+from src.apkcontroller.helper import launch_app
 from src.apkcontroller.scripts.org_torproject_android.v16_6_3_RC_1 import (
     Apk_script,
 )
@@ -9,11 +11,19 @@ from src.apkcontroller.scripts.org_torproject_android.v16_6_3_RC_1 import (
 
 @typechecked
 def run_script(script: Apk_script) -> None:
-    """Runs the incoming script on the phone."""
-    # Script folder structure:
-    # app_scripts/app_name/version
+    """Runs the incoming script on the phone.
+
+    Script folder structure: app_scripts/app_name/version.py with
+    app_name is something like: com_whatsapp_android (not: Whatsapp). It
+    is derived from how your android device calls the app, with the dots
+    replaced by underscores. E.g. com.whatsapp.android or something like
+    that.
+    """
 
     # Open the app.
+    app_name = script.script_description["app_name"]
+    launch_app(app_name)
+
     # next_screens = get start_screens()
     # get_current_screen.
     # verify current_screen in next_screens.
