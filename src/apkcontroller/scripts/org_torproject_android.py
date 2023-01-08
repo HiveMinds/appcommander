@@ -3,13 +3,13 @@
 Android names this app: org.torproject.android
 """
 
-from typing import Callable, Dict, List, Union
+from typing import Callable, Dict, List, Optional, Union
 
 import networkx as nx
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
-from uiautomator import device as d
 
+from src.apkcontroller.helper import export_screen_data_if_valid
 from src.apkcontroller.Screen import Screen
 
 
@@ -24,9 +24,7 @@ class Apk_script:
     # pylint: disable=R0903
 
     @typechecked
-    def __init__(
-        self,
-    ) -> None:
+    def __init__(self, device: Optional[AutomatorDevice] = None) -> None:
 
         self.script_description: Dict[str, Union[bool, int, str]] = {
             "title": "conf_orbot",
@@ -36,25 +34,18 @@ class Apk_script:
             "overwrite": True,
         }
         self.script_graph = nx.DiGraph()
-        self.screens_objects: List[Screen] = self.create_screens(
+        self.screen_objects: List[Screen] = self.create_screen_objects(
             self.script_graph
         )
-        self.export_screen_data_if_valid(self.screens_objects)
-
-    def export_screen_data_if_valid(
-        self, screens_objects: List[Screen]
-    ) -> None:
-        """Checks whether the required objects are in the actual screen, and if
-        they are, it exports the data of the screen in json format and as a
-        screenshot."""
-        for screen in screens_objects:
-            if screen.is_expected_screen(self, d):
-                screen.export_screen_data(
-                    device=d, overwrite=self.script_description["overwrite"]
-                )
+        if device is not None:
+            export_screen_data_if_valid(
+                device=device,
+                overwrite=self.script_description["overwrite"],
+                screen_objects=self.screen_objects,
+            )
 
     @typechecked
-    def create_screens(self, script_graph: nx.DiGraph) -> List[Screen]:
+    def create_screen_objects(self, script_graph: nx.DiGraph) -> List[Screen]:
         """Creates the screens as networkx nodes."""
 
         s0: Screen = org_torproject_android_s0(self.script_description)

@@ -2,11 +2,16 @@
 import json
 import os
 from pathlib import Path
-from typing import Dict, List, Union
+from typing import TYPE_CHECKING, Dict, List, Union
 
 import xmltodict
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
+
+if TYPE_CHECKING:
+    from src.apkcontroller.Screen import Screen
+else:
+    Screen = object
 
 
 @typechecked
@@ -116,3 +121,17 @@ def make_path_if_not_exists(path: str) -> None:
         os.makedirs(path)
     if not os.path.exists(path):
         raise Exception(f"Error, path:{path} did not exist after creation.")
+
+
+@typechecked
+def export_screen_data_if_valid(
+    device: AutomatorDevice,
+    overwrite: bool,
+    screen_objects: List[Screen],
+) -> None:
+    """Checks whether the required objects are in the actual screen, and if
+    they are, it exports the data of the screen in json format and as a
+    screenshot."""
+    for screen in screen_objects:
+        if screen.is_expected_screen(device=device):
+            screen.export_screen_data(device=device, overwrite=overwrite)
