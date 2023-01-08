@@ -2,6 +2,7 @@
 # something to Git(Hub/Lab) using the program GIT.
 
 *.xml
+*.png
 
 demo/*
 latex/Images/graphs/*

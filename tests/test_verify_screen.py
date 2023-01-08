@@ -1,11 +1,13 @@
 """Verifies 2 nodes are included in the networkx graph."""
 import unittest
-from typing import Any, Dict, List
+from typing import Dict, List
 
 from typeguard import typechecked
 
-from src.apkcontroller.helper import element_in_ui
-from src.apkcontroller.scripts.s2 import s2
+from src.apkcontroller.helper import (
+    load_json_file_into_dict,
+    required_objects_in_screen,
+)
 
 
 class Test_get_graph(unittest.TestCase):
@@ -19,18 +21,34 @@ class Test_get_graph(unittest.TestCase):
 
     @typechecked
     def test_finds_required_dict(self) -> None:
-        """Tests whether the element_in_ui function correctly finds the
-        required object in s0."""
+        """Tests whether the required_object_in_screen function correctly finds
+        the required object in s0."""
+        screen_dict: Dict = load_json_file_into_dict(
+            "src/apkcontroller/scripts/org.torproject.android/"
+            + "16.6.3 RC 1/s0.json"
+        )
 
-        required_objects: List[Dict[str, Any]] = {
-            "@package": "org.torproject.android",
-            "@text": "Global (Auto)",
-        }
-        self.assertTrue(element_in_ui(required_objects, s2["hierarchy"]))
-        required_objects: List[Dict[str, Any]] = {
-            "@resource-id": "android:id/text1",
-        }
-        self.assertTrue(element_in_ui(required_objects, s2["hierarchy"]))
+        required_objects: List[Dict[str, str]] = [
+            {
+                "@package": "org.torproject.android",
+                "@text": "Global (Auto)",
+            },
+        ]
+        self.assertTrue(
+            required_objects_in_screen(
+                required_objects, screen_dict["hierarchy"]
+            )
+        )
+        required_objects = [
+            {
+                "@resource-id": "android:id/text1",
+            },
+        ]
+        self.assertTrue(
+            required_objects_in_screen(
+                required_objects, screen_dict["hierarchy"]
+            )
+        )
 
         #
         # "@text": "Trouble " "connecting?",

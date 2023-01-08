@@ -3,11 +3,12 @@
 Android names this app: org.torproject.android
 """
 
-from typing import Any, Callable, Dict, List
+from typing import Callable, Dict, List, Union
 
 import networkx as nx
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
+from uiautomator import device as d
 
 from src.apkcontroller.Screen import Screen
 
@@ -27,19 +28,27 @@ class Apk_script:
         self,
     ) -> None:
 
-        self.name = "org.torproject.android"
-        self.display_name = "Orbot"
-        self.version = "16.6.3 RC 1"
-
+        self.script_description: Dict[str, Union[bool, int, str]] = {
+            "title": "conf_orbot",
+            "app_name": "org.torproject.android",
+            "app_display_name": "Orbot",
+            "version": "16.6.3 RC 1",
+            "overwrite": True,
+        }
         self.screens = nx.DiGraph()
-        self.create_screens(self.screens)
+        screens: List[Screen] = self.create_screens(self.screens)
+
+        screens[0].export_screen_data(
+            device=d, overwrite=self.script_description["overwrite"]
+        )
 
     @typechecked
-    def create_screens(self, screens: nx.DiGraph) -> None:
+    def create_screens(self, screens: nx.DiGraph) -> List[Screen]:
         """Creates the screens as networkx nodes."""
 
-        s1: Screen = org_torproject_android_s1()
-        print(f"TODO: create screens{screens}")
+        s0: Screen = org_torproject_android_s0(self.script_description)
+        print(f"TODO: create all screens{screens}")
+        return [s0]
 
     def specify_start_nodes(self, screens: nx.DiGraph) -> None:
         """Sets the start_nodes attributes to True in the nodes that are start
@@ -63,29 +72,43 @@ class Apk_script:
         print(f"TODO: set edges properties.{screens}")
 
 
-def org_torproject_android_s1() -> Screen:
+def org_torproject_android_s0(
+    script_description: Dict[str, Union[bool, int, str]]
+) -> Screen:
     """Creates the settings for a starting screen where Orbot is not yet
     started."""
-    max_retries = 1
-    wait_time_sec = 2
-    required_objects: List[Dict[str, Any]] = [{
-        "@text": "Global " "(Auto)",
-        "@text": "Trouble " "connecting?",
-        "@text": "Use Bridges ",
-        "@text": "Orbot",
-    }]
-    optional_objects: List[Dict[str, Any]] = [
+
+    script_description["max_retries"] = 1
+    script_description["screen_name"] = "s0"
+    script_description["wait_time_sec"] = 2
+    required_objects: List[Dict[str, str]] = [
+        {
+            "@text": "Global " "(Auto)",
+        },
+        {
+            "@text": "Trouble " "connecting?",
+        },
+        {
+            "@text": "Use Bridges ",
+        },
+        {
+            "@text": "Orbot",
+        },
+    ]
+    optional_objects: List[Dict[str, str]] = [
         # Append options that are visible when the screen is connected to tor.
         {
-            "@content-desc": "Orbot notification: Connected to the Tor network",
+            "@content-desc": (
+                "Orbot notification: Connected " + "to the Tor network"
+            ),
             "@text": "STOP",
         }
     ]
 
     @typechecked
     def get_next_actions(
-        required_objects: List[Dict[str, Any]],
-        optional_objects: List[Dict[str, Any]],
+        required_objects: List[Dict[str, str]],
+        optional_objects: List[Dict[str, str]],
     ) -> List[Callable[[AutomatorDevice], None]]:
         """Looks at the required objects and optional objects and determines
         which actions to take next.
@@ -106,15 +129,14 @@ def org_torproject_android_s1() -> Screen:
 
     return Screen(
         get_next_actions=get_next_actions,
-        max_retries=max_retries,
         required_objects=required_objects,
-        wait_time_sec=wait_time_sec,
+        script_description=script_description,
         optional_objects=optional_objects,
     )
 
 
 @typechecked
-def actions_1(d: AutomatorDevice) -> None:
+def actions_1(device: AutomatorDevice) -> None:
     """Performs the actions in option 1 in this screen.
 
     Example:
@@ -128,11 +150,11 @@ def actions_1(d: AutomatorDevice) -> None:
     ).click()
     """
     # Go to settings to select which apps are torified.
-    d(resourceId="org.torproject.android:id/ivAppVpnSettings").click()
+    device(resourceId="org.torproject.android:id/ivAppVpnSettings").click()
 
 
 @typechecked
-def actions_2(d: AutomatorDevice) -> None:
+def actions_2(device: AutomatorDevice) -> None:
     """Performs the actions in option 2 in this screen."""
     # Press the START button in the Orbot app to create a tor connection.
-    d(resourceId="org.torproject.android:id/btnStart").click()
+    device(resourceId="org.torproject.android:id/btnStart").click()

@@ -1,38 +1,45 @@
 """Starts a script to control an app."""
 
-from typing import Any, Callable, Dict, List, Optional
+import time
+from pathlib import Path
+from typing import Callable, Dict, List, Optional, Union
 
 import networkx as nx
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
-from src.apkcontroller.helper import show_screen_as_dict
+from src.apkcontroller.helper import (
+    get_screen_as_dict,
+    output_json,
+    required_objects_in_screen,
+)
 
 
+# pylint: disable=R0902
 class Screen:
     """Represents an Android app screen."""
 
-    # pylint: disable=R0903
-
+    # pylint: disable=R0913
     @typechecked
     def __init__(
         self,
         get_next_actions: Callable[
-            [Dict[str, Any], Dict[str, Any]],
+            [Dict[str, str], Dict[str, str]],
             List[Callable[[AutomatorDevice], None]],
         ],
-        max_retries: int,
-        required_objects: List[Dict[str, Any]],
-        wait_time_sec: int,
-        optional_objects: Optional[List[Dict[str, Any]]] = None,
+        required_objects: List[Dict[str, str]],
+        script_description: Dict[str, Union[bool, int, str]],
+        optional_objects: Optional[List[Dict[str, str]]] = None,
+        device: Optional[AutomatorDevice] = None,
     ) -> None:
 
+        self.device: AutomatorDevice = device
         self.get_next_actions: Callable[
-            [Dict[str, Any], Dict[str, Any]],
+            [Dict[str, str], Dict[str, str]],
             List[Callable[[AutomatorDevice], None]],
         ] = get_next_actions
 
-        self.max_retries: int = max_retries
+        self.max_retries: int = int(script_description["max_retries"])
 
         """Sets the required objects for this screen.
 
@@ -40,7 +47,15 @@ class Screen:
         returned by the device, the screen will not be recogniszed. If
         it is, the screen is recognised by the: is_screen function.
         """
-        self.required_objects: List[Dict[str, Any]] = required_objects
+        self.required_objects: List[Dict[str, str]] = required_objects
+
+        self.screen_dict: Union[None, Dict] = None
+        if self.device is not None:
+            self.screen_dict = get_screen_as_dict(self.device)
+
+        self.script_description: Dict[
+            str, Union[bool, int, str]
+        ] = script_description
         """Some buttons/obtjects in the screen may appear depending on
         parameters that are not predictable in advance, e.g. whether some
         server responds or not.
@@ -48,34 +63,95 @@ class Screen:
         Yet some actions may depend on the presence and/or value of
         these objects. Hence they should be stored here.
         """
-        self.optional_objects: List[Dict[str, Any]] = optional_objects
+        self.optional_objects: Union[
+            None, List[Dict[str, str]]
+        ] = optional_objects
 
-        self.wait_time_sec: int = wait_time_sec
+        self.wait_time_sec: int = int(script_description["max_retries"])
 
     @typechecked
-    def is_screen(self, d: AutomatorDevice) -> bool:
+    def is_screen(
+        self,
+        device: AutomatorDevice,
+    ) -> bool:
         """Custom verification per screen based on the optional and required
-        objects in screen. Raise error if verification fails.
+        objects in screen.
 
-        TODO: include wait_time_sec and max_retries in verification.
+        Raise error if verification fails.
         """
-        screen_dict = show_screen_as_dict(d)
-        print(f"TODO: implement verification: {d}")
-
-        for required_key, required_val in self.required_objects.items():
-            if required_key not in screen_dict.keys():
-                return False
-            if required_val not in screen_dict.vals():
-                return False
+        if self.screen_dict is None:
+            self.screen_dict = get_screen_as_dict(device)
+        if not required_objects_in_screen(
+            self.required_objects, self.screen_dict
+        ):
+            for _ in range(0, self.max_retries):
+                time.sleep(self.wait_time_sec)
+                if required_objects_in_screen(
+                    self.required_objects, self.screen_dict
+                ):
+                    return True
+            return False
         return True
 
     @typechecked
-    def export_screen_data(self, d: AutomatorDevice) -> Dict[str, Any]:
-        """Optional: export data from screen if relevant.
+    def export_screen_data(
+        self,
+        device: AutomatorDevice,
+        overwrite: bool = False,
+    ) -> None:
+        """Writes a dict file to a .json file, and exports a screenshot."""
+        output_dir = (
+            f'src/apkcontroller/scripts/{self.script_description["app_name"]}/'
+            + f'/{self.script_description["version"]}/'
+        )
+        output_name = f'{self.script_description["screen_name"]}'
 
-        TODO: include wait_time_sec and max_retries in export."""
-        print(f"TODO: implement export option to log file.{d}")
-        return {"TODO": "TODO"}
+        for extension in [".json", ".png"]:
+            output_path = f"{output_dir}{output_name}{extension}"
+            if not Path(output_path).is_file() or overwrite:
+
+                if extension == ".json":
+                    if self.screen_dict is None:
+                        self.screen_dict = get_screen_as_dict(device)
+                    output_json(
+                        output_dir, f"{output_name}.json", self.screen_dict
+                    )
+                if extension == ".png":
+                    # device.takeScreenshot(output_path)
+                    device.screenshot(output_path)
+
+            # Verify the file exists.
+            if not Path(output_path).is_file():
+                raise Exception(
+                    f"Error, filepath:{output_path} was not created."
+                )
+
+    @typechecked
+    def export_screen_img(
+        self,
+        device: AutomatorDevice,
+        overwrite: bool = False,
+    ) -> None:
+        """Outputs a screenshot of the screen."""
+        output_dir = (
+            f'src/apkcontroller/scripts/{self.script_description["app_name"]}/'
+            + f'/{self.script_description["version"]}/'
+        )
+        output_name = f'{self.script_description["screen_name"]}'
+        output_path_json = f"{output_dir}{output_name}.png"
+
+        if not Path(output_path_json).is_file() or overwrite:
+
+            if self.screen_dict is None:
+                self.screen_dict = get_screen_as_dict(device)
+
+            output_json(output_dir, f"{output_name}.json", self.screen_dict)
+
+        # Verify the file exists.
+        if not Path(output_path_json).is_file():
+            raise Exception(
+                f"Error, filepath:{output_path_json} was not created."
+            )
 
     def goto_next_screen(
         self, actions: List[str], next_screen_index: int
@@ -89,7 +165,7 @@ class Screen:
 
 @typechecked
 def get_next_screen(
-    screen_name,
+    screen_name: str,
     screens: nx.DiGraph,
     actions: List[Callable[[AutomatorDevice], None]],
 ) -> bool:
@@ -99,7 +175,9 @@ def get_next_screen(
     """
 
     print("TODO: get next screen.")
-    neighbour_edges = [], neighbour_names = [], edge_actions = []
+    neighbour_edges = []
+    neighbour_names = []
+    edge_actions = []
 
     for neighbour_name in nx.all_neighbors(screens, screen_name):
         # Get neighbours.
