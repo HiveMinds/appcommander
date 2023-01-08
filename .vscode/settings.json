@@ -18,6 +18,6 @@
   "searchOpenAllResults.fileResultsLimit": 300,
   "searchOpenAllResults.resultsLimit": 250,
   "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
-  "window.zoomLevel": 0,
+  "window.zoomLevel": 1,
   "workbench.colorTheme": "Default High Contrast"
 }

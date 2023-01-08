@@ -3,9 +3,11 @@
 Android names this app: org.torproject.android
 """
 
+from typing import Any, Callable, Dict, List
 
 import networkx as nx
 from typeguard import typechecked
+from uiautomator import AutomatorDevice
 
 from src.apkcontroller.Screen import Screen
 
@@ -36,10 +38,7 @@ class Apk_script:
     def create_screens(self, screens: nx.DiGraph) -> None:
         """Creates the screens as networkx nodes."""
 
-        screen = Screen(wait_time_sec=2, max_retries=3)
-        screen.get_next_actions(
-            screen.required_objects, screen.optional_objects
-        )
+        s1: Screen = org_torproject_android_s1()
         print(f"TODO: create screens{screens}")
 
     def specify_start_nodes(self, screens: nx.DiGraph) -> None:
@@ -62,3 +61,78 @@ class Apk_script:
         to screen 3. Hence, 1 edge multiple action lists (in/as a list).
         """
         print(f"TODO: set edges properties.{screens}")
+
+
+def org_torproject_android_s1() -> Screen:
+    """Creates the settings for a starting screen where Orbot is not yet
+    started."""
+    max_retries = 1
+    wait_time_sec = 2
+    required_objects: List[Dict[str, Any]] = [{
+        "@text": "Global " "(Auto)",
+        "@text": "Trouble " "connecting?",
+        "@text": "Use Bridges ",
+        "@text": "Orbot",
+    }]
+    optional_objects: List[Dict[str, Any]] = [
+        # Append options that are visible when the screen is connected to tor.
+        {
+            "@content-desc": "Orbot notification: Connected to the Tor network",
+            "@text": "STOP",
+        }
+    ]
+
+    @typechecked
+    def get_next_actions(
+        required_objects: List[Dict[str, Any]],
+        optional_objects: List[Dict[str, Any]],
+    ) -> List[Callable[[AutomatorDevice], None]]:
+        """Looks at the required objects and optional objects and determines
+        which actions to take next.
+        An example of the next actions could be the following List:
+        0. Select a textbox.
+        1. Send some data to a textbox.
+        2. Click on the/a "Next" button.
+
+        Then the app goes to the next screen and waits a pre-determined
+        amount, and optionally retries a pre-determined amount of attempts.
+        """
+
+        print(
+            "TODO: determine how to specify how to compute the next action"
+            + f" for this screen. {required_objects},{optional_objects}"
+        )
+        return [actions_1, actions_2]
+
+    return Screen(
+        get_next_actions=get_next_actions,
+        max_retries=max_retries,
+        required_objects=required_objects,
+        wait_time_sec=wait_time_sec,
+        optional_objects=optional_objects,
+    )
+
+
+@typechecked
+def actions_1(d: AutomatorDevice) -> None:
+    """Performs the actions in option 1 in this screen.
+
+    Example:
+    d(
+        resourceId=resourceId,
+        text=text,
+        className=className,
+        descriptionContains= descriptionContains,
+        index=index,
+        description=description
+    ).click()
+    """
+    # Go to settings to select which apps are torified.
+    d(resourceId="org.torproject.android:id/ivAppVpnSettings").click()
+
+
+@typechecked
+def actions_2(d: AutomatorDevice) -> None:
+    """Performs the actions in option 2 in this screen."""
+    # Press the START button in the Orbot app to create a tor connection.
+    d(resourceId="org.torproject.android:id/btnStart").click()
