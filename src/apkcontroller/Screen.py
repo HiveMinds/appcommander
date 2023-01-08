@@ -45,7 +45,7 @@ class Screen:
 
         (If these objects are not found within the screen information
         returned by the device, the screen will not be recogniszed. If
-        it is, the screen is recognised by the: is_screen function.
+        it is, the screen is recognised by the: is_expected_screen function.
         """
         self.required_objects: List[Dict[str, str]] = required_objects
 
@@ -70,7 +70,7 @@ class Screen:
         self.wait_time_sec: int = int(script_description["max_retries"])
 
     @typechecked
-    def is_screen(
+    def is_expected_screen(
         self,
         device: AutomatorDevice,
     ) -> bool:
@@ -166,7 +166,7 @@ class Screen:
 @typechecked
 def get_next_screen(
     screen_name: str,
-    screens: nx.DiGraph,
+    script_graph: nx.DiGraph,
     actions: List[Callable[[AutomatorDevice], None]],
 ) -> bool:
     """Gets the next expected screen.
@@ -179,7 +179,7 @@ def get_next_screen(
     neighbour_names = []
     edge_actions = []
 
-    for neighbour_name in nx.all_neighbors(screens, screen_name):
+    for neighbour_name in nx.all_neighbors(script_graph, screen_name):
         # Get neighbours.
         neighbour_names.append(neighbour_name)
 
@@ -187,7 +187,7 @@ def get_next_screen(
         neighbour_edges.append([screen_name, neighbour_name])
 
         # Get all action lists in all those outgoing edges.
-        edge_actions.append(screens.edges[neighbour_edges[-1]].actions)
+        edge_actions.append(script_graph.edges[neighbour_edges[-1]].actions)
 
     # Verify the sought action list is in that list of lists, only once,
     # otherwise raise error.

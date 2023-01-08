@@ -35,32 +35,46 @@ class Apk_script:
             "version": "16.6.3 RC 1",
             "overwrite": True,
         }
-        self.screens = nx.DiGraph()
-        screens: List[Screen] = self.create_screens(self.screens)
-
-        screens[0].export_screen_data(
-            device=d, overwrite=self.script_description["overwrite"]
+        self.script_graph = nx.DiGraph()
+        self.screens_objects: List[Screen] = self.create_screens(
+            self.script_graph
         )
+        self.export_screen_data_if_valid(self.screens_objects)
+
+    def export_screen_data_if_valid(
+        self, screens_objects: List[Screen]
+    ) -> None:
+        """Checks whether the required objects are in the actual screen, and if
+        they are, it exports the data of the screen in json format and as a
+        screenshot."""
+        for screen in screens_objects:
+            if screen.is_expected_screen(self, d):
+                screen.export_screen_data(
+                    device=d, overwrite=self.script_description["overwrite"]
+                )
 
     @typechecked
-    def create_screens(self, screens: nx.DiGraph) -> List[Screen]:
+    def create_screens(self, script_graph: nx.DiGraph) -> List[Screen]:
         """Creates the screens as networkx nodes."""
 
         s0: Screen = org_torproject_android_s0(self.script_description)
-        print(f"TODO: create all screens{screens}")
+        print(f"TODO: create all screens{script_graph}")
         return [s0]
 
-    def specify_start_nodes(self, screens: nx.DiGraph) -> None:
+    @typechecked
+    def specify_start_nodes(self, script_graph: nx.DiGraph) -> None:
         """Sets the start_nodes attributes to True in the nodes that are start
         screens."""
-        print(f"TODO: set start node properties.{screens}")
+        print(f"TODO: set start node properties.{script_graph}")
 
-    def specify_end_nodes(self, screens: nx.DiGraph) -> None:
+    @typechecked
+    def specify_end_nodes(self, script_graph: nx.DiGraph) -> None:
         """Sets the end_nodes attributes to True in the nodes that are end
         screens."""
-        print(f"TODO: set end node properties.{screens}")
+        print(f"TODO: set end node properties.{script_graph}")
 
-    def create_screen_transitions(self, screens: nx.DiGraph) -> None:
+    @typechecked
+    def create_screen_transitions(self, script_graph: nx.DiGraph) -> None:
         """Adds the edges between the nodes(screens), representing possible
         transitions between the screens. The edges contain a list containing
         lists of actions.
@@ -69,9 +83,10 @@ class Apk_script:
         Next], lead to screen 3, as well as actions: [click: Next] lead
         to screen 3. Hence, 1 edge multiple action lists (in/as a list).
         """
-        print(f"TODO: set edges properties.{screens}")
+        print(f"TODO: set edges properties.{script_graph}")
 
 
+@typechecked
 def org_torproject_android_s0(
     script_description: Dict[str, Union[bool, int, str]]
 ) -> Screen:
