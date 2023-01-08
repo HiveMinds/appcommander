@@ -2,7 +2,9 @@
 
 from typeguard import typechecked
 
-from src.apkcontroller.scripts.org_torproject_android import Apk_script
+from src.apkcontroller.scripts.org_torproject_android.v16_6_3_RC_1 import (
+    Apk_script,
+)
 
 
 @typechecked
@@ -12,25 +14,21 @@ def run_script(script: Apk_script) -> None:
     # app_scripts/app_name/version
 
     # Open the app.
+    # next_screens = get start_screens()
+    # get_current_screen.
+    # verify current_screen in next_screens.
 
-    # Detect screen (wait for n seconds).
+    # end_screens = get end_screens()
 
-    # If invalid screen is detected/if valid screen is not found within n
-    # seconds:
-    # raise Exception.
-    # Ideally include automatic issue creation (with optional screenshot.)
-    # Else:
+    # while current_screen not in end_screens:
+    # if current_screen in next_screens(s):
 
-    # Perform optional additional verification.
-    # Optional get and store some state.
+    # next_screens = get_next_screen(s)(
+    # current_screen_name
+    # script_graph
+    # actions
 
-    # Determine what next screen is.
-
-    # Find dataform.
-    # Fill dataform.
-    # Optional: verify dataform is filled correctly.
-
-    # Find button.
-    # Click button.
-    # Recursively go to next screen.
+    # goto_next_screen(
+    #   actions
+    #   next_screen_index
     print(f"TODO: run script:{script}")

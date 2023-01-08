@@ -101,8 +101,13 @@ class Screen:
     ) -> None:
         """Writes a dict file to a .json file, and exports a screenshot."""
         output_dir = (
-            f'src/apkcontroller/scripts/{self.script_description["app_name"]}/'
-            + f'/{self.script_description["version"]}/'
+            (
+                "src/apkcontroller/scripts/"
+                + f'{self.script_description["app_name"]}'
+                + f'/{self.script_description["version"]}/'
+            )
+            .replace(".", "_")
+            .replace(" ", "_")
         )
         output_name = f'{self.script_description["screen_name"]}'
 
@@ -126,33 +131,6 @@ class Screen:
                     f"Error, filepath:{output_path} was not created."
                 )
 
-    @typechecked
-    def export_screen_img(
-        self,
-        device: AutomatorDevice,
-        overwrite: bool = False,
-    ) -> None:
-        """Outputs a screenshot of the screen."""
-        output_dir = (
-            f'src/apkcontroller/scripts/{self.script_description["app_name"]}/'
-            + f'/{self.script_description["version"]}/'
-        )
-        output_name = f'{self.script_description["screen_name"]}'
-        output_path_json = f"{output_dir}{output_name}.png"
-
-        if not Path(output_path_json).is_file() or overwrite:
-
-            if self.screen_dict is None:
-                self.screen_dict = get_screen_as_dict(device)
-
-            output_json(output_dir, f"{output_name}.json", self.screen_dict)
-
-        # Verify the file exists.
-        if not Path(output_path_json).is_file():
-            raise Exception(
-                f"Error, filepath:{output_path_json} was not created."
-            )
-
     def goto_next_screen(
         self, actions: List[str], next_screen_index: int
     ) -> int:
@@ -165,26 +143,22 @@ class Screen:
 
 @typechecked
 def get_next_screen(
-    screen_name: str,
+    current_screen_name: str,
     script_graph: nx.DiGraph,
     actions: List[Callable[[AutomatorDevice], None]],
 ) -> bool:
-    """Gets the next expected screen.
+    """Gets the next expected screen."""
 
-    TODO: add typing.
-    """
-
-    print("TODO: get next screen.")
     neighbour_edges = []
     neighbour_names = []
     edge_actions = []
 
-    for neighbour_name in nx.all_neighbors(script_graph, screen_name):
+    for neighbour_name in nx.all_neighbors(script_graph, current_screen_name):
         # Get neighbours.
         neighbour_names.append(neighbour_name)
 
         # Get edges twoards neighbours. (Outgoing edges).
-        neighbour_edges.append([screen_name, neighbour_name])
+        neighbour_edges.append([current_screen_name, neighbour_name])
 
         # Get all action lists in all those outgoing edges.
         edge_actions.append(script_graph.edges[neighbour_edges[-1]].actions)
