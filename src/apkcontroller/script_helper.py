@@ -7,14 +7,14 @@ import xmltodict
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
-from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.script import (
-    Apk_script,
-)
-
 if TYPE_CHECKING:
+    from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.script import (
+        Apk_script,
+    )
     from src.apkcontroller.Screen import Screen
 else:
     Screen = object
+    Apk_script = object
 
 
 @typechecked
