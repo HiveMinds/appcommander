@@ -3,6 +3,7 @@
 
 *.xml
 *.png
+*.json
 
 demo/*
 latex/Images/graphs/*

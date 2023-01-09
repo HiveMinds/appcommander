@@ -177,7 +177,7 @@ def launch_app(app_name: str) -> None:
     # Launc the app on phone.
     command = f'adb shell monkey -p "{app_name}" 1 &>/dev/null'
     run_bash_command(
-        await_compilation=True, bash_command=command, verbose=True
+        await_compilation=True, bash_command=command, verbose=False
     )
 
     # TODO: verify app is laucned

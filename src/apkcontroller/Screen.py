@@ -79,18 +79,26 @@ class Screen:
 
         Raise error if verification fails.
         """
+
+        # Load and unpack the screen dict to get meaningful ui info.
         if self.screen_dict is None:
             self.screen_dict = get_screen_as_dict(device)
+        unpacked_screen_dict = self.screen_dict["hierarchy"]
+
+        # Preliminary check to see if the required objects are in.
         if not required_objects_in_screen(
-            self.required_objects, self.screen_dict
+            self.required_objects, unpacked_screen_dict
         ):
+            # Retry and return True if the required objects were found.
             for _ in range(0, self.max_retries):
                 time.sleep(self.wait_time_sec)
                 if required_objects_in_screen(
-                    self.required_objects, self.screen_dict
+                    self.required_objects, unpacked_screen_dict
                 ):
                     return True
+            # Return false otherwise.
             return False
+        # else:
         return True
 
     @typechecked
@@ -102,14 +110,14 @@ class Screen:
         """Writes a dict file to a .json file, and exports a screenshot."""
         output_dir = (
             (
-                "src/apkcontroller/scripts/"
+                "src/apkcontroller/"
                 + f'{self.script_description["app_name"]}'
-                + f'/{self.script_description["version"]}/'
+                + f'/V{self.script_description["version"]}/'
             )
             .replace(".", "_")
             .replace(" ", "_")
         )
-        output_name = f'{self.script_description["screen_name"]}'
+        output_name = f'{self.script_description["screen_nr"]}'
 
         for extension in [".json", ".png"]:
             output_path = f"{output_dir}{output_name}{extension}"
@@ -143,7 +151,7 @@ class Screen:
 
 @typechecked
 def get_next_screen(
-    current_screen_name: str,
+    current_screen_nr: str,
     script_graph: nx.DiGraph,
     actions: List[Callable[[AutomatorDevice], None]],
 ) -> bool:
@@ -153,12 +161,12 @@ def get_next_screen(
     neighbour_names = []
     edge_actions = []
 
-    for neighbour_name in nx.all_neighbors(script_graph, current_screen_name):
+    for neighbour_name in nx.all_neighbors(script_graph, current_screen_nr):
         # Get neighbours.
         neighbour_names.append(neighbour_name)
 
         # Get edges twoards neighbours. (Outgoing edges).
-        neighbour_edges.append([current_screen_name, neighbour_name])
+        neighbour_edges.append([current_screen_nr, neighbour_name])
 
         # Get all action lists in all those outgoing edges.
         edge_actions.append(script_graph.edges[neighbour_edges[-1]].actions)

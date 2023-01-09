@@ -26,6 +26,18 @@ def parse_cli_args() -> argparse.Namespace:
         ),
     )
 
+    # Take a screenshot and store the UI information in a .json file.
+    parser.add_argument(
+        "-e",
+        "--export-screen",
+        action="store",
+        type=str,
+        help=(
+            "Specify the screen number whose json data and .png data are "
+            + "stored."
+        ),
+    )
+
     # Run experiment on a particular experiment_settings json file.
     parser.add_argument(
         "-v",
@@ -35,17 +47,6 @@ def parse_cli_args() -> argparse.Namespace:
         help=("Give the version of the Android app."),
     )
 
-    # Run run on a particular run_settings json file.
-    parser.add_argument(
-        "-s",
-        "--script-path",
-        action="store",
-        type=str,
-        help=(
-            "Give filepath to the script that you created for the Android app "
-            + "you want to control from the CLI."
-        ),
-    )
     # Load the arguments that are given.
     args = parser.parse_args()
     return args
