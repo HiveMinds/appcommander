@@ -3,6 +3,7 @@
 Android names this app: org.torproject.android
 """
 
+import importlib
 from typing import Dict, List, Optional, Union
 
 import networkx as nx
@@ -10,16 +11,18 @@ from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
 from src.apkcontroller.helper import export_screen_data_if_valid
-from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.screen_0 import (
-    screen_0,
-)
-from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.screen_1 import (
-    screen_1,
-)
-from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.screen_2 import (
-    screen_2,
-)
 from src.apkcontroller.Screen import Screen
+
+screen_path: str = "src.apkcontroller.org_torproject_android.V16_6_3_RC_1."
+moduleNames = []
+screen_func_names = []
+modules = []
+for screen_index in range(0, 6):
+    module_name = f"{screen_path}screen_{screen_index}"
+    moduleNames.append(module_name)
+    screen_func_names.append(f"screen_{screen_index}")
+    my_module = importlib.import_module(module_name)
+    modules.append(my_module)
 
 
 class Apk_script:
@@ -65,12 +68,21 @@ class Apk_script:
         """Creates the screens as networkx nodes."""
         screens: List[Screen] = []
 
-        # Create screens.
-        screens.append(screen_0(self.script_description))
-        screens.append(screen_1(self.script_description))
-        screens.append(screen_2(self.script_description))
+        # Create the Screen objects programmatically.
+        for i, module in enumerate(modules):
+            # Create the function (reference) programmatically.
+            # module represents the file that contains the screen function.
+            # screen_func_name[i] is the name of the screen_i function in that
+            # module.
+            # screen_function is the actual Pythonic function handle. it is
+            # like writing: screen_3 if i==3.
+            screen_function = getattr(module, screen_func_names[i])
+            # execute the screen function, which returns a Screen object.
+            screens.append(screen_function(self.script_description))
 
+        # Add the screen objects to the script graph.
         for screen in screens:
+            # TODO: verify all screen nrs are unique.
             script_graph.add_node(screen.script_description["screen_nr"])
             script_graph.nodes[screen.script_description["screen_nr"]][
                 "Screen"
@@ -88,10 +100,14 @@ class Apk_script:
 
         for nodename in script_graph.nodes:
             screen: Screen = script_graph.nodes[nodename]["Screen"]
-            if screen.script_description["screen_nr"] in [0, 1, 2]:
+            if screen.script_description["screen_nr"] in list(range(0, 7)):
                 script_graph.nodes[nodename]["is_start"] = True
-            if screen.script_description["screen_nr"] in [1, 2]:
+            else:
+                script_graph.nodes[nodename]["is_start"] = False
+            if screen.script_description["screen_nr"] in [5, 6]:
                 script_graph.nodes[nodename]["is_end"] = True
+            else:
+                script_graph.nodes[nodename]["is_end"] = False
 
     @typechecked
     def create_screen_transitions(self, script_graph: nx.DiGraph) -> None:

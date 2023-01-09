@@ -1,6 +1,6 @@
 """Functions to assist a script file for an arbitrary app."""
 import time
-from typing import TYPE_CHECKING, Dict, List, Union
+from typing import TYPE_CHECKING, Dict, List, Tuple, Union
 
 import networkx as nx
 import xmltodict
@@ -62,17 +62,19 @@ def current_screen_is_expected(
     expected_screennames: List[int],
     unpacked_screen_dict: Dict,
     script_graph: nx.DiGraph,
-) -> bool:
+) -> Tuple[bool, int]:
     """Determines whether the current screen is one of the expected screens."""
-    expected_screens = get_expected_screens(expected_screennames, script_graph)
+    expected_screens: List[Screen] = get_expected_screens(
+        expected_screennames, script_graph
+    )
     for expected_screen in expected_screens:
         if is_expected_screen(
             unpacked_screen_dict=unpacked_screen_dict,
             expected_screen=expected_screen,
         ):
 
-            return True
-    return False
+            return (True, int(expected_screen.script_description["screen_nr"]))
+    return (False, -1)
 
 
 @typechecked

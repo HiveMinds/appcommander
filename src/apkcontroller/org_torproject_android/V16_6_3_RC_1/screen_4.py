@@ -13,16 +13,24 @@ from src.apkcontroller.Screen import Screen
 
 
 @typechecked
-def screen_0(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
+def screen_4(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
     """Creates the settings for a starting screen where Orbot is not yet
     started."""
     description = copy.deepcopy(script_description)
     description["max_retries"] = 1
-    description["screen_nr"] = 0
+    description["screen_nr"] = 4
     description["wait_time_sec"] = 2
     required_objects: List[Dict[str, str]] = [
         {
-            "@text": "Connection request",
+            "@text": "You can enable any app to go through Tor using our"
+            + " built-in VPN.",
+        },
+        {
+            "@text": "This won't make you anonymous, but it will help get"
+            " through firewalls.",
+        },
+        {
+            "@text": "CHOOSE APPS",
         },
     ]
 
@@ -55,17 +63,8 @@ def screen_0(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
 
 @typechecked
 def actions_0(device: AutomatorDevice) -> None:
-    """Performs the actions in option 1 in this screen. For this screen, it
-    clicks the "OK" button in the "Connection request".
+    """Performs the actions in option 0 in this screen.
 
-    Example:
-    d(
-        resourceId=resourceId,
-        text=text,
-        className=className,
-        descriptionContains= descriptionContains,
-        index=index,
-        description=description
-    ).click()
+    For this screen, it clicks the "DONE" button in the bottom right.
     """
-    device(resourceId="android:id/button1").click()
+    device(resourceId="org.torproject.android:id/done").click()

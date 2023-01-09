@@ -1,6 +1,7 @@
-"""First entry point on app if it is freshly installed.
+"""Can be first screen after "Connection request" has been satisfied. The tor-
+bridge is not yet started.
 
-Presents a: "Connection Request".
+Presents a: "Connection request".
 """
 # pylint: disable=R0801
 import copy
@@ -13,20 +14,41 @@ from src.apkcontroller.Screen import Screen
 
 
 @typechecked
-def screen_0(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
+def screen_6(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
     """Creates the settings for a starting screen where Orbot is not yet
     started."""
     description = copy.deepcopy(script_description)
     description["max_retries"] = 1
-    description["screen_nr"] = 0
+    description["screen_nr"] = 6
     description["wait_time_sec"] = 2
     required_objects: List[Dict[str, str]] = [
         {
-            "@text": "Connection request",
+            "@text": "Global " "(Auto)",
+        },
+        {
+            "@text": "Trouble " "connecting?",
+        },
+        {
+            "@text": "Use Bridges ",
+        },
+        {
+            "@text": "Orbot",
+        },
+        {
+            "@resource-id": "org.torproject.android:id/btnStart",
+        },
+        # Specific to this page.
+        {
+            "@text": "STOP",
+        },
+        {
+            "@content-desc": (
+                "Orbot notification: Connected to the Tor network"
+            )
         },
     ]
+    optional_objects: List[Dict[str, str]] = []
 
-    # pylint: disable=W0613
     @typechecked
     def get_next_actions(
         required_objects: List[Dict[str, str]],
@@ -43,20 +65,23 @@ def screen_0(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
         amount, and optionally retries a pre-determined amount of attempts.
         """
 
-        return [actions_0]
+        print(
+            "TODO: determine how to specify how to compute the next action"
+            + f" for this screen. {required_objects},{optional_objects}"
+        )
+        return [actions_0, actions_1]
 
     return Screen(
         get_next_actions=get_next_actions,
         required_objects=required_objects,
         script_description=description,
-        optional_objects=None,
+        optional_objects=optional_objects,
     )
 
 
 @typechecked
 def actions_0(device: AutomatorDevice) -> None:
-    """Performs the actions in option 1 in this screen. For this screen, it
-    clicks the "OK" button in the "Connection request".
+    """Performs the actions in option 1 in this screen.
 
     Example:
     d(
@@ -68,4 +93,12 @@ def actions_0(device: AutomatorDevice) -> None:
         description=description
     ).click()
     """
-    device(resourceId="android:id/button1").click()
+    # Go to settings to select which apps are torified.
+    device(resourceId="org.torproject.android:id/ivAppVpnSettings").click()
+
+
+@typechecked
+def actions_1(device: AutomatorDevice) -> None:
+    """Performs the actions in option 2 in this screen."""
+    # Press the START button in the Orbot app to create a tor connection.
+    device(resourceId="org.torproject.android:id/btnStart").click()
