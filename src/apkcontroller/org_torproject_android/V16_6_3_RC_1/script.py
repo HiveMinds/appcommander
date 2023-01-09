@@ -16,6 +16,9 @@ from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.screen_0 import (
 from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.screen_1 import (
     screen_1,
 )
+from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.screen_2 import (
+    screen_2,
+)
 from src.apkcontroller.Screen import Screen
 
 
@@ -43,9 +46,7 @@ class Apk_script:
 
         # Generate the script screen flow as a graph and generate the screens.
         self.script_graph = nx.DiGraph()
-        self.screen_objects: List[Screen] = self.create_screen_objects(
-            self.script_graph
-        )
+        self.screens: List[Screen] = self.create_screens(self.script_graph)
 
         # Export the data of the screens if they happen to be found in the
         # device already.
@@ -53,7 +54,7 @@ class Apk_script:
             export_screen_data_if_valid(
                 device=device,
                 overwrite=self.script_description["overwrite"],
-                screen_objects=self.screen_objects,
+                screens=self.screens,
             )
 
         # Specify the start and end nodes in the graph.
@@ -63,25 +64,31 @@ class Apk_script:
         self.specify_end_nodes(self.script_graph)
 
     @typechecked
-    def create_screen_objects(self, script_graph: nx.DiGraph) -> List[Screen]:
+    def create_screens(self, script_graph: nx.DiGraph) -> List[Screen]:
         """Creates the screens as networkx nodes."""
-        screen_objects: List[Screen] = []
+        screens: List[Screen] = []
 
         # Create screens.
-        screen_objects.append(screen_0(self.script_description))
-        screen_objects.append(screen_1(self.script_description))
-        print(f"TODO: create all screens{script_graph}")
-        return screen_objects
+        screens.append(screen_0(self.script_description))
+        screens.append(screen_1(self.script_description))
+        screens.append(screen_2(self.script_description))
+
+        for screen in screens:
+            script_graph.add_node(screen.script_description["screen_nr"])
+            script_graph.nodes[screen.script_description["screen_nr"]][
+                "Screen"
+            ] = screen
+        return screens
 
     @typechecked
     def specify_start_nodes(self, script_graph: nx.DiGraph) -> None:
         """Sets the start_nodes attributes to True in the nodes that are start
         screens."""
-        print(f"TODO: set start node properties.{script_graph}")
+
         for nodename in script_graph.nodes:
-            screen: Screen = script_graph.nodes[nodename].graph["Screen"]
-            if screen.script_description["screen_nr"] in [0, 1, 2, 3]:
-                script_graph.nodes[nodename].graph["is_start"] = True
+            screen: Screen = script_graph.nodes[nodename]["Screen"]
+            if screen.script_description["screen_nr"] in [0, 1, 2]:
+                script_graph.nodes[nodename]["is_start"] = True
 
     @typechecked
     def specify_end_nodes(self, script_graph: nx.DiGraph) -> None:

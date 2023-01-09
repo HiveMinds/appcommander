@@ -3,6 +3,7 @@
 Presents a: "Connection Request".
 """
 
+import copy
 from typing import Callable, Dict, List, Union
 
 from typeguard import typechecked
@@ -15,10 +16,10 @@ from src.apkcontroller.Screen import Screen
 def screen_0(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
     """Creates the settings for a starting screen where Orbot is not yet
     started."""
-
-    script_description["max_retries"] = 1
-    script_description["screen_nr"] = 0
-    script_description["wait_time_sec"] = 2
+    description = copy.deepcopy(script_description)
+    description["max_retries"] = 1
+    description["screen_nr"] = 0
+    description["wait_time_sec"] = 2
     required_objects: List[Dict[str, str]] = [
         {
             "@text": "Connection request",
@@ -47,7 +48,7 @@ def screen_0(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
     return Screen(
         get_next_actions=get_next_actions,
         required_objects=required_objects,
-        script_description=script_description,
+        script_description=description,
         optional_objects=None,
     )
 

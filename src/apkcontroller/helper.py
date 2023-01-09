@@ -128,13 +128,13 @@ def make_path_if_not_exists(path: str) -> None:
 def export_screen_data_if_valid(
     device: AutomatorDevice,
     overwrite: bool,
-    screen_objects: List[Screen],
+    screens: List[Screen],
 ) -> None:
     """Checks whether the required objects are in the actual screen, and if
     they are, it exports the data of the screen in json format and as a
     screenshot."""
     if device is not None:
-        for screen in screen_objects:
+        for screen in screens:
             if screen.is_expected_screen(device=device):
                 export_screen_data(
                     device=device,

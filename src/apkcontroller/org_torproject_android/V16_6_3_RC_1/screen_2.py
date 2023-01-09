@@ -14,12 +14,12 @@ from src.apkcontroller.Screen import Screen
 
 
 @typechecked
-def screen_1(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
+def screen_2(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
     """Creates the settings for a starting screen where Orbot is not yet
     started."""
     description = copy.deepcopy(script_description)
     description["max_retries"] = 1
-    description["screen_nr"] = 1
+    description["screen_nr"] = 2
     description["wait_time_sec"] = 2
     required_objects: List[Dict[str, str]] = [
         {
@@ -39,10 +39,12 @@ def screen_1(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
         },
         # Specific to this page.
         {
-            "@text": "START",
+            "@text": "STOP",
         },
         {
-            "@text": "Tor v0.4.7.11",
+            "@content-desc": (
+                "Orbot notification: Connected to the Tor network"
+            )
         },
     ]
     optional_objects: List[Dict[str, str]] = []

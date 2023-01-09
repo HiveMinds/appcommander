@@ -1,12 +1,16 @@
 """Starts a script to control an app."""
 
 
+from typing import Dict
+
 from typeguard import typechecked
+from uiautomator import device
 
 from src.apkcontroller.helper import launch_app
 from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.script import (
     Apk_script,
 )
+from src.apkcontroller.script_helper import get_current_screen, get_start_nodes
 
 
 @typechecked
@@ -24,8 +28,13 @@ def run_script(script: Apk_script) -> None:
     app_name = script.script_description["app_name"]
     launch_app(app_name)
 
-    # next_screens = get_start_screens()
-    # get_current_screen.
+    start_screennames = get_start_nodes(script.script_graph)
+    print(f"start_screennames={start_screennames}")
+
+    # get current screen.
+    screen_dict: Dict = get_current_screen(device)
+    print(screen_dict)
+
     # verify current_screen in next_screens.
 
     # end_screens = get end_screens()
