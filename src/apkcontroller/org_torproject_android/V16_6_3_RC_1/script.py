@@ -58,10 +58,7 @@ class Apk_script:
             )
 
         # Specify the start and end nodes in the graph.
-        self.specify_start_nodes(self.script_graph)
-
-        # Specify the end and end nodes in the graph.
-        self.specify_end_nodes(self.script_graph)
+        self.specify_start__and_end_nodes(self.script_graph)
 
     @typechecked
     def create_screens(self, script_graph: nx.DiGraph) -> List[Screen]:
@@ -81,20 +78,20 @@ class Apk_script:
         return screens
 
     @typechecked
-    def specify_start_nodes(self, script_graph: nx.DiGraph) -> None:
-        """Sets the start_nodes attributes to True in the nodes that are start
-        screens."""
+    def specify_start__and_end_nodes(self, script_graph: nx.DiGraph) -> None:
+        """Sets the is_start attributes to True in the nodes that are start
+        screens.
+
+        Sets the is_end attributes to True in the nodes that are end
+        screens.
+        """
 
         for nodename in script_graph.nodes:
             screen: Screen = script_graph.nodes[nodename]["Screen"]
             if screen.script_description["screen_nr"] in [0, 1, 2]:
                 script_graph.nodes[nodename]["is_start"] = True
-
-    @typechecked
-    def specify_end_nodes(self, script_graph: nx.DiGraph) -> None:
-        """Sets the end_nodes attributes to True in the nodes that are end
-        screens."""
-        print(f"TODO: set end node properties.{script_graph}")
+            if screen.script_description["screen_nr"] in [1, 2]:
+                script_graph.nodes[nodename]["is_end"] = True
 
     @typechecked
     def create_screen_transitions(self, script_graph: nx.DiGraph) -> None:

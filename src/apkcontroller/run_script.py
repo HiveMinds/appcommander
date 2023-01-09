@@ -10,7 +10,11 @@ from src.apkcontroller.helper import launch_app
 from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.script import (
     Apk_script,
 )
-from src.apkcontroller.script_helper import get_current_screen, get_start_nodes
+from src.apkcontroller.script_helper import (
+    current_screen_is_expected,
+    get_current_screen_unpacked,
+    get_start_nodes,
+)
 
 
 @typechecked
@@ -32,12 +36,21 @@ def run_script(script: Apk_script) -> None:
     print(f"start_screennames={start_screennames}")
 
     # get current screen.
-    screen_dict: Dict = get_current_screen(device)
-    print(screen_dict)
+    unpacked_screen_dict: Dict = get_current_screen_unpacked(device)
 
     # verify current_screen in next_screens.
+    is_expected: bool = current_screen_is_expected(
+        expected_screennames=start_screennames,
+        unpacked_screen_dict=unpacked_screen_dict,
+        script_graph=script.script_graph,
+    )
+    print(f"is_expected={is_expected}")
 
     # end_screens = get end_screens()
+    if not is_expected:
+        # TODO: Export the actual screen, screen data and expected screens in
+        # specific error log folder.
+        raise ReferenceError("Error, the expected screen was not found.")
 
     # while current_screen not in end_screens:
     # if current_screen in next_screens(s):

@@ -3,11 +3,15 @@ import json
 import os
 import subprocess  # nosec
 from pathlib import Path
-from typing import TYPE_CHECKING, Dict, List, Union
+from typing import TYPE_CHECKING, Dict, List
 
-import xmltodict
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
+
+from src.apkcontroller.script_helper import (
+    get_screen_as_dict,
+    is_expected_screen,
+)
 
 if TYPE_CHECKING:
     from src.apkcontroller.Screen import Screen
@@ -25,62 +29,6 @@ def file_exists(filepath: str) -> bool:
     # function.
     my_file = Path(filepath)
     return my_file.is_file()
-
-
-@typechecked
-def get_screen_as_dict(device: AutomatorDevice) -> Dict:
-    """Loads the phone and shows the screen as a dict.
-
-    from uiautomator import device as d
-    """
-    doc = xmltodict.parse(device.dump())
-    return doc
-
-
-@typechecked
-def required_objects_in_screen(
-    required_objects: List[Dict[str, Union[List, Dict, str]]],
-    screen: Dict[str, Union[List, Dict, str]],
-) -> bool:
-    """Returns True if all required objects are found in the UI/screen.
-
-    False otherwise.
-    """
-    for required_object in required_objects:
-        if not required_object_in_screen(required_object, screen):
-            return False
-    return True
-
-
-@typechecked
-def required_object_in_screen(
-    required_object: Dict[str, Union[List, Dict, str]],
-    screen: Dict[str, Union[List, Dict, str]],
-) -> bool:
-    """Returns True if all the keys and values in a dict are found within the
-    same key or list of the xml of the ui."""
-    if dict_contains_other_dict(required_object, screen):
-        return True
-    if "node" in screen.keys():
-        if isinstance(screen["node"], Dict):
-            if required_object_in_screen(required_object, screen["node"]):
-                return True
-        if isinstance(screen["node"], List):
-            for node_elem in screen["node"]:
-                if required_object_in_screen(required_object, node_elem):
-                    return True
-    return False
-
-
-@typechecked
-def dict_contains_other_dict(sub: Dict, main: Dict) -> bool:
-    """Returns true if the sub dict is a subset of the main dict."""
-    for sub_key, sub_val in sub.items():
-        if sub_key not in main.keys():
-            return False
-        if sub_val != main[sub_key]:
-            return False
-    return True
 
 
 @typechecked
@@ -135,7 +83,14 @@ def export_screen_data_if_valid(
     screenshot."""
     if device is not None:
         for screen in screens:
-            if screen.is_expected_screen(device=device):
+            if screen.screen_dict is None:
+                # Load and unpack the screen dict to get meaningful ui info.
+                screen.screen_dict = get_screen_as_dict(device)
+            unpacked_screen_dict = screen.screen_dict["hierarchy"]
+            if is_expected_screen(
+                unpacked_screen_dict=unpacked_screen_dict,
+                expected_screen=screen,
+            ):
                 export_screen_data(
                     device=device,
                     screen_dict=screen.screen_dict,

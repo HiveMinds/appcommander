@@ -1,19 +1,16 @@
 """Starts a script to control an app."""
 
-import time
 from typing import Callable, Dict, List, Optional, Union
 
 import networkx as nx
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
-from src.apkcontroller.helper import (
-    get_screen_as_dict,
-    required_objects_in_screen,
-)
+from src.apkcontroller.helper import get_screen_as_dict
 
 
 # pylint: disable=R0902
+# pylint: disable=R0903
 class Screen:
     """Represents an Android app screen."""
 
@@ -66,38 +63,6 @@ class Screen:
         ] = optional_objects
 
         self.wait_time_sec: int = int(script_description["max_retries"])
-
-    @typechecked
-    def is_expected_screen(
-        self,
-        device: AutomatorDevice,
-    ) -> bool:
-        """Custom verification per screen based on the optional and required
-        objects in screen.
-
-        Raise error if verification fails.
-        """
-
-        # Load and unpack the screen dict to get meaningful ui info.
-        if self.screen_dict is None:
-            self.screen_dict = get_screen_as_dict(device)
-        unpacked_screen_dict = self.screen_dict["hierarchy"]
-
-        # Preliminary check to see if the required objects are in.
-        if not required_objects_in_screen(
-            self.required_objects, unpacked_screen_dict
-        ):
-            # Retry and return True if the required objects were found.
-            for _ in range(0, self.max_retries):
-                time.sleep(self.wait_time_sec)
-                if required_objects_in_screen(
-                    self.required_objects, unpacked_screen_dict
-                ):
-                    return True
-            # Return false otherwise.
-            return False
-        # else:
-        return True
 
     def goto_next_screen(
         self, actions: List[str], next_screen_index: int

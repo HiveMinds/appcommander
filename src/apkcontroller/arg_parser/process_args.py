@@ -40,10 +40,10 @@ def process_args(args: argparse.Namespace) -> None:
             unverified=True,
         )
     else:
-        # apk_script = Apk_script()
+        apk_script = Apk_script()
         # TODO: only if device is connected pass device.
-        apk_script = Apk_script(device=device)
+        # apk_script = Apk_script(device=device)
 
         print("")
         run_script(apk_script)
-        print("DONE")
+    print("DONE")
