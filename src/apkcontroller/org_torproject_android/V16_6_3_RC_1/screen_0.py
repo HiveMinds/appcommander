@@ -41,15 +41,18 @@ def screen_0(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
 
         Then the app goes to the next screen and waits a pre-determined
         amount, and optionally retries a pre-determined amount of attempts.
+        TODO: Don't return a list of functions, just return one function,
+        because this method should decide which action is to be performed based
+        on the required and optional objects, and on nothing else.
+        TODO: Determine how to deal with server responses/unpredictable input.
         """
-
         return [actions_0]
 
     return Screen(
         get_next_actions=get_next_actions,
         required_objects=required_objects,
         script_description=description,
-        optional_objects=None,
+        optional_objects=[],
     )
 
 

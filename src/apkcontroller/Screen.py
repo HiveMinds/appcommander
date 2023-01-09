@@ -15,6 +15,7 @@ class Screen:
     """Represents an Android app screen."""
 
     # pylint: disable=R0913
+    # pylint: disable=W0102
     @typechecked
     def __init__(
         self,
@@ -24,7 +25,7 @@ class Screen:
         ],
         required_objects: List[Dict[str, str]],
         script_description: Dict[str, Union[bool, int, str]],
-        optional_objects: Optional[List[Dict[str, str]]] = None,
+        optional_objects: List[Dict[str, str]] = [],
         device: Optional[AutomatorDevice] = None,
     ) -> None:
 

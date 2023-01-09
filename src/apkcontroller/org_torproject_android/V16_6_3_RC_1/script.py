@@ -65,7 +65,10 @@ class Apk_script:
 
     @typechecked
     def create_screens(self, script_graph: nx.DiGraph) -> List[Screen]:
-        """Creates the screens as networkx nodes."""
+        """Creates the screens as networkx nodes.
+
+        TODO: refactor to outside of script to reduce duplicate code.
+        """
         screens: List[Screen] = []
 
         # Create the Screen objects programmatically.

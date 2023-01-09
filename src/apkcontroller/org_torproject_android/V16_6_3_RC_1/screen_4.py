@@ -57,7 +57,7 @@ def screen_4(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
         get_next_actions=get_next_actions,
         required_objects=required_objects,
         script_description=description,
-        optional_objects=None,
+        optional_objects=[],
     )
 
 
