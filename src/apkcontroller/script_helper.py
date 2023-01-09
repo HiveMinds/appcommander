@@ -7,6 +7,10 @@ import xmltodict
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
+from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.script import (
+    Apk_script,
+)
+
 if TYPE_CHECKING:
     from src.apkcontroller.Screen import Screen
 else:
@@ -183,3 +187,31 @@ def dict_contains_other_dict(sub: Dict, main: Dict) -> bool:
         if sub_val != main[sub_key] and sub_val not in main[sub_key]:
             return False
     return True
+
+
+@typechecked
+def can_proceed(
+    device: AutomatorDevice,
+    expected_screennames: List[int],
+    script: Apk_script,
+) -> Tuple[bool, int]:
+    """Checks whether the screen is expected, raises an error if not.
+
+    And it returns the current screen number.
+    """
+    # get current screen dict.
+    unpacked_screen_dict: Dict = get_current_screen_unpacked(device)
+
+    # verify current_screen in next_screens.
+    is_expected, screen_nr = current_screen_is_expected(
+        expected_screennames=expected_screennames,
+        unpacked_screen_dict=unpacked_screen_dict,
+        script_graph=script.script_graph,
+    )
+
+    # end_screens = get end_screens()
+    if not is_expected:
+        # TODO: Export the actual screen, screen data and expected screens in
+        # specific error log folder.
+        raise ReferenceError("Error, the expected screen was not found.")
+    return is_expected, screen_nr
