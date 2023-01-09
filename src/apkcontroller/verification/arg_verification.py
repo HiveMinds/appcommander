@@ -14,9 +14,6 @@ def verify_args(args: argparse.Namespace) -> None:
     verify_app_name(args)
     verify_app_version(args)
 
-    if isinstance(args.script_path, str):
-        verify_app_script(args.script_path)
-
 
 @typechecked
 def verify_app_name(args: argparse.Namespace) -> None:
@@ -27,7 +24,9 @@ def verify_app_name(args: argparse.Namespace) -> None:
     if args.app_name is None:
         raise NameError("Error, app name is not specified.")
 
-    app_path: str = f'src/apkcontroller/{args.app_name.replace(".","_")}'
+    app_path: str = (
+        f'src/apkcontroller/{args.app_name.replace(".","_").replace(" ","_")}'
+    )
     # User just wants to store screenshots and json, make dirs for user.
     if args.export_screen is not None:
         # TODO: verify app is installed.
@@ -51,8 +50,8 @@ def verify_app_version(args: argparse.Namespace) -> None:
         raise NameError("Error, app version is not specified.")
 
     version_path: str = (
-        f'src/apkcontroller/{args.app_name.replace(".","_")}/'
-        + f'{args.version.replace(".","_")}'
+        f'src/apkcontroller/{args.app_name.replace(".","_").replace(" ","_")}/'
+        + f'V{args.version.replace(".","_").replace(" ","_")}'
     )
     # User just wants to store screenshots and json, make dirs for user.
     if args.export_screen is not None:
@@ -65,6 +64,12 @@ def verify_app_version(args: argparse.Namespace) -> None:
             raise NotADirectoryError(
                 f"Error, path:{version_path} does not exist. "
                 + " Please create it and add an accompanying script."
+            )
+        script_path = f"{version_path}/script.py"
+        if not os.path.exists(script_path):
+            raise NotADirectoryError(
+                f"Error, path:{script_path} does not exist. "
+                + " Please create it and make it work."
             )
 
 

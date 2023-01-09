@@ -136,7 +136,13 @@ def export_screen_data_if_valid(
     if device is not None:
         for screen in screen_objects:
             if screen.is_expected_screen(device=device):
-                screen.export_screen_data(device=device, overwrite=overwrite)
+                export_screen_data(
+                    device=device,
+                    screen_dict=screen.screen_dict,
+                    script_description=screen.script_description,
+                    overwrite=overwrite,
+                    unverified=False,
+                )
 
 
 @typechecked
@@ -181,3 +187,52 @@ def launch_app(app_name: str) -> None:
     )
 
     # TODO: verify app is laucned
+
+
+@typechecked
+def export_screen_data(
+    device: AutomatorDevice,
+    screen_dict: Dict,
+    script_description: Dict[str, str],
+    overwrite: bool = False,
+    unverified: bool = True,
+) -> None:
+    """Writes a dict file to a .json file, and exports a screenshot.
+
+    The overwrite bool determines whether a file will be overwritten or
+    not if it  already exists. The unverified bool determines whether
+    the screen data is verified to be expected, or not. If not, the
+    screen data is placed in a subfolder named: unverified, to reduce
+    the probability of the developer basing script actions on data
+    belonging to the wrong screen.
+    """
+    if unverified:
+        unverified_dir = "unverified/"
+    else:
+        unverified_dir = ""
+    output_dir = (
+        (
+            "src/apkcontroller/"
+            + f'{script_description["app_name"]}'
+            + f'/V{script_description["version"]}/{unverified_dir}'
+        )
+        .replace(".", "_")
+        .replace(" ", "_")
+    )
+    output_name = f'{script_description["screen_nr"]}'
+
+    for extension in [".json", ".png"]:
+        output_path = f"{output_dir}{output_name}{extension}"
+        if not Path(output_path).is_file() or overwrite:
+
+            if extension == ".json":
+                if screen_dict is None:
+                    screen_dict = get_screen_as_dict(device)
+                output_json(output_dir, f"{output_name}.json", screen_dict)
+            if extension == ".png":
+                # device.takeScreenshot(output_path)
+                device.screenshot(output_path)
+
+        # Verify the file exists.
+        if not Path(output_path).is_file():
+            raise Exception(f"Error, filepath:{output_path} was not created.")

@@ -1,7 +1,6 @@
 """Starts a script to control an app."""
 
 import time
-from pathlib import Path
 from typing import Callable, Dict, List, Optional, Union
 
 import networkx as nx
@@ -10,7 +9,6 @@ from uiautomator import AutomatorDevice
 
 from src.apkcontroller.helper import (
     get_screen_as_dict,
-    output_json,
     required_objects_in_screen,
 )
 
@@ -100,44 +98,6 @@ class Screen:
             return False
         # else:
         return True
-
-    @typechecked
-    def export_screen_data(
-        self,
-        device: AutomatorDevice,
-        overwrite: bool = False,
-    ) -> None:
-        """Writes a dict file to a .json file, and exports a screenshot."""
-        output_dir = (
-            (
-                "src/apkcontroller/"
-                + f'{self.script_description["app_name"]}'
-                + f'/V{self.script_description["version"]}/'
-            )
-            .replace(".", "_")
-            .replace(" ", "_")
-        )
-        output_name = f'{self.script_description["screen_nr"]}'
-
-        for extension in [".json", ".png"]:
-            output_path = f"{output_dir}{output_name}{extension}"
-            if not Path(output_path).is_file() or overwrite:
-
-                if extension == ".json":
-                    if self.screen_dict is None:
-                        self.screen_dict = get_screen_as_dict(device)
-                    output_json(
-                        output_dir, f"{output_name}.json", self.screen_dict
-                    )
-                if extension == ".png":
-                    # device.takeScreenshot(output_path)
-                    device.screenshot(output_path)
-
-            # Verify the file exists.
-            if not Path(output_path).is_file():
-                raise Exception(
-                    f"Error, filepath:{output_path} was not created."
-                )
 
     def goto_next_screen(
         self, actions: List[str], next_screen_index: int
