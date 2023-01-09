@@ -62,6 +62,11 @@ def screen_5(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
         Then the app goes to the next screen and waits a pre-determined
         amount, and optionally retries a pre-determined amount of attempts.
         """
+        # If the desired apps are already torified:
+        # run start.
+
+        # Else:
+        # Go to settings, and enable the required apps.
 
         print(
             "TODO: determine how to specify how to compute the next action"
