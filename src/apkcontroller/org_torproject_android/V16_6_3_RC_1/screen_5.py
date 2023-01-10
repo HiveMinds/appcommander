@@ -14,9 +14,7 @@ from src.apkcontroller.Screen import Screen
 
 
 @typechecked
-def screen_5(
-    script_description: Dict[str, Union[bool, int, str, Dict[str, str]]]
-) -> Screen:
+def screen_5(script_description: Dict) -> Screen:
     """Creates the settings for a starting screen where Orbot is not yet
     started."""
     description = copy.deepcopy(script_description)
@@ -66,10 +64,7 @@ def screen_5(
         Then the app goes to the next screen and waits a pre-determined
         amount, and optionally retries a pre-determined amount of attempts.
         """
-        if (
-            "desired_apps_are_torified" in history.keys()
-            and history["desired_apps_are_torified"]
-        ):
+        if 6 in history["past_screens"]:
             # run start.
             return [actions_1]
         # Else:
@@ -87,7 +82,7 @@ def screen_5(
 # pylint: disable=W0613
 @typechecked
 def actions_0(
-    device: AutomatorDevice, additional_info: Dict[str, str]
+    device: AutomatorDevice, additional_info: Dict[str, Union[str, bool]]
 ) -> None:
     """Go to settings inside Orbot to select which apps are torified."""
     device(resourceId="org.torproject.android:id/ivAppVpnSettings").click()
@@ -96,7 +91,7 @@ def actions_0(
 # pylint: disable=W0613
 @typechecked
 def actions_1(
-    device: AutomatorDevice, additional_info: Dict[str, str]
+    device: AutomatorDevice, additional_info: Dict[str, Union[str, bool]]
 ) -> None:
     """Performs the actions in option 2 in this screen."""
     # Press the START button in the Orbot app to create a tor connection.

@@ -24,7 +24,7 @@ class Screen:
             List[Callable[[AutomatorDevice, Dict[str, str]], Dict]],
         ],
         required_objects: List[Dict[str, str]],
-        script_description: Dict[str, Union[bool, int, str, Dict[str, str]]],
+        script_description: Dict,
         optional_objects: List[Dict[str, str]] = [],
         device: Optional[AutomatorDevice] = None,
     ) -> None:
@@ -50,9 +50,7 @@ class Screen:
         if self.device is not None:
             self.screen_dict = get_screen_as_dict(self.device)
 
-        self.script_description: Dict[
-            str, Union[bool, int, str, Dict[str, str]]
-        ] = script_description
+        self.script_description: Dict = script_description
         """Some buttons/obtjects in the screen may appear depending on
         parameters that are not predictable in advance, e.g. whether some
         server responds or not.

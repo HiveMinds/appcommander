@@ -43,9 +43,7 @@ class Apk_script:
     ) -> None:
 
         # Store data used to generate output and find Screen object files.
-        self.script_description: Dict[
-            str, Union[bool, int, str, Dict[str, str]]
-        ] = {
+        self.script_description: Dict = {
             "title": "conf_orbot",
             "app_name": "org.torproject.android",
             "app_display_name": "Orbot",
@@ -138,12 +136,16 @@ class Apk_script:
         device: AutomatorDevice,
         next_actions: List[Callable],
         screen_nr: int,
-        torifying_apps: Dict[str, str],
+        additional_info: Dict[str, Union[str, bool]],
     ) -> None:
         """Performs the first action list in the list of action lists."""
         if screen_nr == 6:
-            print("LINE140")
-
-            next_actions[0](device=device, additional_info=torifying_apps)
+            next_actions[0](
+                device=device,
+                additional_info=additional_info["torrifying_apps"],
+            )
         else:
-            next_actions[0](device=device, additional_info=torifying_apps)
+            next_actions[0](
+                device=device,
+                additional_info=additional_info["torrifying_apps"],
+            )

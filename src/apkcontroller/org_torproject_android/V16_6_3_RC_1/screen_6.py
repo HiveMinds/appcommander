@@ -1,7 +1,6 @@
 """The settings screen where apps are torified."""
 # pylint: disable=R0801
 import copy
-from pprint import pprint
 from typing import Callable, Dict, List, Optional, Union
 
 from typeguard import typechecked
@@ -11,13 +10,12 @@ from src.apkcontroller.Screen import Screen
 from src.apkcontroller.script_helper import (
     get_current_screen_unpacked,
     get_torified_item_index_dict,
+    orbot_torifying_app_is_checked,
 )
 
 
 @typechecked
-def screen_6(
-    script_description: Dict[str, Union[bool, int, str, Dict[str, str]]]
-) -> Screen:
+def screen_6(script_description: Dict) -> Screen:
     """Creates the settings for a starting screen where Orbot is not yet
     started."""
     description = copy.deepcopy(script_description)
@@ -78,7 +76,7 @@ def screen_6(
 # pylint: disable=W0613
 @typechecked
 def actions_0(
-    device: AutomatorDevice, additional_info: Dict[str, str]
+    device: AutomatorDevice, additional_info: Dict[str, Union[str, bool]]
 ) -> None:
     """TODO."""
     # Go to settings to select which apps are torified.
@@ -88,16 +86,19 @@ def actions_0(
 # pylint: disable=W0613
 @typechecked
 def actions_1(
-    device: AutomatorDevice, additional_info: Dict[str, str]
-) -> None:
+    device: AutomatorDevice, additional_info: Dict[str, Union[str, bool]]
+) -> Dict:
     """Performs the actions in option 2 in this screen."""
-    unpacked_screen_dict: Dict = get_current_screen_unpacked(device)
 
     # TODO: get button ids to click.
-    for app_name, package_name in additional_info.items():
-        print(f"torifying app_name={app_name}")
-        print(f"torifying package_name={package_name}")
-        print(f"device={device}")
+    for app_name, _ in additional_info.items():
+
+        # Refresh the screen.
+        device(descriptionMatches="Refresh Apps").click()
+
+        # Reload the screen data.
+        unpacked_screen_dict: Dict = get_current_screen_unpacked(device)
+
         if app_name == "DAVx5":
             searched_name = "DAVx⁵"
         # required_object:Dict[str,str] ={"@text": app_name}
@@ -105,13 +106,16 @@ def actions_1(
         item_dict = get_torified_item_index_dict(
             required_object, unpacked_screen_dict, {}
         )
-        item_index = item_dict["@index"]
-        print("item_index=")
-        pprint(item_index)
-    # Click those buttons.
+        item_index = int(item_dict["@index"])
+        # Click those buttons if they are not enabled..
+        if not orbot_torifying_app_is_checked(item_dict):
+            device(index=item_index).click()
 
     # Optional(Click refresh).
+    # Refresh the screen.
+    device(descriptionMatches="Refresh Apps").click()
 
     # Click back.
+    device(descriptionContains="Navigate up").click()
 
-    raise Exception("Not built yet.")
+    return {"torified": "True"}

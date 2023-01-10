@@ -13,9 +13,7 @@ from src.apkcontroller.Screen import Screen
 
 
 @typechecked
-def screen_0(
-    script_description: Dict[str, Union[bool, int, str, Dict[str, str]]]
-) -> Screen:
+def screen_0(script_description: Dict) -> Screen:
     """Creates the settings for a starting screen where Orbot is not yet
     started."""
     description = copy.deepcopy(script_description)
@@ -62,7 +60,7 @@ def screen_0(
 # pylint: disable=W0613
 @typechecked
 def actions_0(
-    device: AutomatorDevice, additional_info: Dict[str, str]
+    device: AutomatorDevice, additional_info: Dict[str, Union[str, bool]]
 ) -> None:
     """Performs the actions in option 1 in this screen. For this screen, it
     clicks the "OK" button in the "Connection request".

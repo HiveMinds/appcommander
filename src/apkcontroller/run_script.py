@@ -39,6 +39,7 @@ def run_script(script: Apk_script) -> None:
     _, screen_nr = can_proceed(
         device=device, expected_screennames=start_screennames, script=script
     )
+    script.script_description["past_screens"] = [screen_nr]
 
     print(f"end_nodes={end_screennames}")
     print(f"screen_nr={screen_nr}")
@@ -56,7 +57,7 @@ def run_script(script: Apk_script) -> None:
         next_actions = screen.get_next_actions(
             required_objects=screen.required_objects,
             optional_objects=screen.optional_objects,
-            history={},
+            history=script.script_description,
         )
         # Perform next action.
         if len(next_actions) == 0:
@@ -64,13 +65,13 @@ def run_script(script: Apk_script) -> None:
         if len(next_actions) > 1:
             raise ValueError("More than one action functions were returned.")
 
-        print("CALLING")
         script.perform_action(
             device=device,
             next_actions=next_actions,
             screen_nr=screen_nr,
-            torifying_apps=script.script_description["torifying_apps"],
+            additional_info=script.script_description,
         )
+        script.script_description["past_screens"].append(screen_nr)
 
         # next_screens = get_next_screen(s)(
         # current_screen_nr

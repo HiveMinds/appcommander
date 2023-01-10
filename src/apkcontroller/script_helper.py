@@ -284,3 +284,24 @@ def can_proceed(
         # specific error log folder.
         raise ReferenceError("Error, the expected screen was not found.")
     return is_expected, screen_nr
+
+
+def orbot_torifying_app_is_checked(app_item: Dict) -> bool:
+    """Returns True if the item is checked, False if it is unchecked."""
+    if "@checkable" not in app_item["node"][2].keys():
+        raise KeyError(
+            "Error, the app checkbox should contain @checkable."
+            + f"Though it did not:{app_item}"
+        )
+    if "@checkable" not in app_item["node"][2]["@checkable"] != "true":
+        raise ValueError(
+            "Error, the app checkbox should contain:"
+            + f"@checkable: true Though it did not:{app_item}"
+        )
+    if app_item["node"][2]["@checked"] == "true":
+        return True
+    if app_item["node"][2]["@checked"] == "false":
+        return False
+    raise KeyError(
+        "Error, valid @checked value was not found in app_item checkbox."
+    )

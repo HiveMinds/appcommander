@@ -1,6 +1,6 @@
 """Completes the tasks specified in the arg_parser."""
 import argparse
-from typing import Dict, Union
+from typing import Dict
 
 from typeguard import typechecked
 from uiautomator import device
@@ -43,9 +43,7 @@ def process_args(args: argparse.Namespace) -> None:
 
     if args.export_screen:
         screen_dict = get_screen_as_dict(device)
-        script_description: Dict[
-            str, Union[bool, int, str, Dict[str, str]]
-        ] = {
+        script_description: Dict = {
             "app_name": package_name,
             "version": args.version,
             "screen_nr": args.export_screen,

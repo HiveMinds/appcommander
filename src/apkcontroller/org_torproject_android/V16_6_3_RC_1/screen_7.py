@@ -14,9 +14,7 @@ from src.apkcontroller.Screen import Screen
 
 
 @typechecked
-def screen_7(
-    script_description: Dict[str, Union[bool, int, str, Dict[str, str]]]
-) -> Screen:
+def screen_7(script_description: Dict) -> Screen:
     """Creates the settings for a starting screen where Orbot is not yet
     started."""
     description = copy.deepcopy(script_description)
@@ -90,7 +88,7 @@ def screen_7(
 # pylint: disable=W0613
 @typechecked
 def actions_0(
-    device: AutomatorDevice, additional_info: Dict[str, str]
+    device: AutomatorDevice, additional_info: Dict[str, Union[str, bool]]
 ) -> None:
     """Go to settings inside Orbot to select which apps are torified."""
     device(resourceId="org.torproject.android:id/ivAppVpnSettings").click()
