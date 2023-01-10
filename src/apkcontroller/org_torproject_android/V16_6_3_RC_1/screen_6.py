@@ -10,7 +10,7 @@ from uiautomator import AutomatorDevice
 from src.apkcontroller.Screen import Screen
 from src.apkcontroller.script_helper import (
     get_current_screen_unpacked,
-    get_torified_item_buttons,
+    get_torified_item_index_dict,
 )
 
 
@@ -102,11 +102,12 @@ def actions_1(
             searched_name = "DAVx⁵"
         # required_object:Dict[str,str] ={"@text": app_name}
         required_object: Dict[str, str] = {"@text": searched_name}
-        returned_value = get_torified_item_buttons(
-            required_object, unpacked_screen_dict
+        item_dict = get_torified_item_index_dict(
+            required_object, unpacked_screen_dict, {}
         )
-        print("returned_value=")
-        pprint(returned_value)
+        item_index = item_dict["@index"]
+        print("item_index=")
+        pprint(item_index)
     # Click those buttons.
 
     # Optional(Click refresh).
