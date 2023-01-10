@@ -1,12 +1,17 @@
 """The settings screen where apps are torified."""
 # pylint: disable=R0801
 import copy
+from pprint import pprint
 from typing import Callable, Dict, List, Optional, Union
 
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
 from src.apkcontroller.Screen import Screen
+from src.apkcontroller.script_helper import (
+    get_current_screen_unpacked,
+    get_torified_item_buttons,
+)
 
 
 @typechecked
@@ -86,11 +91,22 @@ def actions_1(
     device: AutomatorDevice, additional_info: Dict[str, str]
 ) -> None:
     """Performs the actions in option 2 in this screen."""
+    unpacked_screen_dict: Dict = get_current_screen_unpacked(device)
+
     # TODO: get button ids to click.
     for app_name, package_name in additional_info.items():
         print(f"torifying app_name={app_name}")
         print(f"torifying package_name={package_name}")
         print(f"device={device}")
+        if app_name == "DAVx5":
+            searched_name = "DAVx⁵"
+        # required_object:Dict[str,str] ={"@text": app_name}
+        required_object: Dict[str, str] = {"@text": searched_name}
+        returned_value = get_torified_item_buttons(
+            required_object, unpacked_screen_dict
+        )
+        print("returned_value=")
+        pprint(returned_value)
     # Click those buttons.
 
     # Optional(Click refresh).

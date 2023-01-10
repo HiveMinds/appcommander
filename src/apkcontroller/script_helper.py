@@ -1,6 +1,6 @@
 """Functions to assist a script file for an arbitrary app."""
 import time
-from typing import TYPE_CHECKING, Dict, List, Optional, Tuple, Union
+from typing import TYPE_CHECKING, Dict, List, Optional, Tuple, Union, cast
 
 import networkx as nx
 import xmltodict
@@ -168,6 +168,44 @@ def required_object_in_screen(
         if not isinstance(unpacked_screen_dict["node"], Dict | List):
             raise TypeError("Node value of unexpected type.")
     return False
+
+
+@typechecked
+def get_torified_item_buttons(
+    required_object: Dict[str, str],
+    unpacked_screen_dict: Dict[str, Union[List, Dict, str]],
+) -> Dict[str, str]:
+    """Parses the screen dictionary and returns the button @resource-id values
+    belonging to the apps that are to be torified."""
+
+    if dict_contains_other_dict(required_object, unpacked_screen_dict):
+        # print(f"unpacked_screen_dict={unpacked_screen_dict}")
+        # return "FOUND_DICT"
+        return cast(Dict, unpacked_screen_dict)
+    if "node" in unpacked_screen_dict.keys():
+        if isinstance(unpacked_screen_dict["node"], Dict):
+            if get_torified_item_buttons(
+                required_object=required_object,
+                unpacked_screen_dict=unpacked_screen_dict["node"],
+            ):
+                return get_torified_item_buttons(
+                    required_object=required_object,
+                    unpacked_screen_dict=unpacked_screen_dict["node"],
+                )
+        if isinstance(unpacked_screen_dict["node"], List):
+            for node_elem in unpacked_screen_dict["node"]:
+                if get_torified_item_buttons(
+                    required_object=required_object,
+                    unpacked_screen_dict=cast(Dict, node_elem),
+                ):
+                    return get_torified_item_buttons(
+                        required_object=required_object,
+                        unpacked_screen_dict=cast(Dict, node_elem),
+                    )
+        if not isinstance(unpacked_screen_dict["node"], Dict | List):
+            raise TypeError("Node value of unexpected type.")
+        # pprint(unpacked_screen_dict)
+    return {}
 
 
 @typechecked
