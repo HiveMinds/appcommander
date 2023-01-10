@@ -6,5 +6,6 @@ from typing import Dict
 
 app_name_mappings: Dict = {
     "Nextcloud": "org.nextcloud.android",
-    "DAVx5": "com.davdroid.android",
+    "DAVx5": "at.bitfire.davdroid",
+    "Orbot": "org.torproject.android",
 }

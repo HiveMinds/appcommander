@@ -17,7 +17,7 @@ screen_path: str = "src.apkcontroller.org_torproject_android.V16_6_3_RC_1."
 moduleNames = []
 screen_func_names = []
 modules = []
-for screen_index in range(0, 6):
+for screen_index in range(0, 8):
     module_name = f"{screen_path}screen_{screen_index}"
     moduleNames.append(module_name)
     screen_func_names.append(f"screen_{screen_index}")
@@ -103,7 +103,7 @@ class Apk_script:
 
         for nodename in script_graph.nodes:
             screen: Screen = script_graph.nodes[nodename]["Screen"]
-            if screen.script_description["screen_nr"] in list(range(0, 7)):
+            if screen.script_description["screen_nr"] in list(range(0, 8)):
                 script_graph.nodes[nodename]["is_start"] = True
             else:
                 script_graph.nodes[nodename]["is_start"] = False

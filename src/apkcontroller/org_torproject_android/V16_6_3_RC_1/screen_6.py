@@ -1,8 +1,4 @@
-"""Can be first screen after "Connection request" has been satisfied. The tor-
-bridge is not yet started.
-
-Presents a: "Connection request".
-"""
+"""The settings screen where apps are torrified."""
 # pylint: disable=R0801
 import copy
 from typing import Callable, Dict, List, Union
@@ -58,7 +54,7 @@ def screen_6(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
             "TODO: determine how to specify how to compute the next action"
             + f" for this screen. {required_objects},{optional_objects}"
         )
-        return [actions_0, actions_1]
+        return [actions_1]
 
     return Screen(
         get_next_actions=get_next_actions,
@@ -70,18 +66,7 @@ def screen_6(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
 
 @typechecked
 def actions_0(device: AutomatorDevice) -> None:
-    """Performs the actions in option 1 in this screen.
-
-    Example:
-    d(
-        resourceId=resourceId,
-        text=text,
-        className=className,
-        descriptionContains= descriptionContains,
-        index=index,
-        description=description
-    ).click()
-    """
+    """TODO."""
     # Go to settings to select which apps are torified.
     device(resourceId="org.torproject.android:id/ivAppVpnSettings").click()
 

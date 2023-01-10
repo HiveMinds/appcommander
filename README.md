@@ -25,14 +25,14 @@ pip install apkcontroller
 Connect your phone, and tell this code which app you want to automate, and how:
 
 ```bash
-python -m src.apkcontroller -a org.torproject.android -v 0.4.7.11 -s initiate.py
+python -m src.apkcontroller -a org.torproject.android -v "16.6.3 RC 1" -t "DAVx5"
 ```
 
 which is the same as:
 
 ```bash
-python -m src.apkcontroller --app-name \
-org.torproject.android --version 0.4.7.11 --script initiate.py
+python -m src.apkcontroller --app-name org.torproject.android \
+--version "16.6.3 RC 1" -torify "DAVx5"
 ```
 
 For more info, run:

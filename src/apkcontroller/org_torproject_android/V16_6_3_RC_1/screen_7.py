@@ -49,6 +49,7 @@ def screen_7(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
     ]
     optional_objects: List[Dict[str, str]] = []
 
+    # pylint: disable=W0613
     @typechecked
     def get_next_actions(
         required_objects: List[Dict[str, str]],
@@ -66,11 +67,15 @@ def screen_7(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
         amount, and optionally retries a pre-determined amount of attempts.
         """
 
-        print(
-            "TODO: determine how to specify how to compute the next action"
-            + f" for this screen. {required_objects},{optional_objects}"
-        )
-        return [actions_0, actions_1]
+        if (
+            "desired_apps_are_torified" in history.keys()
+            and history["desired_apps_are_torified"]
+        ):
+            # TODO: Set this screen as end screen, code is done.
+            return []
+        # Else:
+        # Go to settings, and enable the required apps.
+        return [actions_0]
 
     return Screen(
         get_next_actions=get_next_actions,
@@ -82,24 +87,5 @@ def screen_7(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
 
 @typechecked
 def actions_0(device: AutomatorDevice) -> None:
-    """Performs the actions in option 1 in this screen.
-
-    Example:
-    d(
-        resourceId=resourceId,
-        text=text,
-        className=className,
-        descriptionContains= descriptionContains,
-        index=index,
-        description=description
-    ).click()
-    """
-    # Go to settings to select which apps are torified.
+    """Go to settings inside Orbot to select which apps are torified."""
     device(resourceId="org.torproject.android:id/ivAppVpnSettings").click()
-
-
-@typechecked
-def actions_1(device: AutomatorDevice) -> None:
-    """Performs the actions in option 2 in this screen."""
-    # Press the START button in the Orbot app to create a tor connection.
-    device(resourceId="org.torproject.android:id/btnStart").click()

@@ -2,10 +2,38 @@
 other."""
 import argparse
 import os
+from typing import Dict, List, Tuple
 
 from typeguard import typechecked
 
 from src.apkcontroller.helper import file_exists, make_path_if_not_exists
+from src.apkcontroller.verification.verify_phone_connection import (
+    assert_app_is_installed,
+)
+
+
+@typechecked
+def sort_out_app_name_and_package_name(
+    some_apk_name: str, app_name_mappings: Dict[str, str]
+) -> Tuple[str, str]:
+    """Returns app name and package name based on user input and supported apk
+    packages."""
+    if some_apk_name in app_name_mappings.keys():
+        app_name = some_apk_name
+        package_name = app_name_mappings[app_name]
+    elif some_apk_name in app_name_mappings.values():
+        # TODO: verify all supported package names are unique.
+
+        # app_name = list(app_name_mappings.values()).index(some_apk_name)
+        app_name = str(
+            {
+                i
+                for i in app_name_mappings
+                if app_name_mappings[i] == some_apk_name
+            }
+        )
+        package_name = some_apk_name
+    return app_name, package_name
 
 
 @typechecked
@@ -83,3 +111,22 @@ def verify_app_script(script_path: str) -> None:
         raise FileNotFoundError(f"Input Graph path was invalid:{script_path}")
 
     # TODO: Verify script path is valid.
+
+
+def get_verified_apps_to_torify(
+    app_name_mappings: Dict[str, str], torifying_aps_csv: str
+) -> List[str]:
+    """Converts the comma separated values (csv) of the app names that are to
+    be torrified, into a list of app names, and then verifies they are
+    installed on the phone."""
+
+    torifying_apps: List[str] = torifying_aps_csv.split(",")
+    for app_name in torifying_apps:
+        _, package_name = sort_out_app_name_and_package_name(
+            app_name, app_name_mappings=app_name_mappings
+        )
+        assert_app_is_installed(
+            package_name=package_name, app_name_mappings=app_name_mappings
+        )
+
+    return torifying_apps

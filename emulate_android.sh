@@ -44,10 +44,12 @@ echo 'export PATH=$PATH:$ANDROID_HOME/emulator' >> ~/.profile
 
 # create android VMs android-small and @android-large
 avdmanager create avd -n "android-small" -k "system-images;android-28;google_apis_playstore;x86_64"
-# avdmanager create avd -n "android-small" -k "system-images;android-28;google_apis_playstore;x86_64" -d "Nexus S" -c 512
+avdmanager create avd -n Emulator-Api23-Default -c 12M -f -k "system-images;android-28;google_apis_playstore;x86_64"
 
 # Show installed android devices:
 emulator -list-avds
 
 # Launch emulated phone:
-emulator -avd android-small -netdelay none -netspeed full
+#emulator -avd android-small -netdelay none -netspeed full
+emulator -avd android-small -netdelay none -netspeed full -skin 768x1280
+#emulator -avd Emulator-Api23-Default -netdelay none -netspeed full -skin 768x1280

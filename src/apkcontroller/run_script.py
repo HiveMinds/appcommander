@@ -65,7 +65,9 @@ def run_script(script: Apk_script) -> None:
             history={},
         )
         # Perform next action.
-        if len(next_actions) != 1:
+        if len(next_actions) == 0:
+            raise ValueError("No action functions was returned.")
+        if len(next_actions) > 1:
             raise ValueError("More than one action functions were returned.")
 
         next_actions[0](device=device)  # type: ignore[call-arg]

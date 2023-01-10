@@ -1,6 +1,6 @@
 """Functions to assist a script file for an arbitrary app."""
 import time
-from typing import TYPE_CHECKING, Dict, List, Tuple, Union
+from typing import TYPE_CHECKING, Dict, List, Optional, Tuple, Union
 
 import networkx as nx
 import xmltodict
@@ -85,6 +85,7 @@ def current_screen_is_expected(
 def is_expected_screen(
     unpacked_screen_dict: Dict,
     expected_screen: Screen,
+    verbose: Optional[bool] = False,
 ) -> bool:
     """Custom verification per screen based on the optional and required
     objects in screen.
@@ -103,7 +104,8 @@ def is_expected_screen(
                 unpacked_screen_dict=unpacked_screen_dict,
             ):
                 return True
-        # Return false otherwise.
+        if verbose:
+            print(f"Not found:{expected_screen.required_objects}")
         return False
     # else:
     return True
