@@ -56,12 +56,13 @@ def run_script(script: Apk_script) -> None:
         screen = script.script_graph.nodes[screen_nr]["Screen"]
         next_actions: List[
             Callable[
-                [Dict[str, str], Dict[str, str]],
+                [Dict[str, str], Dict[str, str], Dict[str, str]],
                 List[Callable[[AutomatorDevice], None]],
             ]
         ] = screen.get_next_actions(
             required_objects=screen.required_objects,
             optional_objects=screen.optional_objects,
+            history={},
         )
         # Perform next action.
         if len(next_actions) != 1:

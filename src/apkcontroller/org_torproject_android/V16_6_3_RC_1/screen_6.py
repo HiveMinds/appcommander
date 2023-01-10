@@ -22,29 +22,17 @@ def screen_6(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
     description["screen_nr"] = 6
     description["wait_time_sec"] = 2
     required_objects: List[Dict[str, str]] = [
+        # {
+        # "@text": "Global " "(Auto)",
+        # },
         {
-            "@text": "Global " "(Auto)",
+            "@resource-id": "org.torproject.android:id/itemicon",
         },
         {
-            "@text": "Trouble " "connecting?",
+            "@resource-id": "org.torproject.android:id/itemtext",
         },
         {
-            "@text": "Use Bridges ",
-        },
-        {
-            "@text": "Orbot",
-        },
-        {
-            "@resource-id": "org.torproject.android:id/btnStart",
-        },
-        # Specific to this page.
-        {
-            "@text": "STOP",
-        },
-        {
-            "@content-desc": (
-                "Orbot notification: Connected to the Tor network"
-            )
+            "@resource-id": "org.torproject.android:id/itemcheck",
         },
     ]
     optional_objects: List[Dict[str, str]] = []
@@ -53,6 +41,7 @@ def screen_6(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
     def get_next_actions(
         required_objects: List[Dict[str, str]],
         optional_objects: List[Dict[str, str]],
+        history: Dict,  # pylint: disable=W0613
     ) -> List[Callable[[AutomatorDevice], None]]:
         """Looks at the required objects and optional objects and determines
         which actions to take next.

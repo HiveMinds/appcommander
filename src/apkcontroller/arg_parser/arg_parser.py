@@ -1,6 +1,7 @@
 """Parses CLI arguments that specify on which platform to simulate the spiking
 neural network (SNN)."""
 import argparse
+from typing import List
 
 from typeguard import typechecked
 
@@ -35,6 +36,18 @@ def parse_cli_args() -> argparse.Namespace:
         help=(
             "Specify the screen number whose json data and .png data are "
             + "stored."
+        ),
+    )
+
+    # Create argument to allow user to specify which apps Orbot should torrify.
+    parser.add_argument(
+        "-t",
+        "--torify",
+        action="store",
+        type=List[str],
+        help=(
+            "The name of the Android apps that you want Orbot to torrify. "
+            + "You can choose from (left or right):'."
         ),
     )
 

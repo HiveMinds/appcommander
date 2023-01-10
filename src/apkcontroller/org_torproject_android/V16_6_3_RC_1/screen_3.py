@@ -1,7 +1,5 @@
-"""First entry point on app if it is freshly installed.
-
-Presents a: "Connection Request".
-"""
+"""After the "Connection Request" has been granted, the app welcomes the user
+with screens 1,2,3,4."""
 # pylint: disable=R0801
 import copy
 from typing import Callable, Dict, List, Union
@@ -34,6 +32,7 @@ def screen_3(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
     def get_next_actions(
         required_objects: List[Dict[str, str]],
         optional_objects: List[Dict[str, str]],
+        history: Dict,
     ) -> List[Callable[[AutomatorDevice], None]]:
         """Looks at the required objects and optional objects and determines
         which actions to take next.

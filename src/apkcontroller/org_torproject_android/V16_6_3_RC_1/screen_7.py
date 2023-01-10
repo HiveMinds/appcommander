@@ -14,12 +14,12 @@ from src.apkcontroller.Screen import Screen
 
 
 @typechecked
-def screen_5(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
+def screen_7(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
     """Creates the settings for a starting screen where Orbot is not yet
     started."""
     description = copy.deepcopy(script_description)
     description["max_retries"] = 1
-    description["screen_nr"] = 5
+    description["screen_nr"] = 7
     description["wait_time_sec"] = 2
     required_objects: List[Dict[str, str]] = [
         {
@@ -39,20 +39,21 @@ def screen_5(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
         },
         # Specific to this page.
         {
-            "@text": "START",
+            "@text": "STOP",
         },
         {
-            "@text": "Tor v0.4.7.11",
+            "@content-desc": (
+                "Orbot notification: Connected to the Tor network"
+            )
         },
     ]
     optional_objects: List[Dict[str, str]] = []
 
-    # pylint: disable=W0613
     @typechecked
     def get_next_actions(
         required_objects: List[Dict[str, str]],
         optional_objects: List[Dict[str, str]],
-        history: Dict,
+        history: Dict,  # pylint: disable=W0613
     ) -> List[Callable[[AutomatorDevice], None]]:
         """Looks at the required objects and optional objects and determines
         which actions to take next.
@@ -64,12 +65,12 @@ def screen_5(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
         Then the app goes to the next screen and waits a pre-determined
         amount, and optionally retries a pre-determined amount of attempts.
         """
-        if history["desired_apps_are_torified"]:
-            # run start.
-            return [actions_1]
-        # Else:
-        # Go to settings, and enable the required apps.
-        return [actions_0]
+
+        print(
+            "TODO: determine how to specify how to compute the next action"
+            + f" for this screen. {required_objects},{optional_objects}"
+        )
+        return [actions_0, actions_1]
 
     return Screen(
         get_next_actions=get_next_actions,
@@ -81,7 +82,19 @@ def screen_5(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
 
 @typechecked
 def actions_0(device: AutomatorDevice) -> None:
-    """Go to settings inside Orbot to select which apps are torified."""
+    """Performs the actions in option 1 in this screen.
+
+    Example:
+    d(
+        resourceId=resourceId,
+        text=text,
+        className=className,
+        descriptionContains= descriptionContains,
+        index=index,
+        description=description
+    ).click()
+    """
+    # Go to settings to select which apps are torified.
     device(resourceId="org.torproject.android:id/ivAppVpnSettings").click()
 
 

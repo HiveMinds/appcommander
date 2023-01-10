@@ -20,8 +20,8 @@ class Screen:
     def __init__(
         self,
         get_next_actions: Callable[
-            [Dict[str, str], Dict[str, str]],
-            List[Callable[[AutomatorDevice], None]],
+            [Dict[str, str], Dict[str, str], Dict[str, str]],
+            List[Callable[[AutomatorDevice], Dict]],
         ],
         required_objects: List[Dict[str, str]],
         script_description: Dict[str, Union[bool, int, str]],
@@ -31,8 +31,8 @@ class Screen:
 
         self.device: AutomatorDevice = device
         self.get_next_actions: Callable[
-            [Dict[str, str], Dict[str, str]],
-            List[Callable[[AutomatorDevice], None]],
+            [Dict[str, str], Dict[str, str], Dict[str, str]],
+            List[Callable[[AutomatorDevice], Dict]],
         ] = get_next_actions
 
         self.max_retries: int = int(script_description["max_retries"])

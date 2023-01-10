@@ -31,6 +31,7 @@ def screen_0(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
     def get_next_actions(
         required_objects: List[Dict[str, str]],
         optional_objects: List[Dict[str, str]],
+        history: Dict,
     ) -> List[Callable[[AutomatorDevice], None]]:
         """Looks at the required objects and optional objects and determines
         which actions to take next.
