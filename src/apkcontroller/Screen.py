@@ -21,10 +21,10 @@ class Screen:
         self,
         get_next_actions: Callable[
             [Dict[str, str], Dict[str, str], Dict[str, str]],
-            List[Callable[[AutomatorDevice], Dict]],
+            List[Callable[[AutomatorDevice, Dict[str, str]], Dict]],
         ],
         required_objects: List[Dict[str, str]],
-        script_description: Dict[str, Union[bool, int, str]],
+        script_description: Dict[str, Union[bool, int, str, Dict[str, str]]],
         optional_objects: List[Dict[str, str]] = [],
         device: Optional[AutomatorDevice] = None,
     ) -> None:
@@ -32,10 +32,11 @@ class Screen:
         self.device: AutomatorDevice = device
         self.get_next_actions: Callable[
             [Dict[str, str], Dict[str, str], Dict[str, str]],
-            List[Callable[[AutomatorDevice], Dict]],
+            List[Callable[[AutomatorDevice, Dict[str, str]], Dict]],
         ] = get_next_actions
 
-        self.max_retries: int = int(script_description["max_retries"])
+        # eloping typed dict.
+        self.max_retries: int = int(str(script_description["max_retries"]))
 
         """Sets the required objects for this screen.
 
@@ -50,7 +51,7 @@ class Screen:
             self.screen_dict = get_screen_as_dict(self.device)
 
         self.script_description: Dict[
-            str, Union[bool, int, str]
+            str, Union[bool, int, str, Dict[str, str]]
         ] = script_description
         """Some buttons/obtjects in the screen may appear depending on
         parameters that are not predictable in advance, e.g. whether some
@@ -63,7 +64,8 @@ class Screen:
             None, List[Dict[str, str]]
         ] = optional_objects
 
-        self.wait_time_sec: int = int(script_description["max_retries"])
+        # eloping typed dict.
+        self.wait_time_sec: int = int(str(script_description["max_wait_time"]))
 
     def goto_next_screen(
         self, actions: List[str], next_screen_index: int
@@ -79,7 +81,7 @@ class Screen:
 def get_next_screen(
     current_screen_nr: str,
     script_graph: nx.DiGraph,
-    actions: List[Callable[[AutomatorDevice], None]],
+    actions: List[Callable[[AutomatorDevice, Dict[str, str]], None]],
 ) -> bool:
     """Gets the next expected screen."""
 

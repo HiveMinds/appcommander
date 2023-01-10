@@ -1,7 +1,7 @@
-"""The settings screen where apps are torrified."""
+"""The settings screen where apps are torified."""
 # pylint: disable=R0801
 import copy
-from typing import Callable, Dict, List, Union
+from typing import Callable, Dict, List, Optional, Union
 
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
@@ -10,7 +10,9 @@ from src.apkcontroller.Screen import Screen
 
 
 @typechecked
-def screen_6(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
+def screen_6(
+    script_description: Dict[str, Union[bool, int, str, Dict[str, str]]]
+) -> Screen:
     """Creates the settings for a starting screen where Orbot is not yet
     started."""
     description = copy.deepcopy(script_description)
@@ -33,12 +35,14 @@ def screen_6(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
     ]
     optional_objects: List[Dict[str, str]] = []
 
+    # pylint: disable=W0102
     @typechecked
     def get_next_actions(
         required_objects: List[Dict[str, str]],
         optional_objects: List[Dict[str, str]],
         history: Dict,  # pylint: disable=W0613
-    ) -> List[Callable[[AutomatorDevice], None]]:
+        script_description: Optional[Dict] = {},
+    ) -> List[Callable]:
         """Looks at the required objects and optional objects and determines
         which actions to take next.
         An example of the next actions could be the following List:
@@ -54,6 +58,8 @@ def screen_6(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
             "TODO: determine how to specify how to compute the next action"
             + f" for this screen. {required_objects},{optional_objects}"
         )
+        print(f"history={history}")
+        print(f"script_description={script_description}")
         return [actions_1]
 
     return Screen(
@@ -64,15 +70,31 @@ def screen_6(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
     )
 
 
+# pylint: disable=W0613
 @typechecked
-def actions_0(device: AutomatorDevice) -> None:
+def actions_0(
+    device: AutomatorDevice, additional_info: Dict[str, str]
+) -> None:
     """TODO."""
     # Go to settings to select which apps are torified.
     device(resourceId="org.torproject.android:id/ivAppVpnSettings").click()
 
 
+# pylint: disable=W0613
 @typechecked
-def actions_1(device: AutomatorDevice) -> None:
+def actions_1(
+    device: AutomatorDevice, additional_info: Dict[str, str]
+) -> None:
     """Performs the actions in option 2 in this screen."""
-    # Press the START button in the Orbot app to create a tor connection.
-    device(resourceId="org.torproject.android:id/btnStart").click()
+    # TODO: get button ids to click.
+    for app_name, package_name in additional_info.items():
+        print(f"torifying app_name={app_name}")
+        print(f"torifying package_name={package_name}")
+        print(f"device={device}")
+    # Click those buttons.
+
+    # Optional(Click refresh).
+
+    # Click back.
+
+    raise Exception("Not built yet.")

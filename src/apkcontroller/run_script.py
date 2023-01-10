@@ -2,10 +2,9 @@
 
 
 import time
-from typing import Callable, Dict, List
 
 from typeguard import typechecked
-from uiautomator import AutomatorDevice, device
+from uiautomator import device
 
 from src.apkcontroller.helper import launch_app
 from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.script import (
@@ -54,12 +53,7 @@ def run_script(script: Apk_script) -> None:
 
         # Get next action
         screen = script.script_graph.nodes[screen_nr]["Screen"]
-        next_actions: List[
-            Callable[
-                [Dict[str, str], Dict[str, str], Dict[str, str]],
-                List[Callable[[AutomatorDevice], None]],
-            ]
-        ] = screen.get_next_actions(
+        next_actions = screen.get_next_actions(
             required_objects=screen.required_objects,
             optional_objects=screen.optional_objects,
             history={},
@@ -70,7 +64,13 @@ def run_script(script: Apk_script) -> None:
         if len(next_actions) > 1:
             raise ValueError("More than one action functions were returned.")
 
-        next_actions[0](device=device)  # type: ignore[call-arg]
+        print("CALLING")
+        script.perform_action(
+            device=device,
+            next_actions=next_actions,
+            screen_nr=screen_nr,
+            torifying_apps=script.script_description["torifying_apps"],
+        )
 
         # next_screens = get_next_screen(s)(
         # current_screen_nr

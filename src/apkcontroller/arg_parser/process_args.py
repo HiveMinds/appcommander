@@ -1,6 +1,6 @@
 """Completes the tasks specified in the arg_parser."""
 import argparse
-from typing import Dict, List, Union
+from typing import Dict, Union
 
 from typeguard import typechecked
 from uiautomator import device
@@ -30,10 +30,9 @@ def process_args(args: argparse.Namespace) -> None:
     )
 
     if args.torify:
-        torifying_apps: List[str] = get_verified_apps_to_torify(
+        torifying_apps: Dict[str, str] = get_verified_apps_to_torify(
             app_name_mappings, args.torify
         )
-        print(torifying_apps)
 
     # Also verifies phone is connected.
     assert_app_is_installed(package_name=package_name)
@@ -44,7 +43,9 @@ def process_args(args: argparse.Namespace) -> None:
 
     if args.export_screen:
         screen_dict = get_screen_as_dict(device)
-        script_description: Dict[str, Union[bool, int, str]] = {
+        script_description: Dict[
+            str, Union[bool, int, str, Dict[str, str]]
+        ] = {
             "app_name": package_name,
             "version": args.version,
             "screen_nr": args.export_screen,
@@ -57,7 +58,7 @@ def process_args(args: argparse.Namespace) -> None:
             unverified=True,
         )
     else:
-        apk_script = Apk_script()
+        apk_script = Apk_script(torifying_apps=torifying_apps)
         # TODO: only if device is connected pass device.
         # apk_script = Apk_script(device=device)
 

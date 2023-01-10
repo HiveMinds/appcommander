@@ -115,18 +115,20 @@ def verify_app_script(script_path: str) -> None:
 
 def get_verified_apps_to_torify(
     app_name_mappings: Dict[str, str], torifying_aps_csv: str
-) -> List[str]:
+) -> Dict[str, str]:
     """Converts the comma separated values (csv) of the app names that are to
-    be torrified, into a list of app names, and then verifies they are
-    installed on the phone."""
+    be torified, into a list of app names, and then verifies they are installed
+    on the phone."""
 
-    torifying_apps: List[str] = torifying_aps_csv.split(",")
-    for app_name in torifying_apps:
-        _, package_name = sort_out_app_name_and_package_name(
+    some_apps: List[str] = torifying_aps_csv.split(",")
+    torryfying_apps: Dict[str, str] = {}
+    for app_name in some_apps:
+        app_name, package_name = sort_out_app_name_and_package_name(
             app_name, app_name_mappings=app_name_mappings
         )
         assert_app_is_installed(
-            package_name=package_name, app_name_mappings=app_name_mappings
+            package_name=package_name,
         )
+        torryfying_apps[app_name] = package_name
 
-    return torifying_apps
+    return torryfying_apps

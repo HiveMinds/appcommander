@@ -11,7 +11,9 @@ from src.apkcontroller.Screen import Screen
 
 
 @typechecked
-def screen_4(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
+def screen_4(
+    script_description: Dict[str, Union[bool, int, str, Dict[str, str]]]
+) -> Screen:
     """Creates the settings for a starting screen where Orbot is not yet
     started."""
     description = copy.deepcopy(script_description)
@@ -38,7 +40,7 @@ def screen_4(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
         required_objects: List[Dict[str, str]],
         optional_objects: List[Dict[str, str]],
         history: Dict,
-    ) -> List[Callable[[AutomatorDevice], None]]:
+    ) -> List[Callable[[AutomatorDevice, Dict[str, str]], None]]:
         """Looks at the required objects and optional objects and determines
         which actions to take next.
         An example of the next actions could be the following List:
@@ -60,8 +62,11 @@ def screen_4(script_description: Dict[str, Union[bool, int, str]]) -> Screen:
     )
 
 
+# pylint: disable=W0613
 @typechecked
-def actions_0(device: AutomatorDevice) -> None:
+def actions_0(
+    device: AutomatorDevice, additional_info: Dict[str, str]
+) -> None:
     """Performs the actions in option 0 in this screen.
 
     For this screen, it clicks the "DONE" button in the bottom right.

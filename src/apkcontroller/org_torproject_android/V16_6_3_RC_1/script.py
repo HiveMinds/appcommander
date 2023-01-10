@@ -4,7 +4,7 @@ Android names this app: org.torproject.android
 """
 
 import importlib
-from typing import Dict, List, Optional, Union
+from typing import Callable, Dict, List, Optional, Union
 
 import networkx as nx
 from typeguard import typechecked
@@ -36,16 +36,24 @@ class Apk_script:
     # pylint: disable=R0903
 
     @typechecked
-    def __init__(self, device: Optional[AutomatorDevice] = None) -> None:
+    def __init__(
+        self,
+        device: Optional[AutomatorDevice] = None,
+        torifying_apps: Optional[Dict[str, str]] = None,
+    ) -> None:
 
         # Store data used to generate output and find Screen object files.
-        self.script_description: Dict[str, Union[bool, int, str]] = {
+        self.script_description: Dict[
+            str, Union[bool, int, str, Dict[str, str]]
+        ] = {
             "title": "conf_orbot",
             "app_name": "org.torproject.android",
             "app_display_name": "Orbot",
             "version": "16.6.3 RC 1",
             "overwrite": True,
         }
+        if torifying_apps is not None:
+            self.script_description["torifying_apps"] = torifying_apps
 
         # Generate the script screen flow as a graph and generate the screens.
         self.script_graph = nx.DiGraph()
@@ -107,7 +115,7 @@ class Apk_script:
                 script_graph.nodes[nodename]["is_start"] = True
             else:
                 script_graph.nodes[nodename]["is_start"] = False
-            if screen.script_description["screen_nr"] in [5, 6]:
+            if screen.script_description["screen_nr"] in [7]:
                 script_graph.nodes[nodename]["is_end"] = True
             else:
                 script_graph.nodes[nodename]["is_end"] = False
@@ -123,3 +131,19 @@ class Apk_script:
         to screen 3. Hence, 1 edge multiple action lists (in/as a list).
         """
         print(f"TODO: set edges properties.{script_graph}")
+
+    @typechecked
+    def perform_action(
+        self,
+        device: AutomatorDevice,
+        next_actions: List[Callable],
+        screen_nr: int,
+        torifying_apps: Dict[str, str],
+    ) -> None:
+        """Performs the first action list in the list of action lists."""
+        if screen_nr == 6:
+            print("LINE140")
+
+            next_actions[0](device=device, additional_info=torifying_apps)
+        else:
+            next_actions[0](device=device, additional_info=torifying_apps)

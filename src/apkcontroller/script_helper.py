@@ -77,7 +77,10 @@ def current_screen_is_expected(
             expected_screen=expected_screen,
         ):
 
-            return (True, int(expected_screen.script_description["screen_nr"]))
+            return (
+                True,
+                int(str(expected_screen.script_description["screen_nr"])),
+            )
     return (False, -1)
 
 
