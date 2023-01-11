@@ -63,7 +63,9 @@ class Screen:
         ] = optional_objects
 
         # eloping typed dict.
-        self.wait_time_sec: int = int(str(script_description["wait_time_sec"]))
+        self.wait_time_sec: float = float(
+            str(script_description["wait_time_sec"])
+        )
 
     def goto_next_screen(
         self, actions: List[str], next_screen_index: int

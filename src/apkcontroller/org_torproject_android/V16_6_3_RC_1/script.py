@@ -4,7 +4,7 @@ Android names this app: org.torproject.android
 """
 
 import importlib
-from typing import Callable, Dict, List, Optional, Union
+from typing import Callable, Dict, List, Optional
 
 import networkx as nx
 from typeguard import typechecked
@@ -136,16 +136,16 @@ class Apk_script:
         device: AutomatorDevice,
         next_actions: List[Callable],
         screen_nr: int,
-        additional_info: Dict[str, Union[str, bool]],
+        additional_info: Dict,
     ) -> None:
         """Performs the first action list in the list of action lists."""
         if screen_nr == 6:
             next_actions[0](
                 device=device,
-                additional_info=additional_info["torrifying_apps"],
+                additional_info=additional_info["torifying_apps"],
             )
         else:
             next_actions[0](
                 device=device,
-                additional_info=additional_info["torrifying_apps"],
+                additional_info=additional_info["torifying_apps"],
             )

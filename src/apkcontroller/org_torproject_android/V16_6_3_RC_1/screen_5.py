@@ -5,6 +5,7 @@ Presents a: "Connection request".
 """
 # pylint: disable=R0801
 import copy
+import time
 from typing import Callable, Dict, List, Union
 
 from typeguard import typechecked
@@ -20,7 +21,7 @@ def screen_5(script_description: Dict) -> Screen:
     description = copy.deepcopy(script_description)
     description["max_retries"] = 1
     description["screen_nr"] = 5
-    description["wait_time_sec"] = 2
+    description["wait_time_sec"] = 0.1
     required_objects: List[Dict[str, str]] = [
         {
             "@text": "Global " "(Auto)",
@@ -95,4 +96,6 @@ def actions_1(
 ) -> None:
     """Performs the actions in option 2 in this screen."""
     # Press the START button in the Orbot app to create a tor connection.
-    device(resourceId="org.torproject.android:id/btnStart").click()
+    # device(resourceId="org.torproject.android:id/btnStart").click()
+    device(resourceId="org.torproject.android:id/imgStatus").click()
+    time.sleep(10)

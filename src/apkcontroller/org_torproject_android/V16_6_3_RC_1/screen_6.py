@@ -21,7 +21,7 @@ def screen_6(script_description: Dict) -> Screen:
     description = copy.deepcopy(script_description)
     description["max_retries"] = 1
     description["screen_nr"] = 6
-    description["wait_time_sec"] = 2
+    description["wait_time_sec"] = 0.1
     required_objects: List[Dict[str, str]] = [
         # {
         # "@text": "Global " "(Auto)",
@@ -39,6 +39,7 @@ def screen_6(script_description: Dict) -> Screen:
     optional_objects: List[Dict[str, str]] = []
 
     # pylint: disable=W0102
+    # pylint: disable=W0613
     @typechecked
     def get_next_actions(
         required_objects: List[Dict[str, str]],
@@ -57,13 +58,7 @@ def screen_6(script_description: Dict) -> Screen:
         amount, and optionally retries a pre-determined amount of attempts.
         """
 
-        print(
-            "TODO: determine how to specify how to compute the next action"
-            + f" for this screen. {required_objects},{optional_objects}"
-        )
-        print(f"history={history}")
-        print(f"script_description={script_description}")
-        return [actions_1]
+        return [actions_0]
 
     return Screen(
         get_next_actions=get_next_actions,
@@ -76,16 +71,6 @@ def screen_6(script_description: Dict) -> Screen:
 # pylint: disable=W0613
 @typechecked
 def actions_0(
-    device: AutomatorDevice, additional_info: Dict[str, Union[str, bool]]
-) -> None:
-    """TODO."""
-    # Go to settings to select which apps are torified.
-    device(resourceId="org.torproject.android:id/ivAppVpnSettings").click()
-
-
-# pylint: disable=W0613
-@typechecked
-def actions_1(
     device: AutomatorDevice, additional_info: Dict[str, Union[str, bool]]
 ) -> Dict:
     """Performs the actions in option 2 in this screen."""

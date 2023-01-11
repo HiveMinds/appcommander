@@ -1,5 +1,6 @@
 """Functions to assist a script file for an arbitrary app."""
 import time
+from pprint import pprint
 from typing import TYPE_CHECKING, Dict, List, Optional, Tuple, Union, cast
 
 import networkx as nx
@@ -280,9 +281,13 @@ def can_proceed(
 
     # end_screens = get end_screens()
     if not is_expected:
+        pprint(unpacked_screen_dict)
         # TODO: Export the actual screen, screen data and expected screens in
         # specific error log folder.
-        raise ReferenceError("Error, the expected screen was not found.")
+        raise ReferenceError(
+            f"Error, the expected screen was not found in:{screen_nr}."
+            f"Searched for:{expected_screennames}."
+        )
     return is_expected, screen_nr
 
 

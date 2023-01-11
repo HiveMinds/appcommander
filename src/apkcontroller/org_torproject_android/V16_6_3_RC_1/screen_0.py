@@ -19,7 +19,7 @@ def screen_0(script_description: Dict) -> Screen:
     description = copy.deepcopy(script_description)
     description["max_retries"] = 1
     description["screen_nr"] = 0
-    description["wait_time_sec"] = 2
+    description["wait_time_sec"] = 0.1
     required_objects: List[Dict[str, str]] = [
         {
             "@text": "Connection request",

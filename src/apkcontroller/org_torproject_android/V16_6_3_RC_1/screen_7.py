@@ -18,7 +18,7 @@ def screen_7(script_description: Dict) -> Screen:
     """Creates the settings for a starting screen where Orbot is not yet
     started."""
     description = copy.deepcopy(script_description)
-    description["max_retries"] = 1
+    description["max_retries"] = 5
     description["screen_nr"] = 7
     description["wait_time_sec"] = 2
     required_objects: List[Dict[str, str]] = [
@@ -26,7 +26,7 @@ def screen_7(script_description: Dict) -> Screen:
             "@text": "Global " "(Auto)",
         },
         {
-            "@text": "Trouble " "connecting?",
+            "@text": "Trouble connecting?",
         },
         {
             "@text": "Use Bridges ",
@@ -67,11 +67,8 @@ def screen_7(script_description: Dict) -> Screen:
         amount, and optionally retries a pre-determined amount of attempts.
         """
 
-        if (
-            "desired_apps_are_torified" in history.keys()
-            and history["desired_apps_are_torified"]
-        ):
-            # TODO: Set this screen as end screen, code is done.
+        if 6 in history["past_screens"]:
+            # run start.
             return []
         # Else:
         # Go to settings, and enable the required apps.
