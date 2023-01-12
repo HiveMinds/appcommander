@@ -5,12 +5,17 @@ Presents a: "Connection request".
 """
 # pylint: disable=R0801
 import copy
+import inspect
 import time
-from typing import Callable, Dict, List, Union
+from typing import Callable, Dict, List
 
+import networkx as nx
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
+from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.screen_flow import (
+    get_expected_screen_nrs,
+)
 from src.apkcontroller.Screen import Screen
 
 
@@ -82,22 +87,34 @@ def screen_5(script_description: Dict) -> Screen:
 
 # pylint: disable=W0613
 @typechecked
-def actions_0(
-    device: AutomatorDevice, additional_info: Dict[str, Union[str, bool]]
-) -> Dict:
+def actions_0(device: AutomatorDevice, additional_info: Dict) -> Dict:
     """Go to settings inside Orbot to select which apps are torified."""
     device(resourceId="org.torproject.android:id/ivAppVpnSettings").click()
-    return {"expected_screens": [6]}
+    action_nr: int = int(inspect.stack()[0][3][8:])
+    print(f"action_nr={action_nr}")
+    screen_nr: int = additional_info["screen_nr"]
+    script_flow: nx.DiGraph = additional_info["script_graph"]
+    return {
+        "expected_screens": get_expected_screen_nrs(
+            G=script_flow, screen_nr=screen_nr, action_nr=action_nr
+        )
+    }
 
 
 # pylint: disable=W0613
 @typechecked
-def actions_1(
-    device: AutomatorDevice, additional_info: Dict[str, Union[str, bool]]
-) -> Dict:
+def actions_1(device: AutomatorDevice, additional_info: Dict) -> Dict:
     """Performs the actions in option 2 in this screen."""
     # Press the START button in the Orbot app to create a tor connection.
     # device(resourceId="org.torproject.android:id/btnStart").click()
     device(resourceId="org.torproject.android:id/imgStatus").click()
     time.sleep(10)
-    return {"expected_screens": [5, 7]}
+    action_nr: int = int(inspect.stack()[0][3][8:])
+    print(f"action_nr={action_nr}")
+    screen_nr: int = additional_info["screen_nr"]
+    script_flow: nx.DiGraph = additional_info["script_graph"]
+    return {
+        "expected_screens": get_expected_screen_nrs(
+            G=script_flow, screen_nr=screen_nr, action_nr=action_nr
+        )
+    }

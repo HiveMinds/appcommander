@@ -2,11 +2,16 @@
 with screens 1,2,3,4."""
 # pylint: disable=R0801
 import copy
-from typing import Callable, Dict, List, Union
+import inspect
+from typing import Callable, Dict, List
 
+import networkx as nx
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
+from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.screen_flow import (
+    get_expected_screen_nrs,
+)
 from src.apkcontroller.Screen import Screen
 
 
@@ -62,12 +67,18 @@ def screen_4(script_description: Dict) -> Screen:
 
 # pylint: disable=W0613
 @typechecked
-def actions_0(
-    device: AutomatorDevice, additional_info: Dict[str, Union[str, bool]]
-) -> Dict:
+def actions_0(device: AutomatorDevice, additional_info: Dict) -> Dict:
     """Performs the actions in option 0 in this screen.
 
     For this screen, it clicks the "DONE" button in the bottom right.
     """
     device(resourceId="org.torproject.android:id/done").click()
-    return {"expected_screens": [5]}
+    action_nr: int = int(inspect.stack()[0][3][8:])
+    print(f"action_nr={action_nr}")
+    screen_nr: int = additional_info["screen_nr"]
+    script_flow: nx.DiGraph = additional_info["script_graph"]
+    return {
+        "expected_screens": get_expected_screen_nrs(
+            G=script_flow, screen_nr=screen_nr, action_nr=action_nr
+        )
+    }

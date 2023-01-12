@@ -79,11 +79,16 @@ def run_script(script: Apk_script) -> None:
                     "More than one action functions were returned."
                 )
 
+            # Compose the information needed for the actions.
+            additional_info = script.script_description
+            additional_info["screen_nr"] = screen_nr
+            additional_info["script_graph"] = script.script_graph
+
+            # Perform the actual action.
             action_output: Dict = script.perform_action(
                 device=device,
                 next_actions=next_actions,
-                screen_nr=screen_nr,
-                additional_info=script.script_description,
+                additional_info=additional_info,
             )
             expected_screens = action_output["expected_screens"]
             script.script_description["past_screens"].append(screen_nr)

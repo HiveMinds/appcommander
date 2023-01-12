@@ -1,11 +1,16 @@
 """The settings screen where apps are torified."""
 # pylint: disable=R0801
 import copy
-from typing import Callable, Dict, List, Optional, Union
+import inspect
+from typing import Callable, Dict, List, Optional
 
+import networkx as nx
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
+from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.screen_flow import (
+    get_expected_screen_nrs,
+)
 from src.apkcontroller.Screen import Screen
 from src.apkcontroller.script_helper import (
     get_screen_as_dict,
@@ -70,13 +75,13 @@ def screen_6(script_description: Dict) -> Screen:
 
 # pylint: disable=W0613
 @typechecked
-def actions_0(
-    device: AutomatorDevice, additional_info: Dict[str, Union[str, bool]]
-) -> Dict:
+def actions_0(device: AutomatorDevice, additional_info: Dict) -> Dict:
     """Performs the actions in option 2 in this screen."""
 
+    torifying_apps = additional_info["torifying_apps"]
+
     # TODO: get button ids to click.
-    for app_name, _ in additional_info.items():
+    for app_name, _ in torifying_apps.items():
 
         # Refresh the screen.
         device(descriptionMatches="Refresh Apps").click()
@@ -108,4 +113,12 @@ def actions_0(
     # Click back.
     device(descriptionContains="Navigate up").click()
 
-    return {"torified": "True", "expected_screens": [5, 7]}
+    action_nr: int = int(inspect.stack()[0][3][8:])
+    print(f"action_nr={action_nr}")
+    screen_nr: int = additional_info["screen_nr"]
+    script_flow: nx.DiGraph = additional_info["script_graph"]
+    return {
+        "expected_screens": get_expected_screen_nrs(
+            G=script_flow, screen_nr=screen_nr, action_nr=action_nr
+        )
+    }

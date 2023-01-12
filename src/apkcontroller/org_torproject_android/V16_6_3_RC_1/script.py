@@ -10,6 +10,9 @@ import networkx as nx
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
+from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.screen_flow import (
+    Script_flow,
+)
 from src.apkcontroller.Screen import Screen
 
 screen_path: str = "src.apkcontroller.org_torproject_android.V16_6_3_RC_1."
@@ -52,7 +55,7 @@ class Apk_script:
             self.script_description["torifying_apps"] = torifying_apps
 
         # Generate the script screen flow as a graph and generate the screens.
-        self.script_graph = nx.DiGraph()
+        self.script_graph = Script_flow().G
         self.screens: List[Screen] = self.create_screens(self.script_graph)
 
         # Specify the start and end nodes in the graph.
@@ -80,14 +83,9 @@ class Apk_script:
 
         # Add the screen objects to the script graph.
         for screen in screens:
-            # TODO: verify all screen nrs are unique.
-            script_graph.add_node(screen.script_description["screen_nr"])
             script_graph.nodes[screen.script_description["screen_nr"]][
                 "Screen"
             ] = screen
-
-        # TODO: Create the edges based on the screen actions.
-
         return screens
 
     @typechecked
@@ -123,21 +121,13 @@ class Apk_script:
         self,
         device: AutomatorDevice,
         next_actions: List[Callable],
-        screen_nr: int,
         additional_info: Dict,
     ) -> Dict:
         """Performs the first action list in the list of action lists."""
-        action_output: Dict
-        if screen_nr == 6:
-            action_output = next_actions[0](
-                device=device,
-                additional_info=additional_info["torifying_apps"],
-            )
-        else:
-            action_output = next_actions[0](
-                device=device,
-                additional_info=additional_info["torifying_apps"],
-            )
+        action_output: Dict = next_actions[0](
+            device=device,
+            additional_info=additional_info,
+        )
         if "expected_screens" not in action_output.keys():
             raise KeyError(
                 "Error, the action output did not contain the expected "
