@@ -43,19 +43,12 @@ def get_expected_screens(
 
 
 @typechecked
-def get_current_screen_unpacked(device: AutomatorDevice) -> Dict:
-    """Returns the meaningful dict from the phone UI."""
-    # Load and unpack the screen dict to get meaningful ui info.
-    screen_dict: Dict = get_screen_as_dict(device)
-    unpacked_screen_dict: Dict = screen_dict["hierarchy"]
-    return unpacked_screen_dict
-
-
-@typechecked
 def current_screen_is_expected(
+    device: AutomatorDevice,
     expected_screennames: List[int],
-    unpacked_screen_dict: Dict,
+    retry: bool,
     script_graph: nx.DiGraph,
+    unpacked_screen_dict: Dict,
 ) -> Tuple[bool, int]:
     """Determines whether the current screen is one of the expected screens."""
     expected_screens: List[Screen] = get_expected_screens(
@@ -63,8 +56,10 @@ def current_screen_is_expected(
     )
     for expected_screen in expected_screens:
         if is_expected_screen(
-            unpacked_screen_dict=unpacked_screen_dict,
+            device=device,
             expected_screen=expected_screen,
+            retry=retry,
+            unpacked_screen_dict=unpacked_screen_dict,
         ):
 
             return (
@@ -76,8 +71,10 @@ def current_screen_is_expected(
 
 @typechecked
 def is_expected_screen(
-    unpacked_screen_dict: Dict,
+    device: AutomatorDevice,
     expected_screen: Screen,
+    retry: bool,
+    unpacked_screen_dict: Dict,
     verbose: Optional[bool] = False,
 ) -> bool:
     """Custom verification per screen based on the optional and required
@@ -89,14 +86,27 @@ def is_expected_screen(
     if not required_objects_in_screen(
         expected_screen.required_objects, unpacked_screen_dict
     ):
+        if not retry:
+            return False
         # Retry and return True if the required objects were found.
         for _ in range(0, expected_screen.max_retries):
+
+            # Reload the screen data again.
+            unpacked_screen_dict = get_screen_as_dict(
+                device=device,
+                unpack=True,
+                screen_dict={},
+                reload=True,
+            )
+
             time.sleep(expected_screen.wait_time_sec)
             if required_objects_in_screen(
                 required_objects=expected_screen.required_objects,
                 unpacked_screen_dict=unpacked_screen_dict,
             ):
                 return True
+            if verbose:
+                print(f"Not found:{expected_screen.required_objects}")
         if verbose:
             print(f"Not found:{expected_screen.required_objects}")
         return False
@@ -123,13 +133,30 @@ def required_objects_in_screen(
 
 
 @typechecked
-def get_screen_as_dict(device: AutomatorDevice) -> Dict:
-    """Loads the phone and shows the screen as a dict.
+def get_screen_as_dict(
+    device: AutomatorDevice,
+    unpack: bool,
+    screen_dict: Dict,
+    reload: bool = False,
+) -> Dict:
+    """Loads the phone and shows the screen as a dict."""
 
-    from uiautomator import device as d
-    """
-    doc = xmltodict.parse(device.dump())
-    return doc
+    # Don't reload if the screen dict still exists, and no explicit
+    # reload is asked.
+    if screen_dict != {} and not reload:
+        if unpack and "hierarchy" in screen_dict.keys():
+            return screen_dict["hierarchy"]
+        return screen_dict
+
+    # Get the new screen data from the ui.
+    if screen_dict == {} or reload:
+        print("Loading screen data from phone for orientation.")
+        ui_information: Dict = xmltodict.parse(device.dump())
+
+        # Unpack the screen dict to get a recursive dictionary structure.
+        if unpack:
+            ui_information = ui_information["hierarchy"]
+    return ui_information
 
 
 @typechecked
@@ -252,6 +279,7 @@ def dict_contains_other_dict(sub: Dict, main: Dict) -> bool:
 def can_proceed(
     device: AutomatorDevice,
     expected_screennames: List[int],
+    retry: bool,
     script: Apk_script,
 ) -> Tuple[bool, int]:
     """Checks whether the screen is expected, raises an error if not.
@@ -259,13 +287,20 @@ def can_proceed(
     And it returns the current screen number.
     """
     # get current screen dict.
-    unpacked_screen_dict: Dict = get_current_screen_unpacked(device)
+    unpacked_screen_dict: Dict = get_screen_as_dict(
+        device=device,
+        unpack=True,
+        screen_dict={},
+        reload=False,
+    )
 
     # verify current_screen in next_screens.
     is_expected, screen_nr = current_screen_is_expected(
+        device=device,
         expected_screennames=expected_screennames,
-        unpacked_screen_dict=unpacked_screen_dict,
+        retry=retry,
         script_graph=script.script_graph,
+        unpacked_screen_dict=unpacked_screen_dict,
     )
 
     # end_screens = get end_screens()

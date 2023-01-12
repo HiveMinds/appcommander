@@ -10,7 +10,6 @@ import networkx as nx
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
-from src.apkcontroller.helper import export_screen_data_if_valid
 from src.apkcontroller.Screen import Screen
 
 screen_path: str = "src.apkcontroller.org_torproject_android.V16_6_3_RC_1."
@@ -38,7 +37,6 @@ class Apk_script:
     @typechecked
     def __init__(
         self,
-        device: Optional[AutomatorDevice] = None,
         torifying_apps: Optional[Dict[str, str]] = None,
     ) -> None:
 
@@ -56,15 +54,6 @@ class Apk_script:
         # Generate the script screen flow as a graph and generate the screens.
         self.script_graph = nx.DiGraph()
         self.screens: List[Screen] = self.create_screens(self.script_graph)
-
-        # Export the data of the screens if they happen to be found in the
-        # device already.
-        if device is not None:
-            export_screen_data_if_valid(
-                device=device,
-                overwrite=self.script_description["overwrite"],
-                screens=self.screens,
-            )
 
         # Specify the start and end nodes in the graph.
         self.specify_start__and_end_nodes(self.script_graph)

@@ -17,8 +17,6 @@ def assert_phone_is_connected() -> None:
         await_compilation=True, bash_command=command, verbose=False
     )
     lines = output.split("\n")
-    print(f"output={output}")
-    print(f"output={len(lines)}")
     # TODO: make more robust check, e.g. eat "List of devices attached" and see
     # whether any a-Z 0-9 characters exist in output.
     if len(lines) <= 3:

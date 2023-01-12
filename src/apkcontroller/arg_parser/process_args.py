@@ -42,7 +42,12 @@ def process_args(args: argparse.Namespace) -> None:
     )
 
     if args.export_screen:
-        screen_dict = get_screen_as_dict(device)
+        unpacked_screen_dict: Dict = get_screen_as_dict(
+            device=device,
+            unpack=True,
+            screen_dict={},
+            reload=False,
+        )
         script_description: Dict = {
             "app_name": package_name,
             "version": args.version,
@@ -50,15 +55,13 @@ def process_args(args: argparse.Namespace) -> None:
         }
         export_screen_data(
             device=device,
-            screen_dict=screen_dict,
+            screen_dict=unpacked_screen_dict,
             script_description=script_description,
             overwrite=True,
             unverified=True,
         )
     else:
         apk_script = Apk_script(torifying_apps=torifying_apps)
-        # TODO: only if device is connected pass device.
-        # apk_script = Apk_script(device=device)
 
         print("")
         run_script(apk_script)

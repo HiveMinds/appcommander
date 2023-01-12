@@ -83,12 +83,18 @@ def export_screen_data_if_valid(
     screenshot."""
     if device is not None:
         for screen in screens:
-            if screen.screen_dict is None:
-                # Load and unpack the screen dict to get meaningful ui info.
-                screen.screen_dict = get_screen_as_dict(device)
-            unpacked_screen_dict = screen.screen_dict["hierarchy"]
+            # Load and unpack the screen dict to get meaningful ui info.
+            screen.screen_dict = get_screen_as_dict(
+                device=device,
+                unpack=True,
+                screen_dict=screen.screen_dict,
+                reload=False,
+            )
+
             if is_expected_screen(
-                unpacked_screen_dict=unpacked_screen_dict,
+                device=device,
+                unpacked_screen_dict=screen.screen_dict,
+                retry=True,
                 expected_screen=screen,
             ):
                 export_screen_data(
@@ -150,7 +156,7 @@ def launch_app(app_name: str) -> None:
 def export_screen_data(
     device: AutomatorDevice,
     screen_dict: Dict,
-    script_description: Dict[str, str],
+    script_description: Dict,
     overwrite: bool = False,
     unverified: bool = True,
 ) -> None:
@@ -166,7 +172,7 @@ def export_screen_data(
     if unverified:
         unverified_dir = "unverified/"
     else:
-        unverified_dir = ""
+        unverified_dir = "verified/"
     output_dir = (
         (
             "src/apkcontroller/"
@@ -183,8 +189,13 @@ def export_screen_data(
         if not Path(output_path).is_file() or overwrite:
 
             if extension == ".json":
-                if screen_dict is None:
-                    screen_dict = get_screen_as_dict(device)
+                if screen_dict == {}:
+                    screen_dict = get_screen_as_dict(
+                        device=device,
+                        unpack=True,
+                        screen_dict=screen_dict,
+                        reload=False,
+                    )
                 output_json(output_dir, f"{output_name}.json", screen_dict)
             if extension == ".png":
                 # device.takeScreenshot(output_path)

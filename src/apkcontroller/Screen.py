@@ -1,12 +1,10 @@
 """Starts a script to control an app."""
 
-from typing import Callable, Dict, List, Optional, Union
+from typing import Callable, Dict, List, Union
 
 import networkx as nx
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
-
-from src.apkcontroller.helper import get_screen_as_dict
 
 
 # pylint: disable=R0902
@@ -26,10 +24,7 @@ class Screen:
         required_objects: List[Dict[str, str]],
         script_description: Dict,
         optional_objects: List[Dict[str, str]] = [],
-        device: Optional[AutomatorDevice] = None,
     ) -> None:
-
-        self.device: AutomatorDevice = device
         self.get_next_actions: Callable[
             [Dict[str, str], Dict[str, str], Dict[str, str]],
             List[Callable[[AutomatorDevice, Dict[str, str]], Dict]],
@@ -45,10 +40,6 @@ class Screen:
         it is, the screen is recognised by the: is_expected_screen function.
         """
         self.required_objects: List[Dict[str, str]] = required_objects
-
-        self.screen_dict: Union[None, Dict] = None
-        if self.device is not None:
-            self.screen_dict = get_screen_as_dict(self.device)
 
         self.script_description: Dict = script_description
         """Some buttons/obtjects in the screen may appear depending on
@@ -66,6 +57,7 @@ class Screen:
         self.wait_time_sec: float = float(
             str(script_description["wait_time_sec"])
         )
+        self.screen_dict: Dict = {}
 
     def goto_next_screen(
         self, actions: List[str], next_screen_index: int

@@ -100,4 +100,4 @@ def actions_1(
     # device(resourceId="org.torproject.android:id/btnStart").click()
     device(resourceId="org.torproject.android:id/imgStatus").click()
     time.sleep(10)
-    return {"expected_screens": [7]}
+    return {"expected_screens": [5, 7]}

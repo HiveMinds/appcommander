@@ -8,7 +8,7 @@ from uiautomator import AutomatorDevice
 
 from src.apkcontroller.Screen import Screen
 from src.apkcontroller.script_helper import (
-    get_current_screen_unpacked,
+    get_screen_as_dict,
     get_torified_item_index_dict,
     orbot_torifying_app_is_checked,
 )
@@ -19,9 +19,9 @@ def screen_6(script_description: Dict) -> Screen:
     """Creates the settings for a starting screen where Orbot is not yet
     started."""
     description = copy.deepcopy(script_description)
-    description["max_retries"] = 10
+    description["max_retries"] = 5
     description["screen_nr"] = 6
-    description["wait_time_sec"] = 1
+    description["wait_time_sec"] = 2
     required_objects: List[Dict[str, str]] = [
         # {
         # "@text": "Global " "(Auto)",
@@ -82,7 +82,12 @@ def actions_0(
         device(descriptionMatches="Refresh Apps").click()
 
         # Reload the screen data.
-        unpacked_screen_dict: Dict = get_current_screen_unpacked(device)
+        unpacked_screen_dict: Dict = get_screen_as_dict(
+            device=device,
+            unpack=True,
+            screen_dict={},
+            reload=True,
+        )
 
         if app_name == "DAVx5":
             searched_name = "DAVx⁵"
