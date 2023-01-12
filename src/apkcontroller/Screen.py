@@ -81,7 +81,7 @@ class Screen:
 def get_next_screen(
     current_screen_nr: str,
     script_graph: nx.DiGraph,
-    actions: List[Callable[[AutomatorDevice, Dict[str, str]], None]],
+    actions: List[Callable[[AutomatorDevice, Dict[str, str]], Dict]],
 ) -> bool:
     """Gets the next expected screen."""
 

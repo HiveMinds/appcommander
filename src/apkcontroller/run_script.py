@@ -2,6 +2,7 @@
 
 
 import time
+from typing import Dict, List
 
 from typeguard import typechecked
 from uiautomator import device
@@ -28,22 +29,20 @@ def run_script(script: Apk_script) -> None:
     app_name = script.script_description["app_name"]
     launch_app(app_name)
 
-    start_screennames = get_start_nodes(script.script_graph)
-    next_actions = ["filler"]
-    print(f"start_screennames={start_screennames}")
+    expected_screens: List[int] = get_start_nodes(script.script_graph)
 
     _, screen_nr = can_proceed(
-        device=device, expected_screennames=start_screennames, script=script
+        device=device, expected_screennames=expected_screens, script=script
     )
     script.script_description["past_screens"] = [screen_nr]
 
-    print(f"screen_nr={screen_nr}")
+    next_actions = ["filler"]
     while len(next_actions) >= 1:
         time.sleep(1)  # TODO: replace with max_wait and retries of expected
         # screens. and pass to can_proceed.
         _, screen_nr = can_proceed(
             device=device,
-            expected_screennames=start_screennames,
+            expected_screennames=expected_screens,
             script=script,
         )
         print(f"screen_nr={screen_nr}")
@@ -56,8 +55,6 @@ def run_script(script: Apk_script) -> None:
             history=script.script_description,
         )
 
-        # TODO: Get next expected screen.
-
         # Perform next action.
         if len(next_actions) != 0:
             if len(next_actions) > 1:
@@ -65,11 +62,14 @@ def run_script(script: Apk_script) -> None:
                     "More than one action functions were returned."
                 )
 
-            script.perform_action(
+            action_output: Dict = script.perform_action(
                 device=device,
                 next_actions=next_actions,
                 screen_nr=screen_nr,
                 additional_info=script.script_description,
             )
+            expected_screens = action_output["expected_screens"]
+
             script.script_description["past_screens"].append(screen_nr)
-    print("DONE")
+
+    print(f'Done with script:{script.script_description["app_name"]}')

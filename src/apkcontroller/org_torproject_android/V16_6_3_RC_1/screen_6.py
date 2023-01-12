@@ -19,9 +19,9 @@ def screen_6(script_description: Dict) -> Screen:
     """Creates the settings for a starting screen where Orbot is not yet
     started."""
     description = copy.deepcopy(script_description)
-    description["max_retries"] = 1
+    description["max_retries"] = 10
     description["screen_nr"] = 6
-    description["wait_time_sec"] = 0.1
+    description["wait_time_sec"] = 1
     required_objects: List[Dict[str, str]] = [
         # {
         # "@text": "Global " "(Auto)",
@@ -46,7 +46,7 @@ def screen_6(script_description: Dict) -> Screen:
         optional_objects: List[Dict[str, str]],
         history: Dict,  # pylint: disable=W0613
         script_description: Optional[Dict] = {},
-    ) -> List[Callable]:
+    ) -> List[Callable[[AutomatorDevice, Dict[str, str]], Dict]]:
         """Looks at the required objects and optional objects and determines
         which actions to take next.
         An example of the next actions could be the following List:
@@ -103,4 +103,4 @@ def actions_0(
     # Click back.
     device(descriptionContains="Navigate up").click()
 
-    return {"torified": "True"}
+    return {"torified": "True", "expected_screens": [5, 7]}

@@ -33,7 +33,7 @@ def screen_1(script_description: Dict) -> Screen:
         required_objects: List[Dict[str, str]],
         optional_objects: List[Dict[str, str]],
         history: Dict,
-    ) -> List[Callable[[AutomatorDevice, Dict[str, str]], None]]:
+    ) -> List[Callable[[AutomatorDevice, Dict[str, str]], Dict]]:
         """Looks at the required objects and optional objects and determines
         which actions to take next.
         An example of the next actions could be the following List:
@@ -59,10 +59,11 @@ def screen_1(script_description: Dict) -> Screen:
 @typechecked
 def actions_0(
     device: AutomatorDevice, additional_info: Dict[str, Union[str, bool]]
-) -> None:
+) -> Dict:
     """Performs the actions in option 0 in this screen.
 
     For this screen, it clicks the "Next" button (icon=">") in the
     bottom right.
     """
     device(resourceId="org.torproject.android:id/next").click()
+    return {"expected_screens": [2]}

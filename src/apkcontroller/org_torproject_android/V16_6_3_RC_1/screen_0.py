@@ -17,9 +17,9 @@ def screen_0(script_description: Dict) -> Screen:
     """Creates the settings for a starting screen where Orbot is not yet
     started."""
     description = copy.deepcopy(script_description)
-    description["max_retries"] = 1
+    description["max_retries"] = 5
     description["screen_nr"] = 0
-    description["wait_time_sec"] = 0.1
+    description["wait_time_sec"] = 1
     required_objects: List[Dict[str, str]] = [
         {
             "@text": "Connection request",
@@ -32,7 +32,7 @@ def screen_0(script_description: Dict) -> Screen:
         required_objects: List[Dict[str, str]],
         optional_objects: List[Dict[str, str]],
         history: Dict,
-    ) -> List[Callable[[AutomatorDevice, Dict[str, str]], None]]:
+    ) -> List[Callable[[AutomatorDevice, Dict[str, str]], Dict]]:
         """Looks at the required objects and optional objects and determines
         which actions to take next.
         An example of the next actions could be the following List:
@@ -61,7 +61,7 @@ def screen_0(script_description: Dict) -> Screen:
 @typechecked
 def actions_0(
     device: AutomatorDevice, additional_info: Dict[str, Union[str, bool]]
-) -> None:
+) -> Dict:
     """Performs the actions in option 1 in this screen. For this screen, it
     clicks the "OK" button in the "Connection request".
 
@@ -76,3 +76,4 @@ def actions_0(
     ).click()
     """
     device(resourceId="android:id/button1").click()
+    return {"expected_screens": [1]}

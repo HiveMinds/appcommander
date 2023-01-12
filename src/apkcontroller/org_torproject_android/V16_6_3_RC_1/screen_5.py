@@ -19,9 +19,9 @@ def screen_5(script_description: Dict) -> Screen:
     """Creates the settings for a starting screen where Orbot is not yet
     started."""
     description = copy.deepcopy(script_description)
-    description["max_retries"] = 1
+    description["max_retries"] = 5
     description["screen_nr"] = 5
-    description["wait_time_sec"] = 0.1
+    description["wait_time_sec"] = 1
     required_objects: List[Dict[str, str]] = [
         {
             "@text": "Global " "(Auto)",
@@ -54,7 +54,7 @@ def screen_5(script_description: Dict) -> Screen:
         required_objects: List[Dict[str, str]],
         optional_objects: List[Dict[str, str]],
         history: Dict,
-    ) -> List[Callable[[AutomatorDevice, Dict[str, str]], None]]:
+    ) -> List[Callable[[AutomatorDevice, Dict[str, str]], Dict]]:
         """Looks at the required objects and optional objects and determines
         which actions to take next.
         An example of the next actions could be the following List:
@@ -84,18 +84,20 @@ def screen_5(script_description: Dict) -> Screen:
 @typechecked
 def actions_0(
     device: AutomatorDevice, additional_info: Dict[str, Union[str, bool]]
-) -> None:
+) -> Dict:
     """Go to settings inside Orbot to select which apps are torified."""
     device(resourceId="org.torproject.android:id/ivAppVpnSettings").click()
+    return {"expected_screens": [6]}
 
 
 # pylint: disable=W0613
 @typechecked
 def actions_1(
     device: AutomatorDevice, additional_info: Dict[str, Union[str, bool]]
-) -> None:
+) -> Dict:
     """Performs the actions in option 2 in this screen."""
     # Press the START button in the Orbot app to create a tor connection.
     # device(resourceId="org.torproject.android:id/btnStart").click()
     device(resourceId="org.torproject.android:id/imgStatus").click()
     time.sleep(10)
+    return {"expected_screens": [7]}

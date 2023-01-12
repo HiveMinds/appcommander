@@ -136,15 +136,22 @@ class Apk_script:
         next_actions: List[Callable],
         screen_nr: int,
         additional_info: Dict,
-    ) -> None:
+    ) -> Dict:
         """Performs the first action list in the list of action lists."""
+        action_output: Dict
         if screen_nr == 6:
-            next_actions[0](
+            action_output = next_actions[0](
                 device=device,
                 additional_info=additional_info["torifying_apps"],
             )
         else:
-            next_actions[0](
+            action_output = next_actions[0](
                 device=device,
                 additional_info=additional_info["torifying_apps"],
             )
+        if "expected_screens" not in action_output.keys():
+            raise KeyError(
+                "Error, the action output did not contain the expected "
+                "screens."
+            )
+        return action_output
