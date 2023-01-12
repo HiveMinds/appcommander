@@ -4,6 +4,7 @@
 *.xml
 *.png
 *.json
+*.pem
 
 demo/*
 latex/Images/graphs/*

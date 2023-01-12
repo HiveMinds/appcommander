@@ -41,6 +41,24 @@ For more info, run:
 python -m src.apkcontroller --help
 ```
 
+## Testing
+
+One can simulate an android phone with:
+
+```sh
+chmod +x emulate_android.sh
+./emulate_android.sh
+```
+
+And then launch the emulated android phone with:
+
+```sh
+. ~/.profile
+cd ~/.android/avd/android-small.avd/
+rm *.lock
+emulator -avd android-small -netdelay none -netspeed full -skin 768x1280
+```
+
 And run tests with:
 
 ```bash
