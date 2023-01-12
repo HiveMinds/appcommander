@@ -96,6 +96,9 @@ class Apk_script:
             script_graph.nodes[screen.script_description["screen_nr"]][
                 "Screen"
             ] = screen
+
+        # TODO: Create the edges based on the screen actions.
+
         return screens
 
     @typechecked
@@ -113,10 +116,6 @@ class Apk_script:
                 script_graph.nodes[nodename]["is_start"] = True
             else:
                 script_graph.nodes[nodename]["is_start"] = False
-            if screen.script_description["screen_nr"] in [7]:
-                script_graph.nodes[nodename]["is_end"] = True
-            else:
-                script_graph.nodes[nodename]["is_end"] = False
 
     @typechecked
     def create_screen_transitions(self, script_graph: nx.DiGraph) -> None:

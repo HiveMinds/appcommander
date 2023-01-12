@@ -30,17 +30,6 @@ def get_start_nodes(script_graph: nx.DiGraph) -> List[int]:
 
 
 @typechecked
-def get_end_nodes(script_graph: nx.DiGraph) -> List[int]:
-    """Sets the end_nodes attributes to True in the nodes that are end
-    screens."""
-    end_nodenames: List[int] = []
-    for nodename in script_graph.nodes:
-        if script_graph.nodes[nodename]["is_end"]:
-            end_nodenames.append(nodename)
-    return end_nodenames
-
-
-@typechecked
 def get_expected_screens(
     expected_screennames: List[int], script_graph: nx.DiGraph
 ) -> List[Screen]:

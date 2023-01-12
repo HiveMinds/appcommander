@@ -30,7 +30,6 @@ def run_script(script: Apk_script) -> None:
 
     start_screennames = get_start_nodes(script.script_graph)
     next_actions = ["filler"]
-    # get_end_nodes(script.script_graph)
     print(f"start_screennames={start_screennames}")
 
     _, screen_nr = can_proceed(
