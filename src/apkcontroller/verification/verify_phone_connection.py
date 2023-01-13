@@ -12,7 +12,7 @@ from src.apkcontroller.helper import run_bash_command
 def assert_phone_is_connected() -> None:
     """Throws error if phone is not connected via ADB."""
     # Launc the app on phone.
-    command = "adb devs"
+    command = "adb devices"
     output = run_bash_command(
         await_compilation=True, bash_command=command, verbose=False
     )
