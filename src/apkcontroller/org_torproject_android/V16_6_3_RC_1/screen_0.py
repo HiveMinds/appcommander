@@ -48,6 +48,7 @@ def screen_0(script_description: Dict) -> Screen:
         Then the app goes to the next screen and waits a pre-determined
         amount, and optionally retries a pre-determined amount of attempts.
         """
+        # In the start screen just press ok.
         return actions_0
 
     return Screen(
@@ -61,22 +62,16 @@ def screen_0(script_description: Dict) -> Screen:
 # pylint: disable=W0613
 @typechecked
 def actions_0(device: AutomatorDevice, additional_info: Dict) -> Dict:
-    """Performs the actions in option 1 in this screen. For this screen, it
-    clicks the "OK" button in the "Connection request".
+    """Performs the actions in option 1 in this screen.
 
-    Example:
-    d(
-        resourceId=resourceId,
-        text=text,
-        className=className,
-        descriptionContains= descriptionContains,
-        index=index,
-        description=description
-    ).click()
+    For this screen, it clicks the "OK" button in the "Connection
+    request".
     """
+    # Click the ok button.
     device(resourceId="android:id/button1").click()
+
+    # Return the expected screens, using get_expected_screen_nrs.
     action_nr: int = int(inspect.stack()[0][3][8:])
-    print(f"action_nr={action_nr}")
     screen_nr: int = additional_info["screen_nr"]
     script_flow: nx.DiGraph = additional_info["script_graph"]
     return {

@@ -73,8 +73,9 @@ def actions_0(device: AutomatorDevice, additional_info: Dict) -> Dict:
     For this screen, it clicks the "DONE" button in the bottom right.
     """
     device(resourceId="org.torproject.android:id/done").click()
+
+    # Return the expected screens, using get_expected_screen_nrs.
     action_nr: int = int(inspect.stack()[0][3][8:])
-    print(f"action_nr={action_nr}")
     screen_nr: int = additional_info["screen_nr"]
     script_flow: nx.DiGraph = additional_info["script_graph"]
     return {

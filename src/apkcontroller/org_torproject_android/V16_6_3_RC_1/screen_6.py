@@ -78,11 +78,12 @@ def screen_6(script_description: Dict) -> Screen:
 def actions_0(device: AutomatorDevice, additional_info: Dict) -> Dict:
     """Performs the actions in option 2 in this screen."""
 
+    # Get the dictionary with apps that need to be torified.
     torifying_apps = additional_info["torifying_apps"]
 
     for app_name, _ in torifying_apps.items():
 
-        # Refresh the screen.
+        # Refresh the Orbot settings screen.
         device(descriptionMatches="Refresh Apps").click()
 
         # Reload the screen data.
@@ -93,27 +94,35 @@ def actions_0(device: AutomatorDevice, additional_info: Dict) -> Dict:
             reload=True,
         )
 
+        # Map from normal function name, to name in UI xml for DAVx5 app.
         if app_name == "DAVx5":
             searched_name = "DAVx⁵"
-        # required_object:Dict[str,str] ={"@text": app_name}
+
+        # Specify which dict element is required in the screen that contains
+        # the app that needs to be torified.
         required_object: Dict[str, str] = {"@text": searched_name}
+
+        # The dict that contains the app that needs to be torified contains 3
+        # dicts, one for the icon, one for the name (on which is searched), and
+        # another one for the checkbox. The parent dict of these 3 contains the
+        # index of the button that needs to be clicked.
         item_dict = get_torified_item_index_dict(
             required_object, unpacked_screen_dict, {}
         )
         item_index = int(item_dict["@index"])
-        # Click those buttons if they are not enabled..
+
+        # Click those buttons if they are not enabled.
         if not orbot_torifying_app_is_checked(item_dict):
             device(index=item_index).click()
 
-    # Optional(Click refresh).
     # Refresh the screen.
     device(descriptionMatches="Refresh Apps").click()
 
     # Click back.
     device(descriptionContains="Navigate up").click()
 
+    # Return the expected screens, using get_expected_screen_nrs.
     action_nr: int = int(inspect.stack()[0][3][8:])
-    print(f"action_nr={action_nr}")
     screen_nr: int = additional_info["screen_nr"]
     script_flow: nx.DiGraph = additional_info["script_graph"]
     return {
