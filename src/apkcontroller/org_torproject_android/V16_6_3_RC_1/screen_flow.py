@@ -4,7 +4,6 @@ from typing import Dict, List, Union
 import matplotlib.pyplot as plt
 import networkx as nx
 import PIL
-from cyclic_toposort import cyclic_toposort, cyclic_toposort_groupings
 from typeguard import typechecked
 
 
@@ -47,7 +46,6 @@ def get_expected_screen_nrs(
     expected_screens: List[int] = []
     for edge in G.edges:
         if edge[0] == screen_nr:
-            print(f"screen_nr={screen_nr}")
             if action_nr in G[edge[0]][edge[1]]["actions"]:
                 expected_screens.append(edge[1])
     return expected_screens
@@ -57,23 +55,10 @@ def visualise_script_flow(
     G: nx.DiGraph, app_name: str, app_version: str
 ) -> None:
     """Visualises the script flow."""
-    print(cyclic_toposort(G.edges))
-    print(cyclic_toposort_groupings(G.edges, start_node=2, end_node=5))
 
-    # ts = TopologicalSorter(G)
-
-    # print(tuple(ts.static_order()))
     G.nodes[0]["pos"] = [0, 0]
-
     set_cyclical_node_coords(evaluated_nodes=[], G=G, start_nodename=0, y=0)
-    # for nodename in G.nodes:
-    #    #    print(G.nodes[nodename]["pos"])
-    #    #    G.nodes[nodename]["pos"][0]=G.nodes[nodename]["pos"][0]/8
-    #        G.nodes[nodename]["pos"][1]=G.nodes[nodename]["pos"][1]/8
-    # nx.draw(G)
-
     set_node_images(G=G, app_name=app_name, app_version=app_version)
-
     plot_coordinated_graph(
         G=G,
     )

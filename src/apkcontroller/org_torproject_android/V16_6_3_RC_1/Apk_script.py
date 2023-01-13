@@ -53,16 +53,12 @@ class Apk_script:
         self.screens: List[Screen] = create_screens(self, self.script_graph)
 
         # Specify the start and end nodes in the graph.
-        self.specify_start__and_end_nodes(self.script_graph)
+        self.set_start_nodes(self.script_graph)
 
     @typechecked
-    def specify_start__and_end_nodes(self, script_graph: nx.DiGraph) -> None:
+    def set_start_nodes(self, script_graph: nx.DiGraph) -> None:
         """Sets the is_start attributes to True in the nodes that are start
-        screens.
-
-        Sets the is_end attributes to True in the nodes that are end
-        screens.
-        """
+        screens."""
 
         for nodename in script_graph.nodes:
             screen: Screen = script_graph.nodes[nodename]["Screen"]

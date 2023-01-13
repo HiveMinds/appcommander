@@ -7,7 +7,7 @@ from uiautomator import device
 
 from src.apkcontroller.hardcoded import app_name_mappings
 from src.apkcontroller.helper import export_screen_data, get_screen_as_dict
-from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.script import (
+from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.Apk_script import (
     Apk_script,
 )
 from src.apkcontroller.run_script import run_script

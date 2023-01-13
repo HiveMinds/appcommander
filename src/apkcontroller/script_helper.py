@@ -14,7 +14,7 @@ from src.apkcontroller.helper import (
 
 # pylint: disable=R0801
 if TYPE_CHECKING:
-    from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.script import (
+    from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.Apk_script import (
         Apk_script,
     )
     from src.apkcontroller.Screen import Screen
