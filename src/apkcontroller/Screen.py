@@ -59,15 +59,6 @@ class Screen:
         )
         self.screen_dict: Dict = {}
 
-    def goto_next_screen(
-        self, actions: List[str], next_screen_index: int
-    ) -> int:
-        """Performs the actions in the list and then goes to the next
-        screen."""
-
-        print(f"TODO: goto next screen.{actions}")
-        return next_screen_index
-
 
 @typechecked
 def get_next_screen(
@@ -98,9 +89,6 @@ def get_next_screen(
             f"Error, the expected action list:{actions} was not in the "
             + f"available actions:{edge_actions}"
         )
-
-    # TODO: check if actions occurs more than once in edge_actions, if yes
-    # raise exception.
 
     for edge in edge_actions:
         if edge.actions == actions:

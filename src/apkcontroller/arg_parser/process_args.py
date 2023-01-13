@@ -58,7 +58,7 @@ def process_args(args: argparse.Namespace) -> None:
             screen_dict=unpacked_screen_dict,
             script_description=script_description,
             overwrite=True,
-            unverified=True,
+            subdir="unverified",
         )
     else:
         apk_script = Apk_script(torifying_apps=torifying_apps)

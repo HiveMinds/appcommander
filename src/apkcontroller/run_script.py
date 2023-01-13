@@ -1,7 +1,6 @@
 """Starts a script to control an app."""
 
 
-import time
 from typing import Dict, List
 
 from typeguard import typechecked
@@ -26,8 +25,6 @@ def run_script(script: Apk_script) -> None:
     is derived from how your android device calls the app, with the dots
     replaced by underscores. E.g. com.whatsapp.android or something like
     that.
-
-    # TODO: include arg to export data of screen.
     """
     visualise_script_flow(
         G=script.script_graph,
@@ -55,8 +52,6 @@ def run_script(script: Apk_script) -> None:
     retry: bool = False  # For the first screen, do a quick scope because it is
     # known already.
     while len(next_actions) >= 1:
-        time.sleep(1)  # TODO: replace with max_wait and retries of expected
-        # screens. and pass to can_proceed.
         _, screen_nr = can_proceed(
             device=device,
             expected_screennames=expected_screens,

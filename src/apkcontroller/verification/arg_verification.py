@@ -2,11 +2,12 @@
 other."""
 import argparse
 import os
+from pathlib import Path
 from typing import Dict, List, Tuple
 
 from typeguard import typechecked
 
-from src.apkcontroller.helper import file_exists, make_path_if_not_exists
+from src.apkcontroller.helper import make_path_if_not_exists
 from src.apkcontroller.verification.verify_phone_connection import (
     assert_app_is_installed,
 )
@@ -107,7 +108,7 @@ def verify_app_script(script_path: str) -> None:
     networkx graph."""
 
     # Assert graph file exists.
-    if not file_exists(script_path):
+    if not Path(script_path).is_file():
         raise FileNotFoundError(f"Input Graph path was invalid:{script_path}")
 
     # TODO: Verify script path is valid.
