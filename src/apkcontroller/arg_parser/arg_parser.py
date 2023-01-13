@@ -38,6 +38,14 @@ def parse_cli_args() -> argparse.Namespace:
         ),
     )
 
+    # Take a screenshot and store the UI information in a .json file.
+    parser.add_argument(
+        "-f",
+        "--export_script_flow",
+        action="store_true",
+        help=("Show a graph  of the screen flow of this script for an app."),
+    )
+
     # Create argument to allow user to specify which apps Orbot should torify.
     parser.add_argument(
         "-t",

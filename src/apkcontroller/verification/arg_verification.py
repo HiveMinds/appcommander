@@ -86,7 +86,7 @@ def verify_app_version(args: argparse.Namespace) -> None:
                 f"Error, path:{version_path} does not exist. "
                 + " Please create it and add an accompanying script."
             )
-        script_path = f"{version_path}/Apk_script.py"
+        script_path = f"{version_path}/Script.py"
         if not os.path.exists(script_path):
             raise NotADirectoryError(
                 f"Error, path:{script_path} does not exist. "

@@ -6,12 +6,12 @@ import networkx as nx
 from typeguard import typechecked
 
 if TYPE_CHECKING:
-    from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.Apk_script import (
-        Apk_script,
+    from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.Script import (
+        Script,
     )
     from src.apkcontroller.Screen import Screen
 else:
-    Apk_script = object
+    Script = object
     Screen = object
 
 screen_path: str = "src.apkcontroller.org_torproject_android.V16_6_3_RC_1."
@@ -27,9 +27,7 @@ for screen_index in range(0, 8):
 
 
 @typechecked
-def create_screens(
-    script: Apk_script, script_graph: nx.DiGraph
-) -> List[Screen]:
+def create_screens(script: Script, script_graph: nx.DiGraph) -> List[Screen]:
     """Creates the screens as networkx nodes."""
     screens: List[Screen] = []
 

@@ -7,9 +7,8 @@ from uiautomator import device
 
 from src.apkcontroller.hardcoded import app_name_mappings
 from src.apkcontroller.helper import export_screen_data, get_screen_as_dict
-from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.Apk_script import (
-    Apk_script,
-)
+from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.Script import Script
+from src.apkcontroller.plot_script_flow import visualise_script_flow
 from src.apkcontroller.run_script import run_script
 from src.apkcontroller.verification.arg_verification import (
     get_verified_apps_to_torify,
@@ -41,6 +40,7 @@ def process_args(args: argparse.Namespace) -> None:
         app_version=args.version,
     )
 
+    apk_script = Script(torifying_apps=torifying_apps)
     if args.export_screen:
         unpacked_screen_dict: Dict = get_screen_as_dict(
             dev=device,
@@ -60,8 +60,16 @@ def process_args(args: argparse.Namespace) -> None:
             overwrite=True,
             subdir="unverified",
         )
+    elif args.export_script_flow:
+        visualise_script_flow(
+            G=apk_script.script_graph,
+            app_name=apk_script.script_description["app_name"].replace(
+                ".", "_"
+            ),
+            app_version=apk_script.script_description["version"]
+            .replace(".", "_")
+            .replace(" ", "_"),
+        )
     else:
-        apk_script = Apk_script(torifying_apps=torifying_apps)
-
         print("")
         run_script(apk_script, device)

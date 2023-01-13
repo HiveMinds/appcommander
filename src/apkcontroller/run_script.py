@@ -7,16 +7,13 @@ from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
 from src.apkcontroller.helper import export_screen_data_if_valid, launch_app
-from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.Apk_script import (
-    Apk_script,
-)
-from src.apkcontroller.plot_script_flow import visualise_script_flow
+from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.Script import Script
 from src.apkcontroller.script_orientation import get_start_nodes
 from src.apkcontroller.verification.status_verification import can_proceed
 
 
 @typechecked
-def run_script(script: Apk_script, dev: AutomatorDevice) -> None:
+def run_script(script: Script, dev: AutomatorDevice) -> None:
     """Runs the incoming script on the phone.
 
     Script folder structure: src/apkcontroller/app_name/version.py with
@@ -25,13 +22,6 @@ def run_script(script: Apk_script, dev: AutomatorDevice) -> None:
     replaced by underscores. E.g. com.whatsapp.android or something like
     that.
     """
-    visualise_script_flow(
-        G=script.script_graph,
-        app_name=script.script_description["app_name"].replace(".", "_"),
-        app_version=script.script_description["version"]
-        .replace(".", "_")
-        .replace(" ", "_"),
-    )
 
     # Open the app.
     app_name = script.script_description["app_name"]

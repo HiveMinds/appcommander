@@ -20,7 +20,7 @@ else:
     Screen = object
 
 
-class Apk_script:
+class Script:
     """Experiment manager.
 
     First prepares the environment for running the experiment, and then
