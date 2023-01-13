@@ -8,11 +8,11 @@ import inspect
 from typing import Callable, Dict, List, Union
 
 import networkx as nx
-from src.apkcontroller.script_helper import get_expected_screen_nrs
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
 from src.apkcontroller.Screen import Screen
+from src.apkcontroller.script_orientation import get_expected_screen_nrs
 
 
 @typechecked

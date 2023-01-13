@@ -1,5 +1,4 @@
 """Stores the flow logic of the script in a networkx graph."""
-from typing import List
 
 import networkx as nx
 from typeguard import typechecked

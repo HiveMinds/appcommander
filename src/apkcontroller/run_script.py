@@ -7,13 +7,12 @@ from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
 from src.apkcontroller.helper import export_screen_data_if_valid, launch_app
-from src.apkcontroller.org_torproject_android.plot_script_flow import (
-    visualise_script_flow,
-)
 from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.Apk_script import (
     Apk_script,
 )
-from src.apkcontroller.script_helper import can_proceed, get_start_nodes
+from src.apkcontroller.plot_script_flow import visualise_script_flow
+from src.apkcontroller.script_orientation import get_start_nodes
+from src.apkcontroller.verification.status_verification import can_proceed
 
 
 @typechecked

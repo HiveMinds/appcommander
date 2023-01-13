@@ -9,8 +9,8 @@ import networkx as nx
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
-from src.apkcontroller.script_helper import get_expected_screen_nrs
 from src.apkcontroller.Screen import Screen
+from src.apkcontroller.script_orientation import get_expected_screen_nrs
 
 
 @typechecked
