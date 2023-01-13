@@ -1,4 +1,4 @@
-# Control Android Apps from Python
+# Command Android Apps from Python
 
 [![Python 3.10](https://img.shields.io/badge/python-3.10-blue.svg)](https://www.python.org/downloads/release/python-3106/)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
@@ -10,9 +10,17 @@ apps.
 The user can specify some app logic (series of screens and button clicks) that
 is executed on your Android phone through ADB.
 
+## Why
+I wanted self-host my Nextcloud calendar with 1 command, from anywhere in the world, no port-forwarding, no DNS stuff, no domain-name, no registrar configruation no nothing. So I wanted to completely automate my Android phone configuration. Some apps did not have, nor want, a configuration API. Automatic Android apps with key-presses is not safe because an unexpected event may come up, e.g. a prompt for a phone update, a call may come in etc.
+
+So I wanted a safe- and controlled way to configure the app. using the UI. This repository verifies each step, verifies the button is the desired button etc. If unexpected changes are expected, the script aborts.
+
+Also, each phone manufacturer has a different rooting process, this repo can become a library to safely- and automatically root all (rootable) Android phones automatically (except the user must enable `ADB` themselves).
+
 ## Example
 
-TODO
+![image](https://user-images.githubusercontent.com/34750068/212434675-65839344-0dbd-43c1-a7c2-3717cdd40d31.png)
+
 
 ## Usage
 
