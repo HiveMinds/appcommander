@@ -11,7 +11,7 @@ The user can specify some app logic (series of screens and button clicks) that
 is executed on your Android phone through ADB.
 
 ## Why
-I wanted self-host my Nextcloud calendar with 1 command, from anywhere in the world, no port-forwarding, no DNS stuff, no domain-name, no registrar configruation no nothing. So I wanted to completely automate my Android phone configuration. Some apps did not have, and perhaps may not want, a configuration API. Configuring Android apps with automated key-presses is not safe because an unexpected event may come up, e.g. a prompt for a phone update, a call may come in etc.
+I wanted self-host my Nextcloud calendar with 1 command, from anywhere in the world, no port-forwarding, no DNS stuff, no domain-name, no registrar configruation no nothing. That includes complete Android phone configuration automation for me. Some apps did not have, and perhaps may not want, a configuration API. Configuring Android apps with automated key-presses is not safe because an unexpected event may come up, e.g. a prompt for a phone update, a call may come in etc.
 
 So I wanted a safe- and controlled way to configure the app, using the UI. This repository verifies each step in an arbitrary script, verifies the button is the desired button etc. If unexpected changes are expected, the script aborts.
 
