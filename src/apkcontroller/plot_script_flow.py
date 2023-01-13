@@ -72,7 +72,7 @@ def plot_coordinated_graph(
 
     :param G: The original graph on which the MDSA algorithm is ran.
     """
-    pos: Dict = {}
+    pos: Dict[int, List[int]] = {}
     for nodename in G.nodes:
         pos[nodename] = G.nodes[nodename]["pos"]
     print(f"pos={pos}")
