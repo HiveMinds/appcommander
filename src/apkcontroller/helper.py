@@ -11,10 +11,10 @@ from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
 if TYPE_CHECKING:
-    from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.Script import (
+    from src.appcommander.org_torproject_android.V16_6_3_RC_1.Script import (
         Script,
     )
-    from src.apkcontroller.Screen import Screen
+    from src.appcommander.Screen import Screen
 else:
     Screen = object
     Script = object
@@ -159,7 +159,7 @@ def export_screen_data(
     """
     output_dir = (
         (
-            "src/apkcontroller/"
+            "src/appcommander/"
             + f"{script.app_name}"
             + f"/V{script.version}/{subdir}"
         )

@@ -5,16 +5,16 @@ from typing import Dict
 from typeguard import typechecked
 from uiautomator import device
 
-from src.apkcontroller.hardcoded import app_name_mappings
-from src.apkcontroller.helper import export_screen_data, get_screen_as_dict
-from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.Script import Script
-from src.apkcontroller.plot_script_flow import visualise_script_flow
-from src.apkcontroller.run_script import run_script
-from src.apkcontroller.verification.arg_verification import (
+from src.appcommander.hardcoded import app_name_mappings
+from src.appcommander.helper import export_screen_data, get_screen_as_dict
+from src.appcommander.org_torproject_android.V16_6_3_RC_1.Script import Script
+from src.appcommander.plot_script_flow import visualise_script_flow
+from src.appcommander.run_script import run_script
+from src.appcommander.verification.arg_verification import (
     get_verified_apps_to_torify,
     sort_out_app_name_and_package_name,
 )
-from src.apkcontroller.verification.verify_phone_connection import (
+from src.appcommander.verification.verify_phone_connection import (
     assert_app_is_installed,
     assert_app_version_is_correct,
 )

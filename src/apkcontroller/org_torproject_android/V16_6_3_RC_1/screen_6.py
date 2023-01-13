@@ -7,16 +7,16 @@ import networkx as nx
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
-from src.apkcontroller.helper import get_screen_as_dict
-from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.app_specific_helper import (
+from src.appcommander.helper import get_screen_as_dict
+from src.appcommander.org_torproject_android.V16_6_3_RC_1.app_specific_helper import (
     get_torified_item_index_dict,
     orbot_torifying_app_is_checked,
 )
-from src.apkcontroller.Screen import Screen
-from src.apkcontroller.script_orientation import get_expected_screen_nrs
+from src.appcommander.Screen import Screen
+from src.appcommander.script_orientation import get_expected_screen_nrs
 
 if TYPE_CHECKING:
-    from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.Script import (
+    from src.appcommander.org_torproject_android.V16_6_3_RC_1.Script import (
         Script,
     )
 else:

@@ -5,19 +5,19 @@ import networkx as nx
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
-from src.apkcontroller.helper import (
+from src.appcommander.helper import (
     export_screen_data,
     get_screen_as_dict,
     is_expected_screen,
 )
-from src.apkcontroller.script_orientation import get_expected_screens
+from src.appcommander.script_orientation import get_expected_screens
 
 # pylint: disable=R0801
 if TYPE_CHECKING:
-    from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.Script import (
+    from src.appcommander.org_torproject_android.V16_6_3_RC_1.Script import (
         Script,
     )
-    from src.apkcontroller.Screen import Screen
+    from src.appcommander.Screen import Screen
 else:
     Screen = object
     Script = object
@@ -66,7 +66,7 @@ def can_proceed(
         raise ReferenceError(
             f"Error, the expected screen was not found in:{screen_nr}. "
             + f"Searched for:{expected_screennames}. The accompanying screen "
-            + "and xml can be found in:src/apkcontroller/<package_name>/<app_"
+            + "and xml can be found in:src/appcommander/<package_name>/<app_"
             + f"version>/error/{screen_nr}.json"
         )
     return is_expected, screen_nr

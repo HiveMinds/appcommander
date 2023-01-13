@@ -5,7 +5,7 @@ from typing import List
 
 from typeguard import typechecked
 
-from src.apkcontroller.helper import run_bash_command
+from src.appcommander.helper import run_bash_command
 
 
 @typechecked

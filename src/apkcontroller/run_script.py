@@ -6,18 +6,18 @@ from typing import Callable, Dict, List
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
-from src.apkcontroller.helper import export_screen_data_if_valid, launch_app
-from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.Script import Script
-from src.apkcontroller.Screen import Screen
-from src.apkcontroller.script_orientation import get_start_nodes
-from src.apkcontroller.verification.status_verification import can_proceed
+from src.appcommander.helper import export_screen_data_if_valid, launch_app
+from src.appcommander.org_torproject_android.V16_6_3_RC_1.Script import Script
+from src.appcommander.Screen import Screen
+from src.appcommander.script_orientation import get_start_nodes
+from src.appcommander.verification.status_verification import can_proceed
 
 
 @typechecked
 def run_script(script: Script, dev: AutomatorDevice) -> None:
     """Runs the incoming script on the phone.
 
-    Script folder structure: src/apkcontroller/app_name/version.py with
+    Script folder structure: src/appcommander/app_name/version.py with
     app_name is something like: com_whatsapp_android (not: Whatsapp). It
     is derived from how your android dev calls the app, with the dots
     replaced by underscores. E.g. com.whatsapp.android or something like

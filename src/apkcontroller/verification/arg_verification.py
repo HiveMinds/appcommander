@@ -7,8 +7,8 @@ from typing import Dict, List, Tuple
 
 from typeguard import typechecked
 
-from src.apkcontroller.helper import make_path_if_not_exists
-from src.apkcontroller.verification.verify_phone_connection import (
+from src.appcommander.helper import make_path_if_not_exists
+from src.appcommander.verification.verify_phone_connection import (
     assert_app_is_installed,
 )
 
@@ -51,7 +51,7 @@ def verify_app_name(args: argparse.Namespace) -> None:
         raise NameError("Error, app name is not specified.")
 
     app_path: str = (
-        f'src/apkcontroller/{args.app_name.replace(".","_").replace(" ","_")}'
+        f'src/appcommander/{args.app_name.replace(".","_").replace(" ","_")}'
     )
     # User just wants to store screenshots and json, make dirs for user.
     if args.export_screen is not None:
@@ -73,7 +73,7 @@ def verify_app_version(args: argparse.Namespace) -> None:
         raise NameError("Error, app version is not specified.")
 
     version_path: str = (
-        f'src/apkcontroller/{args.app_name.replace(".","_").replace(" ","_")}/'
+        f'src/appcommander/{args.app_name.replace(".","_").replace(" ","_")}/'
         + f'V{args.version.replace(".","_").replace(" ","_")}'
     )
     # User just wants to store screenshots and json, make dirs for user.

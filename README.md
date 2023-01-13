@@ -27,26 +27,26 @@ Also, each phone manufacturer has a different rooting process, this repo can bec
 First satisfy the prerequisites:
 
 ```bash
-pip install apkcontroller
+pip install appcommander
 ```
 
 Connect your phone, and tell this code which app you want to automate, and how:
 
 ```bash
-python -m src.apkcontroller -a org.torproject.android -v "16.6.3 RC 1" -t "DAVx5"
+python -m src.appcommander -a org.torproject.android -v "16.6.3 RC 1" -t "DAVx5"
 ```
 
 which is the same as:
 
 ```bash
-python -m src.apkcontroller --app-name org.torproject.android \
+python -m src.appcommander --app-name org.torproject.android \
 --version "16.6.3 RC 1" -torify "DAVx5"
 ```
 
 For more info, run:
 
 ```bash
-python -m src.apkcontroller --help
+python -m src.appcommander --help
 ```
 
 ## Testing
@@ -86,7 +86,7 @@ Developers can use:
 
 ```bash
 conda env create --file environment.yml
-conda activate apkcontroller
+conda activate appcommander
 python -m pytest
 ```
 
@@ -120,7 +120,7 @@ cp apk-ct.sh ~/bin/apk-ct
 chmod +x ~/bin/apk-ct
 ```
 
-Then you can rebuild and locally re-install the `apkcontroller` pip package the command:
+Then you can rebuild and locally re-install the `appcommander` pip package the command:
 
 ```bash
 apk-ct

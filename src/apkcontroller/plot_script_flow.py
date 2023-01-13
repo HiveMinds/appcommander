@@ -52,7 +52,7 @@ def set_node_images(G: nx.DiGraph, app_name: str, app_version: str) -> None:
     icons: Dict[str, str] = {}
     for screen_nr in G.nodes:
         icons[screen_nr] = (
-            f"src/apkcontroller/{app_name}/V{app_version}/verified/"
+            f"src/appcommander/{app_name}/V{app_version}/verified/"
             + f"{screen_nr}.png"
         )
         # TODO: verify file exists, use dummy file otherwise.

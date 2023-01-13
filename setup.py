@@ -1,4 +1,4 @@
-"""Packaging logic for apkcontroller."""
+"""Packaging logic for appcommander."""
 from __future__ import annotations
 
 import os

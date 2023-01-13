@@ -4,7 +4,7 @@ from typing import Dict, List
 
 from typeguard import typechecked
 
-from src.apkcontroller.helper import (
+from src.appcommander.helper import (
     load_json_file_into_dict,
     required_objects_in_screen,
 )
@@ -24,7 +24,7 @@ class Test_get_graph(unittest.TestCase):
         """Tests whether the required_object_in_screen function correctly finds
         the required object in s0."""
         screen_dict: Dict = load_json_file_into_dict(
-            "src/apkcontroller/org.torproject.android/" + "16.6.3 RC 1/s0.json"
+            "src/appcommander/org.torproject.android/" + "16.6.3 RC 1/s0.json"
         )
 
         required_objects: List[Dict[str, str]] = [

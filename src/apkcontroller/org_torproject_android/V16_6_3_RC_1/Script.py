@@ -8,13 +8,13 @@ from typing import TYPE_CHECKING, Dict, List
 import networkx as nx
 from typeguard import typechecked
 
-from src.apkcontroller.create_screens import create_screens
-from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.screen_flow import (
+from src.appcommander.create_screens import create_screens
+from src.appcommander.org_torproject_android.V16_6_3_RC_1.screen_flow import (
     Script_flow,
 )
 
 if TYPE_CHECKING:
-    from src.apkcontroller.Screen import Screen
+    from src.appcommander.Screen import Screen
 else:
     Screen = object
 

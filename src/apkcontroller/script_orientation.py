@@ -7,10 +7,10 @@ from typeguard import typechecked
 
 # pylint: disable=R0801
 if TYPE_CHECKING:
-    from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.Script import (
+    from src.appcommander.org_torproject_android.V16_6_3_RC_1.Script import (
         Script,
     )
-    from src.apkcontroller.Screen import Screen
+    from src.appcommander.Screen import Screen
 else:
     Screen = object
     Script = object

@@ -1,10 +1,10 @@
 #!/bin/bash
 
 ## declare the list of github repositories in an array.
-declare -a arr=("apkcontroller")
+declare -a arr=("appcommander")
 # Specify global variables.
 DIR_WITH_REPOS="/home/$(echo $(whoami))/git/Hiveminds/"
-CONDA_ENVIRONMENT_NAME="apkcontroller"
+CONDA_ENVIRONMENT_NAME="appcommander"
 
 
 while [[ "$#" -gt 0 ]]; do
@@ -93,10 +93,10 @@ run_precommit() {
     local git_path="$1"
     if [ "$(conda_env_exists $CONDA_ENVIRONMENT_NAME)" == "FOUND" ]; then
 		eval "$(conda shell.bash hook)"
-		cd "$git_path" && conda deactivate && conda activate apkcontroller && git add *
-		cd "$git_path" && conda deactivate && conda activate apkcontroller && git add .* && pre-commit run --all-files
-		cd "$git_path" && conda deactivate && conda activate apkcontroller && pre-commit install
-		cd "$git_path" && conda deactivate && conda activate apkcontroller && pre-commit run --all-files
+		cd "$git_path" && conda deactivate && conda activate appcommander && git add *
+		cd "$git_path" && conda deactivate && conda activate appcommander && git add .* && pre-commit run --all-files
+		cd "$git_path" && conda deactivate && conda activate appcommander && pre-commit install
+		cd "$git_path" && conda deactivate && conda activate appcommander && pre-commit run --all-files
 	else
 		echo "Error, conda environment name:$CONDA_ENVIRONMENT_NAME not found."
         exit 5
@@ -109,10 +109,10 @@ commit_and_push() {
 	local message="$2"
     if [ "$(conda_env_exists $CONDA_ENVIRONMENT_NAME)" == "FOUND" ]; then
 		eval "$(conda shell.bash hook)"
-		cd "$git_path" && conda deactivate && conda activate apkcontroller && git add *
-		cd "$git_path" && conda deactivate && conda activate apkcontroller && git add -A
-		cd "$git_path" && conda deactivate && conda activate apkcontroller && git commit -m "$message"
-		cd "$git_path" && conda deactivate && conda activate apkcontroller && git push
+		cd "$git_path" && conda deactivate && conda activate appcommander && git add *
+		cd "$git_path" && conda deactivate && conda activate appcommander && git add -A
+		cd "$git_path" && conda deactivate && conda activate appcommander && git commit -m "$message"
+		cd "$git_path" && conda deactivate && conda activate appcommander && git push
 	else
 		echo "Error, conda environment name:$CONDA_ENVIRONMENT_NAME not found."
         exit 5
@@ -123,7 +123,7 @@ build_pip_package() {
     local git_path="$1"
     if [ "$(conda_env_exists $CONDA_ENVIRONMENT_NAME)" == "FOUND" ]; then
 		eval "$(conda shell.bash hook)"
-		cd "$git_path" && conda deactivate && conda activate apkcontroller && python3 setup.py sdist bdist_wheel
+		cd "$git_path" && conda deactivate && conda activate appcommander && python3 setup.py sdist bdist_wheel
 	else
 		echo "Error, conda environment name:$CONDA_ENVIRONMENT_NAME not found."
         exit 5
@@ -135,7 +135,7 @@ install_pip_package() {
     local git_path="$1"
     if [ "$(conda_env_exists $CONDA_ENVIRONMENT_NAME)" == "FOUND" ]; then
 		eval "$(conda shell.bash hook)"
-		cd "$git_path" && conda deactivate && conda activate apkcontroller && pip install -e .
+		cd "$git_path" && conda deactivate && conda activate appcommander && pip install -e .
 	else
 		echo "Error, conda environment name:$CONDA_ENVIRONMENT_NAME not found."
         exit 5

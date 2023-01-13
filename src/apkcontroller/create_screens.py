@@ -6,15 +6,15 @@ import networkx as nx
 from typeguard import typechecked
 
 if TYPE_CHECKING:
-    from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.Script import (
+    from src.appcommander.org_torproject_android.V16_6_3_RC_1.Script import (
         Script,
     )
-    from src.apkcontroller.Screen import Screen
+    from src.appcommander.Screen import Screen
 else:
     Script = object
     Screen = object
 
-screen_path: str = "src.apkcontroller.org_torproject_android.V16_6_3_RC_1."
+screen_path: str = "src.appcommander.org_torproject_android.V16_6_3_RC_1."
 moduleNames = []
 screen_func_names = []
 modules = []
