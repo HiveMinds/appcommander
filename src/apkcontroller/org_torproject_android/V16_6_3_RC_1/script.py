@@ -72,18 +72,6 @@ class Apk_script:
                 script_graph.nodes[nodename]["is_start"] = False
 
     @typechecked
-    def create_screen_transitions(self, script_graph: nx.DiGraph) -> None:
-        """Adds the edges between the nodes(screens), representing possible
-        transitions between the screens. The edges contain a list containing
-        lists of actions.
-
-        For example, it may be that actions: [click: checkmark I, click:
-        Next], lead to screen 3, as well as actions: [click: Next] lead
-        to screen 3. Hence, 1 edge multiple action lists (in/as a list).
-        """
-        print(f"TODO: set edges properties.{script_graph}")
-
-    @typechecked
     def perform_action(
         self,
         device: AutomatorDevice,

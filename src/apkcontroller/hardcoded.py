@@ -9,3 +9,4 @@ app_name_mappings: Dict = {
     "DAVx5": "at.bitfire.davdroid",
     "Orbot": "org.torproject.android",
 }
+# TODO: verify all supported package names are unique.

@@ -30,10 +30,7 @@ for screen_index in range(0, 8):
 def create_screens(
     script: Apk_script, script_graph: nx.DiGraph
 ) -> List[Screen]:
-    """Creates the screens as networkx nodes.
-
-    TODO: refactor to outside of script to reduce duplicate code.
-    """
+    """Creates the screens as networkx nodes."""
     screens: List[Screen] = []
 
     # Create the Screen objects programmatically.

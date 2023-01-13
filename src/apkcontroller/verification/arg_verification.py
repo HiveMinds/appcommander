@@ -23,9 +23,6 @@ def sort_out_app_name_and_package_name(
         app_name = some_apk_name
         package_name = app_name_mappings[app_name]
     elif some_apk_name in app_name_mappings.values():
-        # TODO: verify all supported package names are unique.
-
-        # app_name = list(app_name_mappings.values()).index(some_apk_name)
         app_name = str(
             {
                 i
@@ -58,9 +55,6 @@ def verify_app_name(args: argparse.Namespace) -> None:
     )
     # User just wants to store screenshots and json, make dirs for user.
     if args.export_screen is not None:
-        # TODO: verify app is installed.
-        # TODO: verify app version.
-        # TODO: create directories if not yet existent.
         make_path_if_not_exists(app_path)
     else:  # User tries to use app name even though app name may not exist.
         if not os.path.exists(app_path):
@@ -84,9 +78,7 @@ def verify_app_version(args: argparse.Namespace) -> None:
     )
     # User just wants to store screenshots and json, make dirs for user.
     if args.export_screen is not None:
-        # TODO: verify app is installed.
-        # TODO: verify app version.
-        # TODO: create directories if not yet existent.
+        # Create directories if not yet existent.
         make_path_if_not_exists(version_path)
     else:  # User tries to use app name even though app name may not exist.
         if not os.path.exists(version_path):
@@ -110,8 +102,6 @@ def verify_app_script(script_path: str) -> None:
     # Assert graph file exists.
     if not Path(script_path).is_file():
         raise FileNotFoundError(f"Input Graph path was invalid:{script_path}")
-
-    # TODO: Verify script path is valid.
 
 
 def get_verified_apps_to_torify(

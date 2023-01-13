@@ -131,8 +131,6 @@ def launch_app(app_name: str) -> None:
         await_compilation=True, bash_command=command, verbose=False
     )
 
-    # TODO: verify app is launched.
-
 
 @typechecked
 def export_screen_data(
