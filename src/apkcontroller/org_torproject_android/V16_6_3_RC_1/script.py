@@ -120,11 +120,11 @@ class Apk_script:
     def perform_action(
         self,
         device: AutomatorDevice,
-        next_actions: List[Callable],
+        next_actions: Callable,
         additional_info: Dict,
     ) -> Dict:
         """Performs the first action list in the list of action lists."""
-        action_output: Dict = next_actions[0](
+        action_output: Dict = next_actions(
             device=device,
             additional_info=additional_info,
         )

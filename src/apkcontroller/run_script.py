@@ -48,10 +48,10 @@ def run_script(script: Apk_script) -> None:
     )
     script.script_description["past_screens"] = [screen_nr]
 
-    next_actions = ["filler"]
+    next_actions = "filler"
     retry: bool = False  # For the first screen, do a quick scope because it is
     # known already.
-    while len(next_actions) >= 1:
+    while next_actions is not None:
         _, screen_nr = can_proceed(
             device=device,
             expected_screennames=expected_screens,
@@ -78,11 +78,7 @@ def run_script(script: Apk_script) -> None:
         )
 
         # Perform next action.
-        if len(next_actions) != 0:
-            if len(next_actions) > 1:
-                raise ValueError(
-                    "More than one action functions were returned."
-                )
+        if next_actions is not None:
 
             # Compose the information needed for the actions.
             additional_info = script.script_description

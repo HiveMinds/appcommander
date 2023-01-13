@@ -7,7 +7,7 @@ Presents a: "Connection request".
 import copy
 import inspect
 import time
-from typing import Callable, Dict, List
+from typing import Callable, Dict, List, Union
 
 import networkx as nx
 from typeguard import typechecked
@@ -59,7 +59,7 @@ def screen_5(script_description: Dict) -> Screen:
         required_objects: List[Dict[str, str]],
         optional_objects: List[Dict[str, str]],
         history: Dict,
-    ) -> List[Callable[[AutomatorDevice, Dict[str, str]], Dict]]:
+    ) -> Union[Callable[[AutomatorDevice, Dict[str, str]], Dict]]:
         """Looks at the required objects and optional objects and determines
         which actions to take next.
         An example of the next actions could be the following List:
@@ -72,10 +72,10 @@ def screen_5(script_description: Dict) -> Screen:
         """
         if 6 in history["past_screens"]:
             # run start.
-            return [actions_1]
+            return actions_1
         # Else:
         # Go to settings, and enable the required apps.
-        return [actions_0]
+        return actions_0
 
     return Screen(
         get_next_actions=get_next_actions,

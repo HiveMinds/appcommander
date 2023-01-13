@@ -2,7 +2,7 @@
 # pylint: disable=R0801
 import copy
 import inspect
-from typing import Callable, Dict, List, Optional
+from typing import Callable, Dict, List, Optional, Union
 
 import networkx as nx
 from typeguard import typechecked
@@ -51,7 +51,7 @@ def screen_6(script_description: Dict) -> Screen:
         optional_objects: List[Dict[str, str]],
         history: Dict,  # pylint: disable=W0613
         script_description: Optional[Dict] = {},
-    ) -> List[Callable[[AutomatorDevice, Dict[str, str]], Dict]]:
+    ) -> Union[Callable[[AutomatorDevice, Dict[str, str]], Dict]]:
         """Looks at the required objects and optional objects and determines
         which actions to take next.
         An example of the next actions could be the following List:
@@ -63,7 +63,7 @@ def screen_6(script_description: Dict) -> Screen:
         amount, and optionally retries a pre-determined amount of attempts.
         """
 
-        return [actions_0]
+        return actions_0
 
     return Screen(
         get_next_actions=get_next_actions,

@@ -39,9 +39,8 @@ def load_json_file_into_dict(
 ) -> Dict:
     """Loads a json file into dict from a filepath."""
     if not Path(json_filepath).is_file():
-        raise Exception("Error, filepath does not exist:{filepath}")
-    # TODO: verify extension.
-    # TODO: verify json formatting is valid.
+        raise Exception(f"Error, filepath does not exist:{json_filepath}")
+
     with open(json_filepath, encoding="utf-8") as json_file:
         the_dict = json.load(json_file)
         json_file.close()
@@ -132,7 +131,7 @@ def launch_app(app_name: str) -> None:
         await_compilation=True, bash_command=command, verbose=False
     )
 
-    # TODO: verify app is laucned
+    # TODO: verify app is launched.
 
 
 @typechecked

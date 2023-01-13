@@ -5,7 +5,7 @@ Presents a: "Connection Request".
 # pylint: disable=R0801
 import copy
 import inspect
-from typing import Callable, Dict, List
+from typing import Callable, Dict, List, Union
 
 import networkx as nx
 from typeguard import typechecked
@@ -37,7 +37,7 @@ def screen_0(script_description: Dict) -> Screen:
         required_objects: List[Dict[str, str]],
         optional_objects: List[Dict[str, str]],
         history: Dict,
-    ) -> List[Callable[[AutomatorDevice, Dict[str, str]], Dict]]:
+    ) -> Union[Callable[[AutomatorDevice, Dict[str, str]], Dict]]:
         """Looks at the required objects and optional objects and determines
         which actions to take next.
         An example of the next actions could be the following List:
@@ -52,7 +52,7 @@ def screen_0(script_description: Dict) -> Screen:
         on the required and optional objects, and on nothing else.
         TODO: Determine how to deal with server responses/unpredictable input.
         """
-        return [actions_0]
+        return actions_0
 
     return Screen(
         get_next_actions=get_next_actions,
