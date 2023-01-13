@@ -37,7 +37,7 @@ def screen_0(script_description: Dict) -> Screen:
         required_objects: List[Dict[str, str]],
         optional_objects: List[Dict[str, str]],
         history: Dict,
-    ) -> Union[Callable[[AutomatorDevice, Dict[str, str]], Dict]]:
+    ) -> Union[Callable[[AutomatorDevice, Dict[str, str]], Dict], None]:
         """Looks at the required objects and optional objects and determines
         which actions to take next.
         An example of the next actions could be the following List:
@@ -47,10 +47,6 @@ def screen_0(script_description: Dict) -> Screen:
 
         Then the app goes to the next screen and waits a pre-determined
         amount, and optionally retries a pre-determined amount of attempts.
-        TODO: Don't return a list of functions, just return one function,
-        because this method should decide which action is to be performed based
-        on the required and optional objects, and on nothing else.
-        TODO: Determine how to deal with server responses/unpredictable input.
         """
         return actions_0
 

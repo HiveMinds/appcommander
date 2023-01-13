@@ -19,7 +19,7 @@ class Screen:
         self,
         get_next_actions: Callable[
             [Dict[str, str], Dict[str, str], Dict[str, str]],
-            Union[Callable[[AutomatorDevice, Dict[str, str]], Dict]],
+            Union[Callable[[AutomatorDevice, Dict[str, str]], Dict], None],
         ],
         required_objects: List[Dict[str, str]],
         script_description: Dict,
@@ -27,7 +27,7 @@ class Screen:
     ) -> None:
         self.get_next_actions: Callable[
             [Dict[str, str], Dict[str, str], Dict[str, str]],
-            Union[Callable[[AutomatorDevice, Dict[str, str]], Dict]],
+            Union[Callable[[AutomatorDevice, Dict[str, str]], Dict], None],
         ] = get_next_actions
 
         # eloping typed dict.
@@ -64,7 +64,7 @@ class Screen:
 def get_next_screen(
     current_screen_nr: str,
     script_graph: nx.DiGraph,
-    actions: Union[Callable[[AutomatorDevice, Dict[str, str]], Dict]],
+    actions: Union[Callable[[AutomatorDevice, Dict[str, str]], Dict], None],
 ) -> bool:
     """Gets the next expected screen."""
 

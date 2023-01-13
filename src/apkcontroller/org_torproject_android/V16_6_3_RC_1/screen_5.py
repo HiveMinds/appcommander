@@ -59,7 +59,7 @@ def screen_5(script_description: Dict) -> Screen:
         required_objects: List[Dict[str, str]],
         optional_objects: List[Dict[str, str]],
         history: Dict,
-    ) -> Union[Callable[[AutomatorDevice, Dict[str, str]], Dict]]:
+    ) -> Union[Callable[[AutomatorDevice, Dict[str, str]], Dict], None]:
         """Looks at the required objects and optional objects and determines
         which actions to take next.
         An example of the next actions could be the following List:

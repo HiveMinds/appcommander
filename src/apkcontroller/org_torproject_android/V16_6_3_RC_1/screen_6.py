@@ -51,7 +51,7 @@ def screen_6(script_description: Dict) -> Screen:
         optional_objects: List[Dict[str, str]],
         history: Dict,  # pylint: disable=W0613
         script_description: Optional[Dict] = {},
-    ) -> Union[Callable[[AutomatorDevice, Dict[str, str]], Dict]]:
+    ) -> Union[Callable[[AutomatorDevice, Dict[str, str]], Dict], None]:
         """Looks at the required objects and optional objects and determines
         which actions to take next.
         An example of the next actions could be the following List:
@@ -80,7 +80,6 @@ def actions_0(device: AutomatorDevice, additional_info: Dict) -> Dict:
 
     torifying_apps = additional_info["torifying_apps"]
 
-    # TODO: get button ids to click.
     for app_name, _ in torifying_apps.items():
 
         # Refresh the screen.

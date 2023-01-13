@@ -3,28 +3,22 @@
 Android names this app: org.torproject.android
 """
 
-import importlib
-from typing import Callable, Dict, List, Optional
+from typing import TYPE_CHECKING, Callable, Dict, List, Optional
 
 import networkx as nx
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
+from src.apkcontroller.create_screens import create_screens
 from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.screen_flow import (
     Script_flow,
 )
-from src.apkcontroller.Screen import Screen
 
-screen_path: str = "src.apkcontroller.org_torproject_android.V16_6_3_RC_1."
-moduleNames = []
-screen_func_names = []
-modules = []
-for screen_index in range(0, 8):
-    module_name = f"{screen_path}screen_{screen_index}"
-    moduleNames.append(module_name)
-    screen_func_names.append(f"screen_{screen_index}")
-    my_module = importlib.import_module(module_name)
-    modules.append(my_module)
+if TYPE_CHECKING:
+    from src.apkcontroller.Screen import Screen
+
+else:
+    Screen = object
 
 
 class Apk_script:
@@ -56,37 +50,10 @@ class Apk_script:
 
         # Generate the script screen flow as a graph and generate the screens.
         self.script_graph = Script_flow().G
-        self.screens: List[Screen] = self.create_screens(self.script_graph)
+        self.screens: List[Screen] = create_screens(self, self.script_graph)
 
         # Specify the start and end nodes in the graph.
         self.specify_start__and_end_nodes(self.script_graph)
-
-    @typechecked
-    def create_screens(self, script_graph: nx.DiGraph) -> List[Screen]:
-        """Creates the screens as networkx nodes.
-
-        TODO: refactor to outside of script to reduce duplicate code.
-        """
-        screens: List[Screen] = []
-
-        # Create the Screen objects programmatically.
-        for i, module in enumerate(modules):
-            # Create the function (reference) programmatically.
-            # module represents the file that contains the screen function.
-            # screen_func_name[i] is the name of the screen_i function in that
-            # module.
-            # screen_function is the actual Pythonic function handle. it is
-            # like writing: screen_3 if i==3.
-            screen_function = getattr(module, screen_func_names[i])
-            # execute the screen function, which returns a Screen object.
-            screens.append(screen_function(self.script_description))
-
-        # Add the screen objects to the script graph.
-        for screen in screens:
-            script_graph.nodes[screen.script_description["screen_nr"]][
-                "Screen"
-            ] = screen
-        return screens
 
     @typechecked
     def specify_start__and_end_nodes(self, script_graph: nx.DiGraph) -> None:
