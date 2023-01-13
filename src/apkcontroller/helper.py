@@ -58,31 +58,31 @@ def make_path_if_not_exists(path: str) -> None:
 
 @typechecked
 def export_screen_data_if_valid(
-    device: AutomatorDevice,
+    dev: AutomatorDevice,
     overwrite: bool,
     screens: List[Screen],
 ) -> None:
     """Checks whether the required objects are in the actual screen, and if
     they are, it exports the data of the screen in json format and as a
     screenshot."""
-    if device is not None:
+    if dev is not None:
         for screen in screens:
             # Load and unpack the screen dict to get meaningful ui info.
             screen.screen_dict = get_screen_as_dict(
-                device=device,
+                dev=dev,
                 unpack=True,
                 screen_dict=screen.screen_dict,
                 reload=False,
             )
 
             if is_expected_screen(
-                device=device,
+                dev=dev,
                 unpacked_screen_dict=screen.screen_dict,
                 retry=True,
                 expected_screen=screen,
             ):
                 export_screen_data(
-                    device=device,
+                    dev=dev,
                     screen_dict=screen.screen_dict,
                     script_description=screen.script_description,
                     overwrite=overwrite,
@@ -134,7 +134,7 @@ def launch_app(app_name: str) -> None:
 
 @typechecked
 def export_screen_data(
-    device: AutomatorDevice,
+    dev: AutomatorDevice,
     screen_dict: Dict,
     script_description: Dict,
     overwrite: bool = False,
@@ -167,15 +167,15 @@ def export_screen_data(
             if extension == ".json":
                 if screen_dict == {}:
                     screen_dict = get_screen_as_dict(
-                        device=device,
+                        dev=dev,
                         unpack=True,
                         screen_dict=screen_dict,
                         reload=False,
                     )
                 output_json(output_dir, f"{output_name}.json", screen_dict)
             if extension == ".png":
-                # device.takeScreenshot(output_path)
-                device.screenshot(output_path)
+                # dev.takeScreenshot(output_path)
+                dev.screenshot(output_path)
 
         # Verify the file exists.
         if not Path(output_path).is_file():
@@ -184,7 +184,7 @@ def export_screen_data(
 
 @typechecked
 def get_screen_as_dict(
-    device: AutomatorDevice,
+    dev: AutomatorDevice,
     unpack: bool,
     screen_dict: Dict,
     reload: bool = False,
@@ -201,7 +201,7 @@ def get_screen_as_dict(
     # Get the new screen data from the ui.
     if screen_dict == {} or reload:
         print("Loading screen data from phone for orientation.")
-        ui_information: Dict = xmltodict.parse(device.dump())
+        ui_information: Dict = xmltodict.parse(dev.dump())
 
         # Unpack the screen dict to get a recursive dictionary structure.
         if unpack:
@@ -211,7 +211,7 @@ def get_screen_as_dict(
 
 @typechecked
 def is_expected_screen(
-    device: AutomatorDevice,
+    dev: AutomatorDevice,
     expected_screen: Screen,
     retry: bool,
     unpacked_screen_dict: Dict,
@@ -233,7 +233,7 @@ def is_expected_screen(
 
             # Reload the screen data again.
             unpacked_screen_dict = get_screen_as_dict(
-                device=device,
+                dev=dev,
                 unpack=True,
                 screen_dict={},
                 reload=True,

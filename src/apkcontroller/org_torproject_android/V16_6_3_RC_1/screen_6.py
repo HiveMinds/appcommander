@@ -75,7 +75,7 @@ def screen_6(script_description: Dict) -> Screen:
 
 # pylint: disable=W0613
 @typechecked
-def actions_0(device: AutomatorDevice, additional_info: Dict) -> Dict:
+def actions_0(dev: AutomatorDevice, additional_info: Dict) -> Dict:
     """Performs the actions in option 2 in this screen."""
 
     # Get the dictionary with apps that need to be torified.
@@ -84,11 +84,11 @@ def actions_0(device: AutomatorDevice, additional_info: Dict) -> Dict:
     for app_name, _ in torifying_apps.items():
 
         # Refresh the Orbot settings screen.
-        device(descriptionMatches="Refresh Apps").click()
+        dev(descriptionMatches="Refresh Apps").click()
 
         # Reload the screen data.
         unpacked_screen_dict: Dict = get_screen_as_dict(
-            device=device,
+            dev=dev,
             unpack=True,
             screen_dict={},
             reload=True,
@@ -113,13 +113,13 @@ def actions_0(device: AutomatorDevice, additional_info: Dict) -> Dict:
 
         # Click those buttons if they are not enabled.
         if not orbot_torifying_app_is_checked(item_dict):
-            device(index=item_index).click()
+            dev(index=item_index).click()
 
     # Refresh the screen.
-    device(descriptionMatches="Refresh Apps").click()
+    dev(descriptionMatches="Refresh Apps").click()
 
     # Click back.
-    device(descriptionContains="Navigate up").click()
+    dev(descriptionContains="Navigate up").click()
 
     # Return the expected screens, using get_expected_screen_nrs.
     action_nr: int = int(inspect.stack()[0][3][8:])

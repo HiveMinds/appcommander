@@ -61,14 +61,14 @@ def screen_0(script_description: Dict) -> Screen:
 
 # pylint: disable=W0613
 @typechecked
-def actions_0(device: AutomatorDevice, additional_info: Dict) -> Dict:
+def actions_0(dev: AutomatorDevice, additional_info: Dict) -> Dict:
     """Performs the actions in option 1 in this screen.
 
     For this screen, it clicks the "OK" button in the "Connection
     request".
     """
     # Click the ok button.
-    device(resourceId="android:id/button1").click()
+    dev(resourceId="android:id/button1").click()
 
     # Return the expected screens, using get_expected_screen_nrs.
     action_nr: int = int(inspect.stack()[0][3][8:])

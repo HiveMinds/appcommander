@@ -62,13 +62,13 @@ def screen_1(script_description: Dict) -> Screen:
 
 # pylint: disable=W0613
 @typechecked
-def actions_0(device: AutomatorDevice, additional_info: Dict) -> Dict:
+def actions_0(dev: AutomatorDevice, additional_info: Dict) -> Dict:
     """Performs the actions in option 0 in this screen.
 
     For this screen, it clicks the "Next" button (icon=">") in the
     bottom right.
     """
-    device(resourceId="org.torproject.android:id/next").click()
+    dev(resourceId="org.torproject.android:id/next").click()
 
     # Return the expected screens, using get_expected_screen_nrs.
     action_nr: int = int(inspect.stack()[0][3][8:])

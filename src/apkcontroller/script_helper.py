@@ -49,7 +49,7 @@ def get_expected_screens(
 
 @typechecked
 def current_screen_is_expected(
-    device: AutomatorDevice,
+    dev: AutomatorDevice,
     expected_screennames: List[int],
     retry: bool,
     script_graph: nx.DiGraph,
@@ -61,7 +61,7 @@ def current_screen_is_expected(
     )
     for expected_screen in expected_screens:
         if is_expected_screen(
-            device=device,
+            dev=dev,
             expected_screen=expected_screen,
             retry=retry,
             unpacked_screen_dict=unpacked_screen_dict,
@@ -140,7 +140,7 @@ def get_torified_item_index_dict(
 
 @typechecked
 def can_proceed(
-    device: AutomatorDevice,
+    dev: AutomatorDevice,
     expected_screennames: List[int],
     retry: bool,
     script: Apk_script,
@@ -151,7 +151,7 @@ def can_proceed(
     """
     # get current screen dict.
     unpacked_screen_dict: Dict = get_screen_as_dict(
-        device=device,
+        dev=dev,
         unpack=True,
         screen_dict={},
         reload=False,
@@ -159,7 +159,7 @@ def can_proceed(
 
     # verify current_screen in next_screens.
     is_expected, screen_nr = current_screen_is_expected(
-        device=device,
+        dev=dev,
         expected_screennames=expected_screennames,
         retry=retry,
         script_graph=script.script_graph,
@@ -171,7 +171,7 @@ def can_proceed(
         # Export the actual screen, screen data and expected screens in
         # specific error log folder.
         export_screen_data(
-            device=device,
+            dev=dev,
             screen_dict=unpacked_screen_dict,
             script_description=script.script_description,
             overwrite=True,

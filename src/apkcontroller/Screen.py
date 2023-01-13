@@ -36,7 +36,7 @@ class Screen:
         """Sets the required objects for this screen.
 
         (If these objects are not found within the screen information
-        returned by the device, the screen will not be recogniszed. If
+        returned by the dev, the screen will not be recogniszed. If
         it is, the screen is recognised by the: is_expected_screen function.
         """
         self.required_objects: List[Dict[str, str]] = required_objects

@@ -43,7 +43,7 @@ def process_args(args: argparse.Namespace) -> None:
 
     if args.export_screen:
         unpacked_screen_dict: Dict = get_screen_as_dict(
-            device=device,
+            dev=device,
             unpack=True,
             screen_dict={},
             reload=False,
@@ -54,7 +54,7 @@ def process_args(args: argparse.Namespace) -> None:
             "screen_nr": args.export_screen,
         }
         export_screen_data(
-            device=device,
+            dev=device,
             screen_dict=unpacked_screen_dict,
             script_description=script_description,
             overwrite=True,
@@ -64,4 +64,4 @@ def process_args(args: argparse.Namespace) -> None:
         apk_script = Apk_script(torifying_apps=torifying_apps)
 
         print("")
-        run_script(apk_script)
+        run_script(apk_script, device)

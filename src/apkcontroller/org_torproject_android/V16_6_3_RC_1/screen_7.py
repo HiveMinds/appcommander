@@ -89,11 +89,11 @@ def screen_7(script_description: Dict) -> Screen:
 
 # pylint: disable=W0613
 @typechecked
-def actions_0(device: AutomatorDevice, additional_info: Dict) -> Dict:
+def actions_0(dev: AutomatorDevice, additional_info: Dict) -> Dict:
     """Go to settings inside Orbot to select which apps are torified."""
 
     # Click in the screen to go to the Orbot settings on which app to torify.
-    device(resourceId="org.torproject.android:id/ivAppVpnSettings").click()
+    dev(resourceId="org.torproject.android:id/ivAppVpnSettings").click()
 
     # Return the expected screens, using get_expected_screen_nrs.
     action_nr: int = int(inspect.stack()[0][3][8:])

@@ -86,11 +86,11 @@ def screen_5(script_description: Dict) -> Screen:
 
 # pylint: disable=W0613
 @typechecked
-def actions_0(device: AutomatorDevice, additional_info: Dict) -> Dict:
+def actions_0(dev: AutomatorDevice, additional_info: Dict) -> Dict:
     """Go to settings inside Orbot to select which apps are torified."""
 
     # Click in the screen to go to the Orbot settings on which app to torify.
-    device(resourceId="org.torproject.android:id/ivAppVpnSettings").click()
+    dev(resourceId="org.torproject.android:id/ivAppVpnSettings").click()
 
     # Return the expected screens, using get_expected_screen_nrs.
     action_nr: int = int(inspect.stack()[0][3][8:])
@@ -105,11 +105,11 @@ def actions_0(device: AutomatorDevice, additional_info: Dict) -> Dict:
 
 # pylint: disable=W0613
 @typechecked
-def actions_1(device: AutomatorDevice, additional_info: Dict) -> Dict:
+def actions_1(dev: AutomatorDevice, additional_info: Dict) -> Dict:
     """Click the start tor bridge button in the Orbot app main screen."""
 
     # Press the START button in the Orbot app to create a tor connection.
-    device(resourceId="org.torproject.android:id/imgStatus").click()
+    dev(resourceId="org.torproject.android:id/imgStatus").click()
 
     # Return the expected screens, using get_expected_screen_nrs.
     action_nr: int = int(inspect.stack()[0][3][8:])
