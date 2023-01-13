@@ -11,16 +11,26 @@ The user can specify some app logic (series of screens and button clicks) that
 is executed on your Android phone through ADB.
 
 ## Why
-I wanted self-host my Nextcloud calendar with 1 command, from anywhere in the world, no port-forwarding, no DNS stuff, no domain-name, no registrar configruation no nothing. That includes complete Android phone configuration automation for me. Some apps did not have, and perhaps may not want, a configuration API. Configuring Android apps with automated key-presses is not safe because an unexpected event may come up, e.g. a prompt for a phone update, a call may come in etc.
 
-So I wanted a safe- and controlled way to configure the app, using the UI. This repository verifies each step in an arbitrary script, verifies the button is the desired button etc. If unexpected changes are expected, the script aborts.
+I wanted self-host my Nextcloud calendar with 1 command, from anywhere in the
+world, no port-forwarding, no DNS stuff, no domain-name, no registrar
+configuration no nothing. That includes complete Android phone configuration
+automation for me. Some apps did not have, and perhaps may not want, a
+configuration API. Configuring Android apps with automated key-presses is not
+safe because an unexpected event may come up, e.g. a prompt for a phone update,
+a call may come in etc.
 
-Also, each phone manufacturer has a different rooting process, this repo can become a library to safely- and automatically root all (rootable) Android phones automatically (except the user must enable `ADB` themselves).
+So I wanted a safe- and controlled way to configure the app, using the UI. This
+repository verifies each step in an arbitrary script, verifies the button is
+the desired button etc. If unexpected changes are expected, the script aborts.
+
+Also, each phone manufacturer has a different rooting process, this repo can
+become a library to safely- and automatically root all (rootable) Android
+phones automatically (except the user must enable `ADB` themselves).
 
 ## Example
 
 ![image](https://user-images.githubusercontent.com/34750068/212434675-65839344-0dbd-43c1-a7c2-3717cdd40d31.png)
-
 
 ## Usage
 
