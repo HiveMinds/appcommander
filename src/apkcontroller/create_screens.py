@@ -27,7 +27,7 @@ for screen_index in range(0, 8):
 
 
 @typechecked
-def create_screens(script: Script, script_graph: nx.DiGraph) -> List[Screen]:
+def create_screens(script_graph: nx.DiGraph) -> List[Screen]:
     """Creates the screens as networkx nodes."""
     screens: List[Screen] = []
 
@@ -41,11 +41,9 @@ def create_screens(script: Script, script_graph: nx.DiGraph) -> List[Screen]:
         # like writing: screen_3 if i==3.
         screen_function = getattr(module, screen_func_names[i])
         # execute the screen function, which returns a Screen object.
-        screens.append(screen_function(script.script_description))
+        screens.append(screen_function())
 
     # Add the screen objects to the script graph.
     for screen in screens:
-        script_graph.nodes[screen.script_description["screen_nr"]][
-            "Screen"
-        ] = screen
+        script_graph.nodes[screen.screen_nr]["Screen"] = screen
     return screens

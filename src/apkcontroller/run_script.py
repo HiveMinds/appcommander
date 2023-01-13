@@ -8,6 +8,7 @@ from uiautomator import AutomatorDevice
 
 from src.apkcontroller.helper import export_screen_data_if_valid, launch_app
 from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.Script import Script
+from src.apkcontroller.Screen import Screen
 from src.apkcontroller.script_orientation import get_start_nodes
 from src.apkcontroller.verification.status_verification import can_proceed
 
@@ -24,7 +25,7 @@ def run_script(script: Script, dev: AutomatorDevice) -> None:
     """
 
     # Open the app.
-    app_name = script.script_description["app_name"]
+    app_name = script.app_name
     launch_app(app_name)
 
     expected_screens: List[int] = get_start_nodes(script.script_graph)
@@ -35,7 +36,7 @@ def run_script(script: Script, dev: AutomatorDevice) -> None:
         retry=True,
         script=script,
     )
-    script.script_description["past_screens"] = [screen_nr]
+    script.past_screens.append(screen_nr)
 
     next_actions = "filler"
     retry: bool = False  # For the first screen, do a quick scope because it is
@@ -55,47 +56,48 @@ def run_script(script: Script, dev: AutomatorDevice) -> None:
         # dev already.
         export_screen_data_if_valid(
             dev=dev,
-            overwrite=script.script_description["overwrite"],
+            overwrite=script.overwrite,
             screens=[screen],
+            script=script,
         )
 
         # Get next action
         next_actions = screen.get_next_actions(
             required_objects=screen.required_objects,
             optional_objects=screen.optional_objects,
-            history=script.script_description,
+            script=script,
         )
 
         # Perform next action.
         if next_actions is not None:
 
             # Compose the information needed for the actions.
-            additional_info = script.script_description
-            additional_info["screen_nr"] = screen_nr
-            additional_info["script_graph"] = script.script_graph
 
             # Perform the actual action.
             action_output: Dict = perform_action(
                 dev=dev,
                 next_actions=next_actions,
-                additional_info=additional_info,
+                screen=screen,
+                script=script,
             )
             expected_screens = action_output["expected_screens"]
-            script.script_description["past_screens"].append(screen_nr)
+            script.past_screens.append(screen_nr)
 
-    print(f'Done with script:{script.script_description["app_name"]}')
+    print(f"Done with script:{script.app_name}")
 
 
 @typechecked
 def perform_action(
     dev: AutomatorDevice,
     next_actions: Callable,
-    additional_info: Dict,
+    screen: Screen,
+    script: Script,
 ) -> Dict:
     """Performs the first action list in the list of action lists."""
     action_output: Dict = next_actions(
         dev=dev,
-        additional_info=additional_info,
+        screen=screen,
+        script=script,
     )
     if "expected_screens" not in action_output.keys():
         raise KeyError(

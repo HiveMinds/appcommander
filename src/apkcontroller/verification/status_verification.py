@@ -58,7 +58,8 @@ def can_proceed(
         export_screen_data(
             dev=dev,
             screen_dict=unpacked_screen_dict,
-            script_description=script.script_description,
+            screen_nr=screen_nr,
+            script=script,
             overwrite=True,
             subdir="error",
         )
@@ -66,7 +67,7 @@ def can_proceed(
             f"Error, the expected screen was not found in:{screen_nr}. "
             + f"Searched for:{expected_screennames}. The accompanying screen "
             + "and xml can be found in:src/apkcontroller/<package_name>/<app_"
-            + f'version>/error/{script.script_description["screen_nr"]}.json'
+            + f"version>/error/{screen_nr}.json"
         )
     return is_expected, screen_nr
 
@@ -93,6 +94,6 @@ def current_screen_is_expected(
 
             return (
                 True,
-                int(str(expected_screen.script_description["screen_nr"])),
+                int(str(expected_screen.screen_nr)),
             )
     return (False, -1)

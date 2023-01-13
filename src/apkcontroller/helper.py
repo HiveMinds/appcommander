@@ -11,9 +11,13 @@ from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
 if TYPE_CHECKING:
+    from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.Script import (
+        Script,
+    )
     from src.apkcontroller.Screen import Screen
 else:
     Screen = object
+    Script = object
 
 
 @typechecked
@@ -61,6 +65,7 @@ def export_screen_data_if_valid(
     dev: AutomatorDevice,
     overwrite: bool,
     screens: List[Screen],
+    script: Script,
 ) -> None:
     """Checks whether the required objects are in the actual screen, and if
     they are, it exports the data of the screen in json format and as a
@@ -84,7 +89,8 @@ def export_screen_data_if_valid(
                 export_screen_data(
                     dev=dev,
                     screen_dict=screen.screen_dict,
-                    script_description=screen.script_description,
+                    screen_nr=screen.screen_nr,
+                    script=script,
                     overwrite=overwrite,
                     subdir="verified",
                 )
@@ -132,11 +138,13 @@ def launch_app(app_name: str) -> None:
     )
 
 
+# pylint: disable=R0913
 @typechecked
 def export_screen_data(
     dev: AutomatorDevice,
     screen_dict: Dict,
-    script_description: Dict,
+    screen_nr: int,
+    script: Script,
     overwrite: bool = False,
     subdir: str = "unverified",
 ) -> None:
@@ -152,13 +160,13 @@ def export_screen_data(
     output_dir = (
         (
             "src/apkcontroller/"
-            + f'{script_description["app_name"]}'
-            + f'/V{script_description["version"]}/{subdir}'
+            + f"{script.app_name}"
+            + f"/V{script.version}/{subdir}"
         )
         .replace(".", "_")
         .replace(" ", "_")
     )
-    output_name = f'{script_description["screen_nr"]}'
+    output_name = f"{screen_nr}"
 
     for extension in [".json", ".png"]:
         output_path = f"{output_dir}{output_name}{extension}"

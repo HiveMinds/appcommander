@@ -3,7 +3,7 @@
 Android names this app: org.torproject.android
 """
 
-from typing import TYPE_CHECKING, Dict, List, Optional
+from typing import TYPE_CHECKING, Dict, List
 
 import networkx as nx
 from typeguard import typechecked
@@ -15,11 +15,11 @@ from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.screen_flow import (
 
 if TYPE_CHECKING:
     from src.apkcontroller.Screen import Screen
-
 else:
     Screen = object
 
 
+# pylint: disable=R0902
 class Script:
     """Experiment manager.
 
@@ -29,27 +29,28 @@ class Script:
     """
 
     # pylint: disable=R0903
-
+    # pylint: disable=R0913
     @typechecked
     def __init__(
         self,
-        torifying_apps: Optional[Dict[str, str]] = None,
+        app_name: str,
+        overwrite: bool,
+        package_name: str,
+        torifying_apps: Dict[str, str],
+        version: str,
     ) -> None:
+        self.app_name: str = app_name
+        self.overwrite: bool = overwrite
+        self.package_name: str = package_name
+        self.torifying_apps: Dict[str, str] = torifying_apps
+        self.version: str = version
 
-        # Store data used to generate output and find Screen object files.
-        self.script_description: Dict = {
-            "title": "conf_orbot",
-            "app_name": "org.torproject.android",
-            "app_display_name": "Orbot",
-            "version": "16.6.3 RC 1",
-            "overwrite": True,
-        }
-        if torifying_apps is not None:
-            self.script_description["torifying_apps"] = torifying_apps
+        # Create placeholder for past screens.
+        self.past_screens: List[int] = []
 
         # Generate the script screen flow as a graph and generate the screens.
         self.script_graph = Script_flow().G
-        self.screens: List[Screen] = create_screens(self, self.script_graph)
+        self.screens: List[Screen] = create_screens(self.script_graph)
 
         # Specify the start and end nodes in the graph.
         self.set_start_nodes(self.script_graph)
@@ -61,7 +62,7 @@ class Script:
 
         for nodename in script_graph.nodes:
             screen: Screen = script_graph.nodes[nodename]["Screen"]
-            if screen.script_description["screen_nr"] in list(range(0, 8)):
+            if screen.screen_nr in list(range(0, 8)):
                 script_graph.nodes[nodename]["is_start"] = True
             else:
                 script_graph.nodes[nodename]["is_start"] = False

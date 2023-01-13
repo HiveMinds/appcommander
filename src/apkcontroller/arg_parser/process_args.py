@@ -24,7 +24,7 @@ from src.apkcontroller.verification.verify_phone_connection import (
 def process_args(args: argparse.Namespace) -> None:
     """Processes the arguments and ensures the accompanying tasks are
     executed."""
-    _, package_name = sort_out_app_name_and_package_name(
+    app_name, package_name = sort_out_app_name_and_package_name(
         args.app_name, app_name_mappings=app_name_mappings
     )
 
@@ -40,7 +40,13 @@ def process_args(args: argparse.Namespace) -> None:
         app_version=args.version,
     )
 
-    apk_script = Script(torifying_apps=torifying_apps)
+    apk_script = Script(
+        app_name=app_name,
+        overwrite=False,
+        package_name=package_name,
+        torifying_apps=torifying_apps,
+        version=args.version,
+    )
     if args.export_screen:
         unpacked_screen_dict: Dict = get_screen_as_dict(
             dev=device,
@@ -48,27 +54,19 @@ def process_args(args: argparse.Namespace) -> None:
             screen_dict={},
             reload=False,
         )
-        script_description: Dict = {
-            "app_name": package_name,
-            "version": args.version,
-            "screen_nr": args.export_screen,
-        }
         export_screen_data(
             dev=device,
             screen_dict=unpacked_screen_dict,
-            script_description=script_description,
+            screen_nr=args.export_screen,
+            script=apk_script,
             overwrite=True,
             subdir="unverified",
         )
     elif args.export_script_flow:
         visualise_script_flow(
             G=apk_script.script_graph,
-            app_name=apk_script.script_description["app_name"].replace(
-                ".", "_"
-            ),
-            app_version=apk_script.script_description["version"]
-            .replace(".", "_")
-            .replace(" ", "_"),
+            app_name=apk_script.app_name.replace(".", "_"),
+            app_version=apk_script.version.replace(".", "_").replace(" ", "_"),
         )
     else:
         print("")

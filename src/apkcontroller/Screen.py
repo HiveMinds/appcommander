@@ -17,12 +17,14 @@ class Screen:
     @typechecked
     def __init__(
         self,
+        max_retries: int,
+        screen_nr: int,
+        wait_time_sec: float,
         get_next_actions: Callable[
             [Dict[str, str], Dict[str, str], Dict[str, str]],
             Union[Callable[[AutomatorDevice, Dict[str, str]], Dict], None],
         ],
         required_objects: List[Dict[str, str]],
-        script_description: Dict,
         optional_objects: List[Dict[str, str]] = [],
     ) -> None:
         self.get_next_actions: Callable[
@@ -31,7 +33,7 @@ class Screen:
         ] = get_next_actions
 
         # eloping typed dict.
-        self.max_retries: int = int(str(script_description["max_retries"]))
+        self.max_retries: int = max_retries
 
         """Sets the required objects for this screen.
 
@@ -41,7 +43,6 @@ class Screen:
         """
         self.required_objects: List[Dict[str, str]] = required_objects
 
-        self.script_description: Dict = script_description
         """Some buttons/obtjects in the screen may appear depending on
         parameters that are not predictable in advance, e.g. whether some
         server responds or not.
@@ -54,9 +55,8 @@ class Screen:
         ] = optional_objects
 
         # eloping typed dict.
-        self.wait_time_sec: float = float(
-            str(script_description["wait_time_sec"])
-        )
+        self.wait_time_sec: float = wait_time_sec
+        self.screen_nr = screen_nr
         self.screen_dict: Dict = {}
 
 

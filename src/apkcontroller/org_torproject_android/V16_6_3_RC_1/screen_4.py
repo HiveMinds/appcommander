@@ -1,9 +1,8 @@
 """After the "Connection Request" has been granted, the app welcomes the user
 with screens 1,2,3,4."""
 # pylint: disable=R0801
-import copy
 import inspect
-from typing import Callable, Dict, List, Union
+from typing import TYPE_CHECKING, Callable, Dict, List, Union
 
 import networkx as nx
 from typeguard import typechecked
@@ -12,15 +11,22 @@ from uiautomator import AutomatorDevice
 from src.apkcontroller.Screen import Screen
 from src.apkcontroller.script_orientation import get_expected_screen_nrs
 
+if TYPE_CHECKING:
+    from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.Script import (
+        Script,
+    )
+else:
+    Script = object
+
 
 @typechecked
-def screen_4(script_description: Dict) -> Screen:
+def screen_4() -> Screen:
     """Creates the settings for a starting screen where Orbot is not yet
     started."""
-    description = copy.deepcopy(script_description)
-    description["max_retries"] = 1
-    description["screen_nr"] = 4
-    description["wait_time_sec"] = 0.1
+
+    max_retries = 1
+    screen_nr = 4
+    wait_time_sec = 0.1
     required_objects: List[Dict[str, str]] = [
         {
             "@text": "You can enable any app to go through Tor using our"
@@ -40,7 +46,7 @@ def screen_4(script_description: Dict) -> Screen:
     def get_next_actions(
         required_objects: List[Dict[str, str]],
         optional_objects: List[Dict[str, str]],
-        history: Dict,
+        script: Script,
     ) -> Union[Callable[[AutomatorDevice, Dict[str, str]], Dict], None]:
         """Looks at the required objects and optional objects and determines
         which actions to take next.
@@ -57,15 +63,16 @@ def screen_4(script_description: Dict) -> Screen:
 
     return Screen(
         get_next_actions=get_next_actions,
+        max_retries=max_retries,
+        screen_nr=screen_nr,
+        wait_time_sec=wait_time_sec,
         required_objects=required_objects,
-        script_description=description,
-        optional_objects=[],
     )
 
 
 # pylint: disable=W0613
 @typechecked
-def actions_0(dev: AutomatorDevice, additional_info: Dict) -> Dict:
+def actions_0(dev: AutomatorDevice, screen: Screen, script: Script) -> Dict:
     """Performs the actions in option 0 in this screen.
 
     For this screen, it clicks the "DONE" button in the bottom right.
@@ -74,8 +81,8 @@ def actions_0(dev: AutomatorDevice, additional_info: Dict) -> Dict:
 
     # Return the expected screens, using get_expected_screen_nrs.
     action_nr: int = int(inspect.stack()[0][3][8:])
-    screen_nr: int = additional_info["screen_nr"]
-    script_flow: nx.DiGraph = additional_info["script_graph"]
+    screen_nr: int = screen.screen_nr
+    script_flow: nx.DiGraph = script.script_graph
     return {
         "expected_screens": get_expected_screen_nrs(
             G=script_flow, screen_nr=screen_nr, action_nr=action_nr

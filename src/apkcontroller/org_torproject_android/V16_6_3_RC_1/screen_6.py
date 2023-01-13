@@ -1,8 +1,7 @@
 """The settings screen where apps are torified."""
 # pylint: disable=R0801
-import copy
 import inspect
-from typing import Callable, Dict, List, Optional, Union
+from typing import TYPE_CHECKING, Callable, Dict, List, Optional, Union
 
 import networkx as nx
 from typeguard import typechecked
@@ -16,15 +15,21 @@ from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.app_specific_helper i
 from src.apkcontroller.Screen import Screen
 from src.apkcontroller.script_orientation import get_expected_screen_nrs
 
+if TYPE_CHECKING:
+    from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.Script import (
+        Script,
+    )
+else:
+    Script = object
+
 
 @typechecked
-def screen_6(script_description: Dict) -> Screen:
+def screen_6() -> Screen:
     """Creates the settings for a starting screen where Orbot is not yet
     started."""
-    description = copy.deepcopy(script_description)
-    description["max_retries"] = 5
-    description["screen_nr"] = 6
-    description["wait_time_sec"] = 2
+    max_retries = 5
+    screen_nr = 6
+    wait_time_sec = 2
     required_objects: List[Dict[str, str]] = [
         # {
         # "@text": "Global " "(Auto)",
@@ -47,7 +52,7 @@ def screen_6(script_description: Dict) -> Screen:
     def get_next_actions(
         required_objects: List[Dict[str, str]],
         optional_objects: List[Dict[str, str]],
-        history: Dict,  # pylint: disable=W0613
+        script: Script,  # pylint: disable=W0613
         script_description: Optional[Dict] = {},
     ) -> Union[Callable[[AutomatorDevice, Dict[str, str]], Dict], None]:
         """Looks at the required objects and optional objects and determines
@@ -65,19 +70,21 @@ def screen_6(script_description: Dict) -> Screen:
 
     return Screen(
         get_next_actions=get_next_actions,
+        max_retries=max_retries,
+        screen_nr=screen_nr,
+        wait_time_sec=wait_time_sec,
         required_objects=required_objects,
-        script_description=description,
         optional_objects=optional_objects,
     )
 
 
 # pylint: disable=W0613
 @typechecked
-def actions_0(dev: AutomatorDevice, additional_info: Dict) -> Dict:
+def actions_0(dev: AutomatorDevice, screen: Screen, script: Script) -> Dict:
     """Performs the actions in option 2 in this screen."""
 
     # Get the dictionary with apps that need to be torified.
-    torifying_apps = additional_info["torifying_apps"]
+    torifying_apps = script.torifying_apps
 
     for app_name, _ in torifying_apps.items():
 
@@ -121,8 +128,8 @@ def actions_0(dev: AutomatorDevice, additional_info: Dict) -> Dict:
 
     # Return the expected screens, using get_expected_screen_nrs.
     action_nr: int = int(inspect.stack()[0][3][8:])
-    screen_nr: int = additional_info["screen_nr"]
-    script_flow: nx.DiGraph = additional_info["script_graph"]
+    screen_nr: int = screen.screen_nr
+    script_flow: nx.DiGraph = script.script_graph
     return {
         "expected_screens": get_expected_screen_nrs(
             G=script_flow, screen_nr=screen_nr, action_nr=action_nr
