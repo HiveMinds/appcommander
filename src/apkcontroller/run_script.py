@@ -8,6 +8,9 @@ from typeguard import typechecked
 from uiautomator import device
 
 from src.apkcontroller.helper import export_screen_data_if_valid, launch_app
+from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.screen_flow import (
+    visualise_script_flow,
+)
 from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.script import (
     Apk_script,
 )
@@ -26,6 +29,13 @@ def run_script(script: Apk_script) -> None:
 
     # TODO: include arg to export data of screen.
     """
+    visualise_script_flow(
+        G=script.script_graph,
+        app_name=script.script_description["app_name"].replace(".", "_"),
+        app_version=script.script_description["version"]
+        .replace(".", "_")
+        .replace(" ", "_"),
+    )
 
     # Open the app.
     app_name = script.script_description["app_name"]
