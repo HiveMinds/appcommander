@@ -4,8 +4,10 @@ from typing import Dict, List
 
 from typeguard import typechecked
 
-from src.apkcontroller.helper import load_json_file_into_dict
-from src.apkcontroller.script_helper import required_objects_in_screen
+from src.apkcontroller.helper import (
+    load_json_file_into_dict,
+    required_objects_in_screen,
+)
 
 
 class Test_get_graph(unittest.TestCase):

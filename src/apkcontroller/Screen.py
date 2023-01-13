@@ -1,12 +1,10 @@
 """Starts a script to control an app."""
 
-from typing import Callable, Dict, List, Optional, Union
+from typing import Callable, Dict, List, Union
 
 import networkx as nx
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
-
-from src.apkcontroller.helper import get_screen_as_dict
 
 
 # pylint: disable=R0902
@@ -19,38 +17,32 @@ class Screen:
     @typechecked
     def __init__(
         self,
+        max_retries: int,
+        screen_nr: int,
+        wait_time_sec: float,
         get_next_actions: Callable[
             [Dict[str, str], Dict[str, str], Dict[str, str]],
-            List[Callable[[AutomatorDevice, Dict[str, str]], Dict]],
+            Union[Callable[[AutomatorDevice, Dict[str, str]], Dict], None],
         ],
         required_objects: List[Dict[str, str]],
-        script_description: Dict,
         optional_objects: List[Dict[str, str]] = [],
-        device: Optional[AutomatorDevice] = None,
     ) -> None:
-
-        self.device: AutomatorDevice = device
         self.get_next_actions: Callable[
             [Dict[str, str], Dict[str, str], Dict[str, str]],
-            List[Callable[[AutomatorDevice, Dict[str, str]], Dict]],
+            Union[Callable[[AutomatorDevice, Dict[str, str]], Dict], None],
         ] = get_next_actions
 
         # eloping typed dict.
-        self.max_retries: int = int(str(script_description["max_retries"]))
+        self.max_retries: int = max_retries
 
         """Sets the required objects for this screen.
 
         (If these objects are not found within the screen information
-        returned by the device, the screen will not be recogniszed. If
+        returned by the dev, the screen will not be recogniszed. If
         it is, the screen is recognised by the: is_expected_screen function.
         """
         self.required_objects: List[Dict[str, str]] = required_objects
 
-        self.screen_dict: Union[None, Dict] = None
-        if self.device is not None:
-            self.screen_dict = get_screen_as_dict(self.device)
-
-        self.script_description: Dict = script_description
         """Some buttons/obtjects in the screen may appear depending on
         parameters that are not predictable in advance, e.g. whether some
         server responds or not.
@@ -63,25 +55,16 @@ class Screen:
         ] = optional_objects
 
         # eloping typed dict.
-        self.wait_time_sec: float = float(
-            str(script_description["wait_time_sec"])
-        )
-
-    def goto_next_screen(
-        self, actions: List[str], next_screen_index: int
-    ) -> int:
-        """Performs the actions in the list and then goes to the next
-        screen."""
-
-        print(f"TODO: goto next screen.{actions}")
-        return next_screen_index
+        self.wait_time_sec: float = wait_time_sec
+        self.screen_nr = screen_nr
+        self.screen_dict: Dict = {}
 
 
 @typechecked
 def get_next_screen(
     current_screen_nr: str,
     script_graph: nx.DiGraph,
-    actions: List[Callable[[AutomatorDevice, Dict[str, str]], Dict]],
+    actions: Union[Callable[[AutomatorDevice, Dict[str, str]], Dict], None],
 ) -> bool:
     """Gets the next expected screen."""
 
@@ -106,9 +89,6 @@ def get_next_screen(
             f"Error, the expected action list:{actions} was not in the "
             + f"available actions:{edge_actions}"
         )
-
-    # TODO: check if actions occurs more than once in edge_actions, if yes
-    # raise exception.
 
     for edge in edge_actions:
         if edge.actions == actions:

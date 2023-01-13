@@ -7,9 +7,8 @@ from uiautomator import device
 
 from src.apkcontroller.hardcoded import app_name_mappings
 from src.apkcontroller.helper import export_screen_data, get_screen_as_dict
-from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.script import (
-    Apk_script,
-)
+from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.Script import Script
+from src.apkcontroller.plot_script_flow import visualise_script_flow
 from src.apkcontroller.run_script import run_script
 from src.apkcontroller.verification.arg_verification import (
     get_verified_apps_to_torify,
@@ -25,7 +24,7 @@ from src.apkcontroller.verification.verify_phone_connection import (
 def process_args(args: argparse.Namespace) -> None:
     """Processes the arguments and ensures the accompanying tasks are
     executed."""
-    _, package_name = sort_out_app_name_and_package_name(
+    app_name, package_name = sort_out_app_name_and_package_name(
         args.app_name, app_name_mappings=app_name_mappings
     )
 
@@ -41,24 +40,34 @@ def process_args(args: argparse.Namespace) -> None:
         app_version=args.version,
     )
 
+    apk_script = Script(
+        app_name=app_name,
+        overwrite=False,
+        package_name=package_name,
+        torifying_apps=torifying_apps,
+        version=args.version,
+    )
     if args.export_screen:
-        screen_dict = get_screen_as_dict(device)
-        script_description: Dict = {
-            "app_name": package_name,
-            "version": args.version,
-            "screen_nr": args.export_screen,
-        }
+        unpacked_screen_dict: Dict = get_screen_as_dict(
+            dev=device,
+            unpack=True,
+            screen_dict={},
+            reload=False,
+        )
         export_screen_data(
-            device=device,
-            screen_dict=screen_dict,
-            script_description=script_description,
+            dev=device,
+            screen_dict=unpacked_screen_dict,
+            screen_nr=args.export_screen,
+            script=apk_script,
             overwrite=True,
-            unverified=True,
+            subdir="unverified",
+        )
+    elif args.export_script_flow:
+        visualise_script_flow(
+            G=apk_script.script_graph,
+            app_name=apk_script.app_name.replace(".", "_"),
+            app_version=apk_script.version.replace(".", "_").replace(" ", "_"),
         )
     else:
-        apk_script = Apk_script(torifying_apps=torifying_apps)
-        # TODO: only if device is connected pass device.
-        # apk_script = Apk_script(device=device)
-
         print("")
-        run_script(apk_script)
+        run_script(apk_script, device)

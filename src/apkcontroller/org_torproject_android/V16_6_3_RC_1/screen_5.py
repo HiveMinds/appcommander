@@ -4,24 +4,32 @@ bridge is not yet started.
 Presents a: "Connection request".
 """
 # pylint: disable=R0801
-import copy
-import time
-from typing import Callable, Dict, List, Union
+import inspect
+from typing import TYPE_CHECKING, Callable, Dict, List, Union
 
+import networkx as nx
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
 from src.apkcontroller.Screen import Screen
+from src.apkcontroller.script_orientation import get_expected_screen_nrs
+
+if TYPE_CHECKING:
+    from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.Script import (
+        Script,
+    )
+else:
+    Script = object
 
 
 @typechecked
-def screen_5(script_description: Dict) -> Screen:
+def screen_5() -> Screen:
     """Creates the settings for a starting screen where Orbot is not yet
     started."""
-    description = copy.deepcopy(script_description)
-    description["max_retries"] = 5
-    description["screen_nr"] = 5
-    description["wait_time_sec"] = 1
+
+    max_retries = 5
+    screen_nr = 5
+    wait_time_sec = 1
     required_objects: List[Dict[str, str]] = [
         {
             "@text": "Global " "(Auto)",
@@ -53,8 +61,8 @@ def screen_5(script_description: Dict) -> Screen:
     def get_next_actions(
         required_objects: List[Dict[str, str]],
         optional_objects: List[Dict[str, str]],
-        history: Dict,
-    ) -> List[Callable[[AutomatorDevice, Dict[str, str]], Dict]]:
+        script: Script,
+    ) -> Union[Callable[[AutomatorDevice, Dict[str, str]], Dict], None]:
         """Looks at the required objects and optional objects and determines
         which actions to take next.
         An example of the next actions could be the following List:
@@ -65,39 +73,56 @@ def screen_5(script_description: Dict) -> Screen:
         Then the app goes to the next screen and waits a pre-determined
         amount, and optionally retries a pre-determined amount of attempts.
         """
-        if 6 in history["past_screens"]:
+        if 6 in script.past_screens:
             # run start.
-            return [actions_1]
+            return actions_1
         # Else:
         # Go to settings, and enable the required apps.
-        return [actions_0]
+        return actions_0
 
     return Screen(
         get_next_actions=get_next_actions,
+        max_retries=max_retries,
+        screen_nr=screen_nr,
+        wait_time_sec=wait_time_sec,
         required_objects=required_objects,
-        script_description=description,
         optional_objects=optional_objects,
     )
 
 
 # pylint: disable=W0613
 @typechecked
-def actions_0(
-    device: AutomatorDevice, additional_info: Dict[str, Union[str, bool]]
-) -> Dict:
+def actions_0(dev: AutomatorDevice, screen: Screen, script: Script) -> Dict:
     """Go to settings inside Orbot to select which apps are torified."""
-    device(resourceId="org.torproject.android:id/ivAppVpnSettings").click()
-    return {"expected_screens": [6]}
+
+    # Click in the screen to go to the Orbot settings on which app to torify.
+    dev(resourceId="org.torproject.android:id/ivAppVpnSettings").click()
+
+    # Return the expected screens, using get_expected_screen_nrs.
+    action_nr: int = int(inspect.stack()[0][3][8:])
+    screen_nr: int = screen.screen_nr
+    script_flow: nx.DiGraph = script.script_graph
+    return {
+        "expected_screens": get_expected_screen_nrs(
+            G=script_flow, screen_nr=screen_nr, action_nr=action_nr
+        )
+    }
 
 
 # pylint: disable=W0613
 @typechecked
-def actions_1(
-    device: AutomatorDevice, additional_info: Dict[str, Union[str, bool]]
-) -> Dict:
-    """Performs the actions in option 2 in this screen."""
+def actions_1(dev: AutomatorDevice, screen: Screen, script: Script) -> Dict:
+    """Click the start tor bridge button in the Orbot app main screen."""
+
     # Press the START button in the Orbot app to create a tor connection.
-    # device(resourceId="org.torproject.android:id/btnStart").click()
-    device(resourceId="org.torproject.android:id/imgStatus").click()
-    time.sleep(10)
-    return {"expected_screens": [7]}
+    dev(resourceId="org.torproject.android:id/imgStatus").click()
+
+    # Return the expected screens, using get_expected_screen_nrs.
+    action_nr: int = int(inspect.stack()[0][3][8:])
+    screen_nr: int = screen.screen_nr
+    script_flow: nx.DiGraph = script.script_graph
+    return {
+        "expected_screens": get_expected_screen_nrs(
+            G=script_flow, screen_nr=screen_nr, action_nr=action_nr
+        )
+    }
