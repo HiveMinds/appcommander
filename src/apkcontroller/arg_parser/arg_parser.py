@@ -31,7 +31,7 @@ def parse_cli_args() -> argparse.Namespace:
         "-e",
         "--export-screen",
         action="store",
-        type=str,
+        type=int,
         help=(
             "Specify the screen number whose json data and .png data are "
             + "stored."
