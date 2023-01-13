@@ -35,15 +35,3 @@ class Script_flow:
         self.G.add_edge(6, 7, actions=[0])
 
         self.G.add_edge(7, 6, actions=[0])
-
-
-def get_expected_screen_nrs(
-    G: nx.DiGraph, screen_nr: int, action_nr: int
-) -> List[int]:
-    """Returns the expected screens per screen per action."""
-    expected_screens: List[int] = []
-    for edge in G.edges:
-        if edge[0] == screen_nr:
-            if action_nr in G[edge[0]][edge[1]]["actions"]:
-                expected_screens.append(edge[1])
-    return expected_screens

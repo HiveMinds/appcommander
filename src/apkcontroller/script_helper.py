@@ -205,3 +205,14 @@ def orbot_torifying_app_is_checked(app_item: Dict) -> bool:
     raise KeyError(
         "Error, valid @checked value was not found in app_item checkbox."
     )
+
+def get_expected_screen_nrs(
+    G: nx.DiGraph, screen_nr: int, action_nr: int
+) -> List[int]:
+    """Returns the expected screens per screen per action."""
+    expected_screens: List[int] = []
+    for edge in G.edges:
+        if edge[0] == screen_nr:
+            if action_nr in G[edge[0]][edge[1]]["actions"]:
+                expected_screens.append(edge[1])
+    return expected_screens

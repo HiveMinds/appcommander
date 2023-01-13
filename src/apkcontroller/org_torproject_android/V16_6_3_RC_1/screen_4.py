@@ -9,9 +9,7 @@ import networkx as nx
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
-from src.apkcontroller.org_torproject_android.V16_6_3_RC_1.screen_flow import (
-    get_expected_screen_nrs,
-)
+from src.apkcontroller.script_helper import get_expected_screen_nrs
 from src.apkcontroller.Screen import Screen
 
 
