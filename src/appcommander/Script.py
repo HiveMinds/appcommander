@@ -78,7 +78,6 @@ class Script:
             self.input_data,
             cli_input_data,
         )
-        print(f"self.input_data={self.input_data}")
         self.screens: List[Screen] = create_screens(self)
 
 
@@ -89,6 +88,6 @@ def fill_input_data(  # type:ignore[misc]
 ) -> Any:
     """Stores the CLI input data into the input_data object, with appropriate
     typing."""
-    print(f"cli_input_data={cli_input_data}")
-    print(f"input_data={input_data.__dict__}")
+    # The ** unpacks the dictionary into the object.
+    # TODO: test what happens if the dictionary is under- or overcomplete.
     return input_data(**cli_input_data)
