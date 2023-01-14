@@ -8,7 +8,7 @@ from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
 from src.appcommander.helper import get_screen_as_dict
-from src.appcommander.org_torproject_android.V16_6_3_RC_1.app_specific_helper import (
+from src.appcommander.org_torproject_android.V16_6_3_RC_1.helper import (
     get_torified_item_index_dict,
     orbot_torifying_app_is_checked,
 )
@@ -16,9 +16,7 @@ from src.appcommander.Screen import Screen
 from src.appcommander.script_orientation import get_expected_screen_nrs
 
 if TYPE_CHECKING:
-    from src.appcommander.org_torproject_android.V16_6_3_RC_1.Script import (
-        Script,
-    )
+    from src.appcommander.Script import Script
 else:
     Script = object
 
@@ -54,7 +52,7 @@ def screen_6() -> Screen:
         optional_objects: List[Dict[str, str]],
         script: Script,  # pylint: disable=W0613
         script_description: Optional[Dict] = {},
-    ) -> Union[Callable[[AutomatorDevice, Dict[str, str]], Dict], None]:
+    ) -> Union[Callable[[AutomatorDevice, Screen, Script], Dict], None]:
         """Looks at the required objects and optional objects and determines
         which actions to take next.
         An example of the next actions could be the following List:
@@ -69,6 +67,7 @@ def screen_6() -> Screen:
         return actions_0
 
     return Screen(
+        is_start=True,
         get_next_actions=get_next_actions,
         max_retries=max_retries,
         screen_nr=screen_nr,

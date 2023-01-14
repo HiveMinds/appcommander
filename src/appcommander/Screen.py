@@ -1,12 +1,21 @@
 """Starts a script to control an app."""
 
-from typing import Callable, Dict, List, Union
+from typing import TYPE_CHECKING, Callable, Dict, List, Union
 
 import networkx as nx
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
+if TYPE_CHECKING:
+    # pylint: disable=W0406
+    # from src.appcommander.Screen import Screen
+    from src.appcommander.Script import Script
+else:
+    Script = object
+    # Screen = object
 
+
+# pylint: disable=E0102
 # pylint: disable=R0902
 # pylint: disable=R0903
 class Screen:
@@ -17,22 +26,23 @@ class Screen:
     @typechecked
     def __init__(
         self,
-        max_retries: int,
-        screen_nr: int,
-        wait_time_sec: float,
+        is_start: bool,
         get_next_actions: Callable[
             [Dict[str, str], Dict[str, str], Dict[str, str]],
-            Union[Callable[[AutomatorDevice, Dict[str, str]], Dict], None],
+            Union[Callable, None],
         ],
+        max_retries: int,
         required_objects: List[Dict[str, str]],
+        screen_nr: int,
+        wait_time_sec: float,
         optional_objects: List[Dict[str, str]] = [],
     ) -> None:
         self.get_next_actions: Callable[
             [Dict[str, str], Dict[str, str], Dict[str, str]],
-            Union[Callable[[AutomatorDevice, Dict[str, str]], Dict], None],
+            Union[Callable, None],
         ] = get_next_actions
 
-        # eloping typed dict.
+        self.is_start = is_start
         self.max_retries: int = max_retries
 
         """Sets the required objects for this screen.
@@ -64,7 +74,7 @@ class Screen:
 def get_next_screen(
     current_screen_nr: str,
     script_graph: nx.DiGraph,
-    actions: Union[Callable[[AutomatorDevice, Dict[str, str]], Dict], None],
+    actions: Union[Callable[[AutomatorDevice, Screen, Script], Dict], None],
 ) -> bool:
     """Gets the next expected screen."""
 

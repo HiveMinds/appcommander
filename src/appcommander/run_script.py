@@ -7,9 +7,8 @@ from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
 from src.appcommander.helper import export_screen_data_if_valid, launch_app
-from src.appcommander.org_torproject_android.V16_6_3_RC_1.Script import Script
 from src.appcommander.Screen import Screen
-from src.appcommander.script_orientation import get_start_nodes
+from src.appcommander.Script import Script
 from src.appcommander.verification.status_verification import can_proceed
 
 
@@ -28,7 +27,9 @@ def run_script(script: Script, dev: AutomatorDevice) -> None:
     app_name = script.app_name
     launch_app(app_name)
 
-    expected_screens: List[int] = get_start_nodes(script.script_graph)
+    expected_screens: List[int] = list(
+        map(lambda x: x.screen_nr, script.screens)
+    )
 
     _, screen_nr = can_proceed(
         dev=dev,

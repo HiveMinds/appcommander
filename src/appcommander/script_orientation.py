@@ -7,10 +7,8 @@ from typeguard import typechecked
 
 # pylint: disable=R0801
 if TYPE_CHECKING:
-    from src.appcommander.org_torproject_android.V16_6_3_RC_1.Script import (
-        Script,
-    )
     from src.appcommander.Screen import Screen
+    from src.appcommander.Script import Script
 else:
     Screen = object
     Script = object
@@ -39,14 +37,3 @@ def get_expected_screens(
             expected_screens.append(script_graph.nodes[nodename]["Screen"])
 
     return expected_screens
-
-
-@typechecked
-def get_start_nodes(script_graph: nx.DiGraph) -> List[int]:
-    """Sets the start_nodes attributes to True in the nodes that are start
-    screens."""
-    start_nodenames: List[int] = []
-    for nodename in script_graph.nodes:
-        if script_graph.nodes[nodename]["is_start"]:
-            start_nodenames.append(nodename)
-    return start_nodenames

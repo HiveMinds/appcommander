@@ -5,7 +5,6 @@ Android names this app: org.torproject.android
 
 from typing import TYPE_CHECKING, Dict, List
 
-import networkx as nx
 from typeguard import typechecked
 
 from src.appcommander.create_screens import create_screens
@@ -51,18 +50,3 @@ class Script:
         # Generate the script screen flow as a graph and generate the screens.
         self.script_graph = Script_flow().G
         self.screens: List[Screen] = create_screens(self.script_graph)
-
-        # Specify the start and end nodes in the graph.
-        self.set_start_nodes(self.script_graph)
-
-    @typechecked
-    def set_start_nodes(self, script_graph: nx.DiGraph) -> None:
-        """Sets the is_start attributes to True in the nodes that are start
-        screens."""
-
-        for nodename in script_graph.nodes:
-            screen: Screen = script_graph.nodes[nodename]["Screen"]
-            if screen.screen_nr in list(range(0, 8)):
-                script_graph.nodes[nodename]["is_start"] = True
-            else:
-                script_graph.nodes[nodename]["is_start"] = False

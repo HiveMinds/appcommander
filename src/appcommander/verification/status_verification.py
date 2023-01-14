@@ -14,10 +14,8 @@ from src.appcommander.script_orientation import get_expected_screens
 
 # pylint: disable=R0801
 if TYPE_CHECKING:
-    from src.appcommander.org_torproject_android.V16_6_3_RC_1.Script import (
-        Script,
-    )
     from src.appcommander.Screen import Screen
+    from src.appcommander.Script import Script
 else:
     Screen = object
     Script = object

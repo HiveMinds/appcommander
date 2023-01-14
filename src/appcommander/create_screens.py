@@ -6,10 +6,8 @@ import networkx as nx
 from typeguard import typechecked
 
 if TYPE_CHECKING:
-    from src.appcommander.org_torproject_android.V16_6_3_RC_1.Script import (
-        Script,
-    )
     from src.appcommander.Screen import Screen
+    from src.appcommander.Script import Script
 else:
     Script = object
     Screen = object

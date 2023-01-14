@@ -12,9 +12,7 @@ from src.appcommander.Screen import Screen
 from src.appcommander.script_orientation import get_expected_screen_nrs
 
 if TYPE_CHECKING:
-    from src.appcommander.org_torproject_android.V16_6_3_RC_1.Script import (
-        Script,
-    )
+    from src.appcommander.Script import Script
 else:
     Script = object
 
@@ -42,7 +40,7 @@ def screen_2() -> Screen:
         required_objects: List[Dict[str, str]],
         optional_objects: List[Dict[str, str]],
         script: Script,
-    ) -> Union[Callable[[AutomatorDevice, Dict[str, str]], Dict], None]:
+    ) -> Union[Callable[[AutomatorDevice, Screen, Script], Dict], None]:
         """Looks at the required objects and optional objects and determines
         which actions to take next.
         An example of the next actions could be the following List:
@@ -58,6 +56,7 @@ def screen_2() -> Screen:
 
     return Screen(
         get_next_actions=get_next_actions,
+        is_start=True,
         max_retries=max_retries,
         screen_nr=screen_nr,
         wait_time_sec=wait_time_sec,
