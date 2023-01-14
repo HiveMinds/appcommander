@@ -1,7 +1,6 @@
 """Contains helper functions that are used throughout this repository."""
 import json
 import os
-import subprocess  # nosec
 import time
 from pathlib import Path
 from typing import TYPE_CHECKING, Dict, List, Optional, Union
@@ -9,6 +8,8 @@ from typing import TYPE_CHECKING, Dict, List, Optional, Union
 import xmltodict
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
+
+from src.appcommander.run_bash_code import run_bash_command
 
 if TYPE_CHECKING:
     from src.appcommander.Screen import Screen
@@ -95,37 +96,6 @@ def export_screen_data_if_valid(
 
 
 @typechecked
-def run_bash_command(
-    await_compilation: bool, bash_command: str, verbose: bool
-) -> Union[None, str]:
-    """Runs a bash command."""
-    if await_compilation:
-        if verbose:
-            subprocess.call(bash_command, shell=True)  # nosec
-        else:
-            output = subprocess.check_output(  # nosec
-                bash_command,
-                shell=True,
-                # stderr=subprocess.DEVNULL,
-                # stdout=subprocess.DEVNULL,
-            )
-            return output.decode("utf-8")
-    else:
-        if verbose:
-            # pylint: disable=R1732
-            subprocess.Popen(bash_command, shell=True)  # nosec
-        else:
-            # pylint: disable=R1732
-            subprocess.Popen(  # nosec
-                bash_command,
-                shell=True,
-                stderr=subprocess.DEVNULL,
-                stdout=subprocess.DEVNULL,
-            )
-    return None
-
-
-@typechecked
 def launch_app(app_name: str) -> None:
     """Launches app on phone."""
 
@@ -158,8 +128,8 @@ def export_screen_data(
     output_dir = (
         (
             "src/appcommander/"
-            + f"{script.app_name}"
-            + f"/V{script.version}/{subdir}"
+            + f"{script.package_name}"
+            + f"/V{script.version}/{subdir}/"
         )
         .replace(".", "_")
         .replace(" ", "_")

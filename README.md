@@ -53,6 +53,12 @@ python -m src.appcommander --app-name org.torproject.android \
 --version "16.6.3 RC 1" -torify "DAVx5"
 ```
 
+Or, to configure DAVx5:
+
+```bash
+python -m src.appcommander -a at.bitfire.davdroid -v "4.2.6"
+```
+
 For more info, run:
 
 ```bash

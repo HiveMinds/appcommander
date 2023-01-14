@@ -1,6 +1,7 @@
 """Completes the tasks specified in the arg_parser."""
 import argparse
-from typing import Dict
+from pprint import pprint
+from typing import Dict, Union
 
 from typeguard import typechecked
 from uiautomator import device
@@ -29,9 +30,11 @@ def process_args(args: argparse.Namespace) -> None:
     )
 
     if args.torify:
-        torifying_apps: Dict[str, str] = get_verified_apps_to_torify(
-            app_name_mappings, args.torify
-        )
+        torifying_apps: Union[
+            Dict[str, str], None
+        ] = get_verified_apps_to_torify(app_name_mappings, args.torify)
+    else:
+        torifying_apps = None
 
     # Also verifies phone is connected.
     assert_app_is_installed(package_name=package_name)
@@ -70,4 +73,5 @@ def process_args(args: argparse.Namespace) -> None:
         )
     else:
         print("")
+        pprint(apk_script.__dict__)
         run_script(apk_script, device)

@@ -5,6 +5,7 @@
 *.png
 *.json
 *.pem
+*.crt
 
 demo/*
 latex/Images/graphs/*

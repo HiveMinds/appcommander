@@ -85,6 +85,10 @@ def actions_0(dev: AutomatorDevice, screen: Screen, script: Script) -> Dict:
     # Get the dictionary with apps that need to be torified.
     torifying_apps = script.torifying_apps
 
+    if not isinstance(torifying_apps, Dict):
+        raise TypeError(
+            f"Error, torifying_apps not specified:{torifying_apps}"
+        )
     for app_name, _ in torifying_apps.items():
 
         # Refresh the Orbot settings screen.

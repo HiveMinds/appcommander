@@ -3,13 +3,14 @@
 Android names this app: org.torproject.android
 """
 
-from typing import TYPE_CHECKING, Dict, List
+
+from typing import TYPE_CHECKING, Dict, List, Optional, Union
 
 from typeguard import typechecked
 
-from src.appcommander.create_screens import create_screens
-from src.appcommander.org_torproject_android.V16_6_3_RC_1.screen_flow import (
-    Script_flow,
+from src.appcommander.create_screens import (
+    create_screens,
+    load_script_attribute,
 )
 
 if TYPE_CHECKING:
@@ -35,18 +36,42 @@ class Script:
         app_name: str,
         overwrite: bool,
         package_name: str,
-        torifying_apps: Dict[str, str],
         version: str,
+        torifying_apps: Optional[Dict[str, str]],
     ) -> None:
         self.app_name: str = app_name
         self.overwrite: bool = overwrite
         self.package_name: str = package_name
-        self.torifying_apps: Dict[str, str] = torifying_apps
+        self.package_name_dir: str = self.package_name.replace(
+            ".", "_"
+        ).replace(" ", "_")
+        self.torifying_apps: Union[Dict[str, str], None] = torifying_apps
         self.version: str = version
+        self.version_dir: str = self.version.replace(".", "_").replace(
+            " ", "_"
+        )
+
+        self.app_version_mod_path: str = (
+            f"src.appcommander.{self.package_name_dir}.V{self.version_dir}."
+        )
+        self.app_version_dir: str = (
+            f"src/appcommander/{self.package_name_dir}/V{self.version_dir}/"
+        )
 
         # Create placeholder for past screens.
         self.past_screens: List[int] = []
 
         # Generate the script screen flow as a graph and generate the screens.
-        self.script_graph = Script_flow().G
-        self.screens: List[Screen] = create_screens(self.script_graph)
+        # self.script_graph = load_graph(self.app_version_mod_path)
+        self.script_graph = load_script_attribute(
+            app_version_mod_path=self.app_version_mod_path,
+            filename="Screen_flow",
+            obj_name="Screen_flow",
+            attribute_name="G",
+        )
+        self.input_data = load_script_attribute(
+            app_version_mod_path=self.app_version_mod_path,
+            filename="App_input_data",
+            obj_name="App_input_data",
+        )
+        self.screens: List[Screen] = create_screens(self)
