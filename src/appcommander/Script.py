@@ -4,7 +4,7 @@ Android names this app: org.torproject.android
 """
 
 
-from typing import TYPE_CHECKING, Dict, List, Optional, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Union
 
 from typeguard import typechecked
 
@@ -37,7 +37,7 @@ class Script:
         overwrite: bool,
         package_name: str,
         version: str,
-        torifying_apps: Optional[Dict[str, str]],
+        cli_input_data: Dict[str, Union[str, Dict[str, str]]],
     ) -> None:
         self.app_name: str = app_name
         self.overwrite: bool = overwrite
@@ -45,7 +45,7 @@ class Script:
         self.package_name_dir: str = self.package_name.replace(
             ".", "_"
         ).replace(" ", "_")
-        self.torifying_apps: Union[Dict[str, str], None] = torifying_apps
+        # self.torifying_apps: Union[Dict[str, str], None] = torifying_apps
         self.version: str = version
         self.version_dir: str = self.version.replace(".", "_").replace(
             " ", "_"
@@ -74,4 +74,21 @@ class Script:
             filename="App_input_data",
             obj_name="App_input_data",
         )
+        self.input_data = fill_input_data(
+            self.input_data,
+            cli_input_data,
+        )
+        print(f"self.input_data={self.input_data}")
         self.screens: List[Screen] = create_screens(self)
+
+
+@typechecked
+def fill_input_data(  # type:ignore[misc]
+    input_data: Any,
+    cli_input_data: Dict,
+) -> Any:
+    """Stores the CLI input data into the input_data object, with appropriate
+    typing."""
+    print(f"cli_input_data={cli_input_data}")
+    print(f"input_data={input_data.__dict__}")
+    return input_data(**cli_input_data)

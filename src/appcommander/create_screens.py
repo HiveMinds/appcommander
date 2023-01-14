@@ -82,8 +82,6 @@ def load_script_attribute(  # type:ignore[misc]
     imported_file = importlib.import_module(file_path)
 
     the_object = getattr(imported_file, obj_name)
-    print(f"the_object={the_object}")
-    print(f"the_object={the_object.__dict__}")
     if attribute_name is not None:
         attribute = getattr(the_object(), attribute_name)
         return attribute

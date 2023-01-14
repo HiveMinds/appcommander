@@ -83,7 +83,7 @@ def actions_0(dev: AutomatorDevice, screen: Screen, script: Script) -> Dict:
     """Performs the actions in option 2 in this screen."""
 
     # Get the dictionary with apps that need to be torified.
-    torifying_apps = script.torifying_apps
+    torifying_apps = script.input_data.torifying_apps
 
     if not isinstance(torifying_apps, Dict):
         raise TypeError(

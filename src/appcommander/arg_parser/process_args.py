@@ -1,7 +1,6 @@
 """Completes the tasks specified in the arg_parser."""
 import argparse
-from pprint import pprint
-from typing import Dict, Union
+from typing import Dict
 
 from typeguard import typechecked
 from uiautomator import device
@@ -28,13 +27,17 @@ def process_args(args: argparse.Namespace) -> None:
     app_name, package_name = sort_out_app_name_and_package_name(
         args.app_name, app_name_mappings=app_name_mappings
     )
-
+    input_data: Dict = {}
     if args.torify:
-        torifying_apps: Union[
-            Dict[str, str], None
-        ] = get_verified_apps_to_torify(app_name_mappings, args.torify)
-    else:
-        torifying_apps = None
+        input_data["torifying_apps"] = get_verified_apps_to_torify(
+            app_name_mappings, args.torify
+        )
+    if args.nextcloud_username and args.onion_url:
+        input_data["nextcloud_username"] = args.nextcloud_username
+        input_data["nextcloud_password"] = args.nextcloud_password
+        # TODO: prompt user for pwd. or safely communicate from
+        # Collabora Online.
+        input_data["onion_url"] = args.onion_url
 
     # Also verifies phone is connected.
     assert_app_is_installed(package_name=package_name)
@@ -47,7 +50,7 @@ def process_args(args: argparse.Namespace) -> None:
         app_name=app_name,
         overwrite=False,
         package_name=package_name,
-        torifying_apps=torifying_apps,
+        cli_input_data=input_data,
         version=args.version,
     )
     if args.export_screen:
@@ -73,5 +76,5 @@ def process_args(args: argparse.Namespace) -> None:
         )
     else:
         print("")
-        pprint(apk_script.__dict__)
+        # pprint(apk_script.__dict__)
         run_script(apk_script, device)

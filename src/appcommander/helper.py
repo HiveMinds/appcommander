@@ -99,7 +99,7 @@ def export_screen_data_if_valid(
 def launch_app(app_name: str) -> None:
     """Launches app on phone."""
 
-    # Launc the app on phone.
+    # Launch the app on phone.
     command = f'adb shell monkey -p "{app_name}" 1 &>/dev/null'
     run_bash_command(
         await_compilation=True, bash_command=command, verbose=False

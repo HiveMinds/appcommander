@@ -56,7 +56,8 @@ python -m src.appcommander --app-name org.torproject.android \
 Or, to configure DAVx5:
 
 ```bash
-python -m src.appcommander -a at.bitfire.davdroid -v "4.2.6"
+python -m src.appcommander -a at.bitfire.davdroid -v "4.2.6" -nu \
+<your_nextcloud_username> -np <your_nextcloud_password> -o <your_onion_url>
 ```
 
 For more info, run:

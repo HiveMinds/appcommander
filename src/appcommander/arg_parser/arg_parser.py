@@ -58,6 +58,36 @@ def parse_cli_args() -> argparse.Namespace:
         ),
     )
 
+    # Create argument to allow user to specify its nextcloud username.
+    parser.add_argument(
+        "-nu",
+        "--nextcloud-username",
+        action="store",
+        type=str,
+        help=("Your Nextcloud username."),
+    )
+
+    # Create argument to allow user to specify its nextcloud username.
+    parser.add_argument(
+        "-np",
+        "--nextcloud-password",
+        action="store",
+        type=str,
+        help=(
+            "Your Nextcloud password. "
+            + "TODO: build support for local safe passing."
+        ),
+    )
+
+    # Create argument to allow user to specify your onion url.
+    parser.add_argument(
+        "-o",
+        "--onion-url",
+        action="store",
+        type=str,
+        help=("Your url like: lakjdsf2340usdffa.onion"),
+    )
+
     # Run experiment on a particular experiment_settings json file.
     parser.add_argument(
         "-v",

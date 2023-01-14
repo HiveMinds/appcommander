@@ -6,7 +6,7 @@ from typing import Callable, Dict, List
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
-from src.appcommander.helper import export_screen_data_if_valid, launch_app
+from src.appcommander.helper import export_screen_data_if_valid
 from src.appcommander.Screen import Screen
 from src.appcommander.Script import Script
 from src.appcommander.verification.status_verification import can_proceed
@@ -24,8 +24,8 @@ def run_script(script: Script, dev: AutomatorDevice) -> None:
     """
 
     # Open the app.
-    app_name = script.app_name
-    launch_app(app_name)
+    script.input_data.launch_app(app_name=script.app_name)
+    # launch_app(app_name)
 
     expected_screens: List[int] = list(
         map(lambda x: x.screen_nr, script.screens)

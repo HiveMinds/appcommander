@@ -10,9 +10,6 @@ import networkx as nx
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
-from src.appcommander.at_bitfire_davdroid.V4_2_6.helper import (
-    start_davx5_with_onion_url_and_nextcloud_creds,
-)
 from src.appcommander.Screen import Screen
 from src.appcommander.script_orientation import get_expected_screen_nrs
 
@@ -76,11 +73,6 @@ def actions_0(dev: AutomatorDevice, screen: Screen, script: Script) -> Dict:
     For this screen, it clicks the "OK" button in the "Connection
     request".
     """
-    start_davx5_with_onion_url_and_nextcloud_creds(
-        nextcloud_username=script.input_data.nextcloud_username,
-        nextcloud_password=script.input_data.nextcloud_password,
-        onion_url=script.input_data.onion_url,
-    )
 
     # Click the ok button.
     dev(resourceId="at.bitfire.davdroid:id/login").click()

@@ -35,25 +35,3 @@ def install_self_signed_root_ca_on_android(
     run_bash_command(
         await_compilation=True, bash_command=command, verbose=False
     )
-
-
-@typechecked
-def start_davx5_with_onion_url_and_nextcloud_creds(
-    nextcloud_password: str,
-    nextcloud_username: str,
-    onion_url: str,
-) -> None:
-    """Launches DAVx5 with onion url of your Nextcloud server and your
-    Nextcloud credentials."""
-
-    # TODO: verify Nextcloud server is running on onion url.
-    command = (
-        "adb shell am start -a android.intent.action.VIEW -d caldavs://"
-        + f"{nextcloud_username}:{nextcloud_password}@{onion_url}/remote.php"
-        + f"/dav/principals/users/{nextcloud_username}"
-    )
-
-    print(f"command={command}")
-    run_bash_command(
-        await_compilation=True, bash_command=command, verbose=False
-    )

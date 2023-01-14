@@ -2,6 +2,8 @@
 
 from typeguard import typechecked
 
+from src.appcommander.run_bash_code import run_bash_command
+
 
 class App_input_data:
     """Stores the input data that is fed into the DAVx5 app."""
@@ -19,3 +21,25 @@ class App_input_data:
         self.nextcloud_password: str = nextcloud_password
         self.nextcloud_username: str = nextcloud_username
         self.onion_url: str = onion_url
+
+    @typechecked
+    def launch_app(
+        self,
+        app_name: str,
+    ) -> None:
+        """Launches DAVx5 with onion url of your Nextcloud server and your
+        Nextcloud credentials."""
+
+        print(f"Launching: {app_name}")
+        # TODO: verify Nextcloud server is running on onion url.
+        command = (
+            "adb shell am start -a android.intent.action.VIEW -d caldavs://"
+            + f"{self.nextcloud_username}:{self.nextcloud_password}@"
+            + f"{self.onion_url}/remote.php"
+            + f"/dav/principals/users/{self.nextcloud_username}"
+        )
+
+        print(f"command={command}")
+        run_bash_command(
+            await_compilation=True, bash_command=command, verbose=False
+        )
