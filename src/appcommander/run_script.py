@@ -25,7 +25,6 @@ def run_script(script: Script, dev: AutomatorDevice) -> None:
 
     # Open the app.
     script.input_data.launch_app(app_name=script.app_name)
-    # launch_app(app_name)
 
     expected_screens: List[int] = list(
         map(lambda x: x.screen_nr, script.screens)

@@ -2,6 +2,7 @@
 with screens 1,2,3,4."""
 # pylint: disable=R0801
 import inspect
+import time
 from typing import TYPE_CHECKING, Callable, Dict, List, Union
 
 import networkx as nx
@@ -18,34 +19,19 @@ else:
 
 
 @typechecked
-def screen_3() -> Screen:
+def screen_4() -> Screen:
     """Creates the settings for a starting screen where Orbot is not yet
     started."""
 
     max_retries = 1
-    screen_nr = 3
+    screen_nr = 4
     wait_time_sec = 1
     required_objects: List[Dict[str, str]] = [
         {
-            "@text": "Name the certificate",
+            "@text": "Configuration detection",
         },
         {
-            # For those reading this, this is you, you are the authority that
-            # can inspect all traffic to and from the device. You created and
-            # signed the certificate yourself.
-            "@text": (
-                "Note: The issuer of this certificate may inspect all "
-                "traffic to and from the device."
-            ),
-        },
-        {
-            "@text": "OK",
-        },
-        {
-            "@resource-id": "android:id/button1",
-        },
-        {
-            "@text": "Type a name",
+            "@text": ("Please wait, querying server"),
         },
     ]
 
@@ -84,19 +70,12 @@ def screen_3() -> Screen:
 def actions_0(dev: AutomatorDevice, screen: Screen, script: Script) -> Dict:
     """Performs the actions in option 0 in this screen.
 
-    For this screen, it clicks the "Next" button (icon=">") in the
-    bottom right.
+    For this screen, it waits until the phone is done querying the
+    server.
     """
-
-    dev(resourceId="com.android.certinstaller:id/credential_name").set_text(
-        "Your self-signed certificate authority"
-    )
-
-    # Press OK.
-    dev(resourceId="android:id/button1").click()
-
+    time.sleep(1)
     # Return the expected screens, using get_expected_screen_nrs.
-    action_nr: int = int(inspect.stack()[0][3][8:])
+    action_nr: int = int(inspect.stack()[0][3][8:])  # 8 for:len(actions__)
     screen_nr: int = screen.screen_nr
     script_flow: nx.DiGraph = script.script_graph
     return {

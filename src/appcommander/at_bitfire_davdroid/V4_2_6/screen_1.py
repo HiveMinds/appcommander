@@ -91,6 +91,10 @@ def actions_0(dev: AutomatorDevice, screen: Screen, script: Script) -> Dict:
     install_self_signed_root_ca_on_android(
         script.app_version_dir,
     )
+
+    # Open the app again.
+    script.input_data.launch_app(app_name=script.app_name)
+
     # Return the expected screens, using get_expected_screen_nrs.
     action_nr: int = int(inspect.stack()[0][3][8:])
     screen_nr: int = screen.screen_nr
