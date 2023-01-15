@@ -17,7 +17,7 @@ class Screen_flow:
         """Creates the networkx graph with the screen nrs as nodes, and the
         action lists as edges."""
         self.G = nx.DiGraph()
-        for nodename in list(range(0, 6 + 1)):
+        for nodename in list(range(0, 8 + 1)):
             self.G.add_node(nodename)
 
         # Set root CA as trusted, on phone.
@@ -58,3 +58,6 @@ class Screen_flow:
         self.G.add_edge(5, 6, actions=[0])
 
         # Screen 6: set the name of the Nextcloud account in DAVx5.
+        self.G.add_edge(6, 7, actions=[0])
+
+        self.G.add_edge(7, 8, actions=[0])

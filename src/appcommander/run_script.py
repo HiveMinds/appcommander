@@ -42,7 +42,7 @@ def run_script(script: Script, dev: AutomatorDevice) -> None:
     next_actions = "filler"
     retry: bool = False  # For the first screen, do a quick scope because it is
     # known already.
-    while next_actions is not None:
+    while next_actions is not None and expected_screens:
         _, screen_nr = can_proceed(
             dev=dev,
             expected_screennames=expected_screens,

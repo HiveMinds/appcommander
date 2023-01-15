@@ -8,7 +8,13 @@ import networkx as nx
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
-from src.appcommander.run_bash_code import run_bash_command
+from src.appcommander.at_bitfire_davdroid.V4_2_6.helper import (
+    get_calendar_names,
+)
+from src.appcommander.helper import get_screen_as_dict
+from src.appcommander.org_torproject_android.V16_6_3_RC_1.helper import (
+    get_torified_item_index_dict,
+)
 from src.appcommander.Screen import Screen
 from src.appcommander.script_orientation import get_expected_screen_nrs
 
@@ -19,11 +25,11 @@ else:
 
 
 @typechecked
-def screen_7() -> Screen:
+def screen_8() -> Screen:
     """Done adding account, now sync and if not done yet, set permmisions."""
 
     max_retries = 3
-    screen_nr = 7
+    screen_nr = 8
     wait_time_sec = 1
     required_objects: List[Dict[str, str]] = [
         {
@@ -36,7 +42,7 @@ def screen_7() -> Screen:
             "@resource-id": "at.bitfire.davdroid:id/sync",
         },
         {
-            "@text": "PERMISSIONS",
+            "@resource-id": "at.bitfire.davdroid:id/list",
         },
     ]
 
@@ -79,37 +85,29 @@ def actions_0(dev: AutomatorDevice, screen: Screen, script: Script) -> Dict:
     server.
     """
 
-    # Set calendar permissions.
-    commands = [
-        (
-            f"adb shell pm grant {script.package_name} "
-            + "android.permission.WRITE_CALENDAR",
-        ),
-        (
-            f"adb shell pm grant {script.package_name} "
-            + "android.permission.READ_CALENDAR"
-        ),
-        (
-            f"adb shell pm grant {script.package_name} "
-            + "android.permission.WRITE_CONTACTS"
-        ),
-        (
-            f"adb shell pm grant {script.package_name} "
-            + "android.permission.READ_CONTACTS"
-        ),
-    ]
+    required_object: Dict[str, str] = {
+        "@resource-id": "at.bitfire.davdroid:id/list"
+    }
 
-    for command in commands:
-        print(f"command={command}")
-        run_bash_command(
-            await_compilation=True, bash_command=command, verbose=False
-        )
+    # Reload the screen data.
+    unpacked_screen_dict: Dict = get_screen_as_dict(
+        dev=dev,
+        unpack=True,
+        screen_dict={},
+        reload=True,
+    )
+
+    # Get a subdict based on a value inside the dict.
+    item_dict = get_torified_item_index_dict(
+        required_object, unpacked_screen_dict, {}
+    )
+
+    cal_names = get_calendar_names(sub_screen_dict=item_dict)
+    for calendar_name in cal_names:
+        dev(text=calendar_name).click()
 
     # Press sync icon.
     dev(resourceId="at.bitfire.davdroid:id/sync").click()
-
-    # Switch to calendar tab.
-    dev(text="CALDAV").click()
 
     # Return the expected screens, using get_expected_screen_nrs.
     action_nr: int = int(inspect.stack()[0][3][8:])  # 8 for:len(actions__)
