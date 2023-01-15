@@ -1,7 +1,7 @@
-"""TODO Documentation."""
+"""After the "Connection Request" has been granted, the app welcomes the user
+with screens 1,2,3,4."""
 # pylint: disable=R0801
 import inspect
-import time
 from typing import TYPE_CHECKING, Callable, Dict, List, Union
 
 import networkx as nx
@@ -18,21 +18,32 @@ else:
 
 
 @typechecked
-def screen_1() -> Screen:
-    """Creates the settings for when DAVx5 is querying the Nextcloud
-    server.."""
-    max_retries = 5
-    screen_nr = 1
+def screen_6() -> Screen:
+    """Creates the settings for a starting screen where Orbot is not yet
+    started."""
+
+    max_retries = 1
+    screen_nr = 6
     wait_time_sec = 1
     required_objects: List[Dict[str, str]] = [
         {
-            "@package": "at.bitfire.davdroid",
+            "@text": "Create account",
         },
         {
-            "@text": "Configuration detection",
+            "@text": "Add account",
         },
         {
-            "@text": "Please wait, querying server",
+            "@resource-id": "at.bitfire.davdroid:id/accountName",
+        },
+        {
+            "@text": "CREATE ACCOUNT",
+        },
+        {
+            "@text": (
+                "Use your email address as account name because Android will "
+                + "use the account name as ORGANIZER field for events you "
+                + "create. You can't have two accounts with the same name."
+            ),
         },
     ]
 
@@ -53,7 +64,7 @@ def screen_1() -> Screen:
         Then the app goes to the next screen and waits a pre-determined
         amount, and optionally retries a pre-determined amount of attempts.
         """
-        # In the start screen just press ok.
+
         return actions_0
 
     return Screen(
@@ -69,15 +80,19 @@ def screen_1() -> Screen:
 # pylint: disable=W0613
 @typechecked
 def actions_0(dev: AutomatorDevice, screen: Screen, script: Script) -> Dict:
-    """Performs the actions in option 1 in this screen.
+    """Performs the actions in option 0 in this screen.
 
-    For this screen, it clicks the "OK" button in the "Connection
-    request".
+    For this screen, it waits until the phone is done querying the
+    server.
     """
+    dev(resourceId="at.bitfire.davdroid:id/accountName").set_text(
+        script.input_data.nextcloud_username
+    )
 
-    time.sleep(1)
+    # Press CREATE ACCOUNT button.
+    dev(resourceId="at.bitfire.davdroid:id/create_account").click()
     # Return the expected screens, using get_expected_screen_nrs.
-    action_nr: int = int(inspect.stack()[0][3][8:])
+    action_nr: int = int(inspect.stack()[0][3][8:])  # 8 for:len(actions__)
     screen_nr: int = screen.screen_nr
     script_flow: nx.DiGraph = script.script_graph
     return {

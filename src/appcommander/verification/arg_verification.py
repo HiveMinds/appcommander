@@ -19,17 +19,14 @@ def sort_out_app_name_and_package_name(
 ) -> Tuple[str, str]:
     """Returns app name and package name based on user input and supported apk
     packages."""
+
     if some_apk_name in app_name_mappings.keys():
         app_name = some_apk_name
         package_name = app_name_mappings[app_name]
     elif some_apk_name in app_name_mappings.values():
-        app_name = str(
-            {
-                i
-                for i in app_name_mappings
-                if app_name_mappings[i] == some_apk_name
-            }
-        )
+        for key in app_name_mappings.keys():
+            if app_name_mappings[key] == some_apk_name:
+                app_name = key
         package_name = some_apk_name
     return app_name, package_name
 

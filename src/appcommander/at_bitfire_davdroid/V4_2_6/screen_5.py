@@ -27,20 +27,25 @@ def screen_5() -> Screen:
     wait_time_sec = 1
     required_objects: List[Dict[str, str]] = [
         {
-            "@text": "Create account",
+            "@text": "Name the certificate",
         },
         {
-            "@text": ("Please wait, querying server"),
-        },
-        {
-            "@text": ("Add account"),
-        },
-        {
+            # For those reading this, this is you, you are the authority that
+            # can inspect all traffic to and from the device. You created and
+            # signed the certificate yourself.
             "@text": (
-                "Use your email address as account name because Android will "
-                + "use the account name as ORGANIZER field for events you "
-                + "create. You can't have two accounts with the same name."
+                "Note: The issuer of this certificate may inspect all "
+                "traffic to and from the device."
             ),
+        },
+        {
+            "@text": "OK",
+        },
+        {
+            "@resource-id": "android:id/button1",
+        },
+        {
+            "@text": "Type a name",
         },
     ]
 
@@ -79,17 +84,19 @@ def screen_5() -> Screen:
 def actions_0(dev: AutomatorDevice, screen: Screen, script: Script) -> Dict:
     """Performs the actions in option 0 in this screen.
 
-    For this screen, it waits until the phone is done querying the
-    server.
+    For this screen, it clicks the "Next" button (icon=">") in the
+    bottom right.
     """
-    dev(resourceId="at.bitfire.davdroid:id/accountName").set_text(
-        script.input_data.nextcloud_username
+
+    dev(resourceId="com.android.certinstaller:id/credential_name").set_text(
+        "Your self-signed certificate authority"
     )
 
-    # Press CREATE ACCOUNT button.
-    dev(resourceId="at.bitfire.davdroid:id/create_account").click()
+    # Press OK.
+    dev(resourceId="android:id/button1").click()
+
     # Return the expected screens, using get_expected_screen_nrs.
-    action_nr: int = int(inspect.stack()[0][3][8:])  # 8 for:len(actions__)
+    action_nr: int = int(inspect.stack()[0][3][8:])
     screen_nr: int = screen.screen_nr
     script_flow: nx.DiGraph = script.script_graph
     return {

@@ -23,13 +23,13 @@ class App_input_data:
     @typechecked
     def launch_app(
         self,
-        app_name: str,
+        package_name: str,
     ) -> None:
         """Launches the Orbot app."""
-        print(f"Launching: {app_name}")
+        print(f"Launching:{package_name}")
 
         # Launch the app on phone.
-        command = f'adb shell monkey -p "{app_name}" 1 &>/dev/null'
+        command = f'adb shell monkey -p "{package_name}" 1 &>/dev/null'
         run_bash_command(
             await_compilation=True, bash_command=command, verbose=False
         )

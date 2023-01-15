@@ -25,12 +25,12 @@ class App_input_data:
     @typechecked
     def launch_app(
         self,
-        app_name: str,
+        package_name: str,
     ) -> None:
         """Launches DAVx5 with onion url of your Nextcloud server and your
         Nextcloud credentials."""
 
-        print(f"Launching: {app_name}")
+        print(f"Launching: {package_name}")
         # TODO: verify Nextcloud server is running on onion url.
         command = (
             "adb shell am start -a android.intent.action.VIEW -d caldavs://"

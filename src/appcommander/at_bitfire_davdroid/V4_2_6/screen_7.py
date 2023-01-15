@@ -1,11 +1,15 @@
-"""TODO Documentation."""
+"""After the "Connection Request" has been granted, the app welcomes the user
+with screens 1,2,3,4."""
 # pylint: disable=R0801
+import inspect
 from typing import TYPE_CHECKING, Callable, Dict, List, Union
 
+import networkx as nx
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
 from src.appcommander.Screen import Screen
+from src.appcommander.script_orientation import get_expected_screen_nrs
 
 if TYPE_CHECKING:
     from src.appcommander.Script import Script
@@ -14,18 +18,21 @@ else:
 
 
 @typechecked
-def screen_2() -> Screen:
-    """Creates the settings for when DAVx5 is querying the Nextcloud
-    server.."""
-    max_retries = 5
-    screen_nr = 2
+def screen_7() -> Screen:
+    """Done adding account, now sync and if not done yet, set permmisions."""
+
+    max_retries = 1
+    screen_nr = 7
     wait_time_sec = 1
     required_objects: List[Dict[str, str]] = [
         {
-            "@package": "at.bitfire.davdroid",
+            "@text": "CARDDAV",
         },
         {
-            "@text": "Couldn't find CalDAV or CardDAV service.",
+            "@text": "CALDAV",
+        },
+        {
+            "@resource-id": "at.bitfire.davdroid:id/sync",
         },
     ]
 
@@ -46,7 +53,7 @@ def screen_2() -> Screen:
         Then the app goes to the next screen and waits a pre-determined
         amount, and optionally retries a pre-determined amount of attempts.
         """
-        # In the start screen just press ok.
+
         return actions_0
 
     return Screen(
@@ -62,14 +69,20 @@ def screen_2() -> Screen:
 # pylint: disable=W0613
 @typechecked
 def actions_0(dev: AutomatorDevice, screen: Screen, script: Script) -> Dict:
-    """Performs the actions in option 1 in this screen.
+    """Performs the actions in option 0 in this screen.
 
-    For this screen, it clicks the "OK" button in the "Connection
-    request".
+    For this screen, it waits until the phone is done querying the
+    server.
     """
-    # TODO: Was not able to connect to tor. Restart orbot and try again.
-    raise Exception(
-        "Error, was not able to connect to TOR server, please:"
-        + " Ensure your Nextcloud server is running and reachable over tor,"
-        + " and ensure Orbot is torifying DAVx5, and connected to TOR."
-    )
+    # Press sync icon.
+    dev(resourceId="at.bitfire.davdroid:id/sync").click()
+
+    # Return the expected screens, using get_expected_screen_nrs.
+    action_nr: int = int(inspect.stack()[0][3][8:])  # 8 for:len(actions__)
+    screen_nr: int = screen.screen_nr
+    script_flow: nx.DiGraph = script.script_graph
+    return {
+        "expected_screens": get_expected_screen_nrs(
+            G=script_flow, screen_nr=screen_nr, action_nr=action_nr
+        )
+    }

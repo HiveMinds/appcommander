@@ -8,6 +8,9 @@ import networkx as nx
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
+from src.appcommander.at_bitfire_davdroid.V4_2_6.helper import (
+    install_self_signed_root_ca_on_android,
+)
 from src.appcommander.Screen import Screen
 from src.appcommander.script_orientation import get_expected_screen_nrs
 
@@ -27,25 +30,17 @@ def screen_3() -> Screen:
     wait_time_sec = 1
     required_objects: List[Dict[str, str]] = [
         {
-            "@text": "Name the certificate",
-        },
-        {
-            # For those reading this, this is you, you are the authority that
-            # can inspect all traffic to and from the device. You created and
-            # signed the certificate yourself.
+            # Original:
+            # "@text":
+            # "DAVx\u2075 has encountered an unknown
+            # certificate. Do you want to trust it?",
             "@text": (
-                "Note: The issuer of this certificate may inspect all "
-                "traffic to and from the device."
+                "has encountered an unknown certificate. Do you want to "
+                + "trust it?"
             ),
         },
         {
-            "@text": "OK",
-        },
-        {
-            "@resource-id": "android:id/button1",
-        },
-        {
-            "@text": "Type a name",
+            "@text": "X509 certificate details",
         },
     ]
 
@@ -87,13 +82,18 @@ def actions_0(dev: AutomatorDevice, screen: Screen, script: Script) -> Dict:
     For this screen, it clicks the "Next" button (icon=">") in the
     bottom right.
     """
-
-    dev(resourceId="com.android.certinstaller:id/credential_name").set_text(
-        "Your self-signed certificate authority"
+    print(
+        "The root CA (your self-signed certificate) that was created for "
+        + "your Nextcloud server has not yet been installed on your phone. "
+        + "Doing that now for you."
     )
 
-    # Press OK.
-    dev(resourceId="android:id/button1").click()
+    install_self_signed_root_ca_on_android(
+        script.app_version_dir,
+    )
+
+    # Open the app again.
+    script.input_data.launch_app(app_name=script.app_name)
 
     # Return the expected screens, using get_expected_screen_nrs.
     action_nr: int = int(inspect.stack()[0][3][8:])
