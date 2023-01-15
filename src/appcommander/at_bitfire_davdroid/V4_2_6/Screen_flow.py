@@ -41,6 +41,7 @@ class Screen_flow:
 
         # Screen 3: If root CA is not trusted, install then restart flow.
         self.G.add_edge(3, 0, actions=[0])
+        self.G.add_edge(3, 1, actions=[0])
         # Or click: "trust cert" in app and get additional prompt in screen 3.
         self.G.add_edge(3, 4, actions=[0])
         self.G.add_edge(3, 5, actions=[0])

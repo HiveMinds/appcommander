@@ -8,9 +8,6 @@ import networkx as nx
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
-from src.appcommander.at_bitfire_davdroid.V4_2_6.helper import (
-    install_self_signed_root_ca_on_android,
-)
 from src.appcommander.Screen import Screen
 from src.appcommander.script_orientation import get_expected_screen_nrs
 
@@ -82,18 +79,22 @@ def actions_0(dev: AutomatorDevice, screen: Screen, script: Script) -> Dict:
     For this screen, it clicks the "Next" button (icon=">") in the
     bottom right.
     """
+
+    dev(text="I have manually verified the whole fingerprint.").click()
+    dev(text="ACCEPT").click()
+
     print(
-        "The root CA (your self-signed certificate) that was created for "
+        "TODO: (re-enable) The root CA (your self-signed certificate) that "
+        + "was created for "
         + "your Nextcloud server has not yet been installed on your phone. "
         + "Doing that now for you."
     )
-
-    install_self_signed_root_ca_on_android(
-        script.app_version_dir,
-    )
+    # install_self_signed_root_ca_on_android(
+    #    script.app_version_dir,
+    # )
 
     # Open the app again.
-    script.input_data.launch_app(app_name=script.app_name)
+    script.input_data.launch_app(package_name=script.package_name)
 
     # Return the expected screens, using get_expected_screen_nrs.
     action_nr: int = int(inspect.stack()[0][3][8:])

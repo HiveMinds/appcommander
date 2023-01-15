@@ -83,7 +83,7 @@ def actions_0(dev: AutomatorDevice, screen: Screen, script: Script) -> Dict:
     commands = [
         (
             f"adb shell pm grant {script.package_name} "
-            + "android.permission.WRITE_CALENDAR",
+            + "android.permission.WRITE_CALENDAR"
         ),
         (
             f"adb shell pm grant {script.package_name} "
