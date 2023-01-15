@@ -17,9 +17,17 @@ def assert_phone_is_connected() -> None:
         await_compilation=True, bash_command=command, verbose=False
     )
     lines = output.split("\n")
+
+    found_device: bool = False
     # TODO: make more robust check, e.g. eat "List of devs attached" and see
     # whether any a-Z 0-9 characters exist in output.
-    if len(lines) <= 3:
+    for line in lines:
+        if "List of devices attached" not in line:
+            for letter in line:
+                if letter.isalnum():
+                    found_device = True
+
+    if not found_device:
         raise Exception("Error, no adb dev is found.")
 
     # TODO: check if more than one devs are connected, and if yes, raise
