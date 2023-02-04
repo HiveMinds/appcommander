@@ -72,6 +72,7 @@ dependencies:
 # Enable creating the pip package.
   - setuptools
   - wheel
+  - xmltodict
 # pip packages:
   - pip
   - pip:
@@ -87,6 +88,8 @@ dependencies:
     - prettier
     # Tag files using Python.
     - pytaggit
+    # Install uiautomator.
+    - uiautomator
     # Identify and remove dead code.
     - vulture
     #- pipreqs
