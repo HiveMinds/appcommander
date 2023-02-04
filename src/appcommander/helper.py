@@ -198,6 +198,7 @@ def is_expected_screen(
 
     Raise error if verification fails.
     """
+
     # Preliminary check to see if the required objects are in.
     if not required_objects_in_screen(
         expected_screen.required_objects, unpacked_screen_dict
@@ -214,7 +215,10 @@ def is_expected_screen(
                 screen_dict={},
                 reload=True,
             )
-
+            print(
+                f"Wait: {expected_screen.wait_time_sec} [s] on screen: "
+                + f"{expected_screen.screen_nr}"
+            )
             time.sleep(expected_screen.wait_time_sec)
             if required_objects_in_screen(
                 required_objects=expected_screen.required_objects,

@@ -31,12 +31,23 @@ def run_script(script: Script, dev: AutomatorDevice) -> None:
         map(lambda x: x.screen_nr, script.screens)
     )
 
-    _, screen_nr = can_proceed(
+    # First perorm a quick scope, without retry to find the desired screen.
+    is_expected, screen_nr = can_proceed(
         dev=dev,
         expected_screennames=expected_screens,
-        retry=True,
+        retry=False,
         script=script,
     )
+
+    # If quickscope did not find desired screen, try again with retries and
+    # waiting times per retry.
+    if not is_expected:
+        _, screen_nr = can_proceed(
+            dev=dev,
+            expected_screennames=expected_screens,
+            retry=True,
+            script=script,
+        )
     script.past_screens.append(screen_nr)
 
     next_actions = "filler"
