@@ -39,13 +39,6 @@ def process_args(args: argparse.Namespace) -> None:
         # Collabora Online.
         input_data["onion_url"] = args.onion_url
 
-    # Also verifies phone is connected.
-    assert_app_is_installed(package_name=package_name)
-    assert_app_version_is_correct(
-        package_name=package_name,
-        app_version=args.version,
-    )
-
     apk_script = Script(
         app_name=app_name,
         overwrite=False,
@@ -71,10 +64,17 @@ def process_args(args: argparse.Namespace) -> None:
     elif args.export_script_flow:
         visualise_script_flow(
             G=apk_script.script_graph,
-            app_name=apk_script.app_name.replace(".", "_"),
+            package_name=apk_script.package_name.replace(".", "_"),
             app_version=apk_script.version.replace(".", "_").replace(" ", "_"),
         )
     else:
         print("")
         # pprint(apk_script.__dict__)
+        # Also verifies phone is connected.
+        assert_app_is_installed(package_name=package_name)
+        assert_app_version_is_correct(
+            package_name=package_name,
+            app_version=args.version,
+        )
+
         run_script(apk_script, device)
