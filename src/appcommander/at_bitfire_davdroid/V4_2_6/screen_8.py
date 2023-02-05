@@ -26,7 +26,7 @@ else:
 def screen_8() -> Screen:
     """Done adding account, now sync and if not done yet, set permmisions."""
 
-    max_retries = 3
+    max_retries = 40
     screen_nr = 8
     wait_time_sec = 1
     required_objects: List[Dict[str, str]] = [

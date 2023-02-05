@@ -35,7 +35,7 @@ def screen_7() -> Screen:
             "@text": "Trouble connecting?",
         },
         {
-            "@text": "Use Bridges ",
+            "@text": "Use Bridges",
         },
         {
             "@text": "Orbot",

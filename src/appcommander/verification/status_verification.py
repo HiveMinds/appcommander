@@ -1,5 +1,5 @@
 """Performs verifications on the status of the phone."""
-from typing import TYPE_CHECKING, Dict, List, Tuple
+from typing import TYPE_CHECKING, Dict, List, Optional, Tuple
 
 import networkx as nx
 from typeguard import typechecked
@@ -27,6 +27,7 @@ def can_proceed(
     expected_screennames: List[int],
     retry: bool,
     script: Script,
+    ignore_error: Optional[bool] = False,
 ) -> Tuple[bool, int]:
     """Checks whether the screen is expected, raises an error if not.
 
@@ -50,7 +51,7 @@ def can_proceed(
     )
 
     # end_screens = get end_screens()
-    if not is_expected:
+    if not is_expected and not ignore_error:
         # Export the actual screen, screen data and expected screens in
         # specific error log folder.
         export_screen_data(

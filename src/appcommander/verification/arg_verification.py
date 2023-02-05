@@ -53,7 +53,7 @@ def verify_app_name(args: argparse.Namespace) -> None:
     # User just wants to store screenshots and json, make dirs for user.
     if args.export_screen is not None:
         make_path_if_not_exists(app_path)
-    else:  # User tries to use app name even though app name may not exist.
+        print(f"args.export_screen={args.export_screen}")
         if not os.path.exists(app_path):
             raise NotADirectoryError(
                 f"Error, path:{app_path} does not exist. Please create it."
@@ -78,17 +78,20 @@ def verify_app_version(args: argparse.Namespace) -> None:
         # Create directories if not yet existent.
         make_path_if_not_exists(version_path)
     else:  # User tries to use app name even though app name may not exist.
+        make_path_if_not_exists(version_path)
         if not os.path.exists(version_path):
             raise NotADirectoryError(
                 f"Error, path:{version_path} does not exist. "
                 + " Please create it and add an accompanying script."
             )
-        script_path = f"{version_path}/Screen_flow.py"
-        if not os.path.exists(script_path):
-            raise NotADirectoryError(
-                f"Error, path:{script_path} does not exist. "
-                + " Please create it and make it work."
-            )
+
+        # TODO: replace this with a "import file test instead."
+        # script_path = f"{version_path}/Screen_flow.py"
+        # if not os.path.exists(script_path):
+        #    raise NotADirectoryError(
+        #        f"Error, path:{script_path} does not exist. "
+        #        + " Please create it and make it work."
+        #    )
 
 
 @typechecked

@@ -51,5 +51,5 @@ class Test_get_graph(unittest.TestCase):
 
         #
         # "@text": "Trouble " "connecting?",
-        # "@text": "Use Bridges ",
+        # "@text": "Use Bridges",
         # "@text": "Orbot",

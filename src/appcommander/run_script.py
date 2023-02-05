@@ -37,6 +37,7 @@ def run_script(script: Script, dev: AutomatorDevice) -> None:
         expected_screennames=expected_screens,
         retry=False,
         script=script,
+        ignore_error=True,  # Don't demand results in quick scope.
     )
 
     # If quickscope did not find desired screen, try again with retries and
