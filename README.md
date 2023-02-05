@@ -30,7 +30,7 @@ phones automatically (except the user must enable `ADB` themselves).
 
 ## Example
 
-![image](https://user-images.githubusercontent.com/34750068/212434675-65839344-0dbd-43c1-a7c2-3717cdd40d31.png)
+![image](https://github.com/HiveMinds/app-commander/blob/main/src/appcommander/org_torproject_android/V16_6_3_RC_1/flow.png?raw=true)
 
 ## Usage
 
