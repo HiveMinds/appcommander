@@ -5,7 +5,7 @@ from typing import List
 
 from typeguard import typechecked
 
-from src.appcommander.helper import run_bash_command
+from appcommander.helper import run_bash_command
 
 
 @typechecked

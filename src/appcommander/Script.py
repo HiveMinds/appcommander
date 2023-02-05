@@ -8,13 +8,10 @@ from typing import TYPE_CHECKING, Any, Dict, List, Union
 
 from typeguard import typechecked
 
-from src.appcommander.create_screens import (
-    create_screens,
-    load_script_attribute,
-)
+from appcommander.create_screens import create_screens, load_script_attribute
 
 if TYPE_CHECKING:
-    from src.appcommander.Screen import Screen
+    from appcommander.Screen import Screen
 else:
     Screen = object
 
@@ -52,7 +49,7 @@ class Script:
         )
 
         self.app_version_mod_path: str = (
-            f"src.appcommander.{self.package_name_dir}.V{self.version_dir}."
+            f"appcommander.{self.package_name_dir}.V{self.version_dir}."
         )
         self.app_version_dir: str = (
             f"src/appcommander/{self.package_name_dir}/V{self.version_dir}/"

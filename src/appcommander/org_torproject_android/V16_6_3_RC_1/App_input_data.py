@@ -4,7 +4,7 @@ from typing import Dict
 
 from typeguard import typechecked
 
-from src.appcommander.run_bash_code import run_bash_command
+from appcommander.run_bash_code import run_bash_command
 
 
 class App_input_data:

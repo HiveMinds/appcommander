@@ -11,7 +11,8 @@
     "**/__init__*": true,
     "**/__pycache__*": true,
     "**/build*": true,
-    "**/dist*": true
+    "**/dist*": true,
+    "src/appcommander/__init__.py": false
   },
   "python.condaPath": "~/anaconda/bin/conda",
   "searchOpenAllResults.delay": 150,

@@ -5,10 +5,10 @@ from typing import TYPE_CHECKING, Callable, Dict, List, Union
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
-from src.appcommander.Screen import Screen
+from appcommander.Screen import Screen
 
 if TYPE_CHECKING:
-    from src.appcommander.Script import Script
+    from appcommander.Script import Script
 else:
     Script = object
 

@@ -2,7 +2,7 @@
 that invokes this script."""
 
 
-from src.appcommander.verification.arg_verification import verify_args
+from appcommander.verification.arg_verification import verify_args
 
 from .arg_parser.arg_parser import parse_cli_args
 from .arg_parser.process_args import process_args

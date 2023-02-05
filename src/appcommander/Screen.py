@@ -8,8 +8,8 @@ from uiautomator import AutomatorDevice
 
 if TYPE_CHECKING:
     # pylint: disable=W0406
-    # from src.appcommander.Screen import Screen
-    from src.appcommander.Script import Script
+    # from appcommander.Screen import Screen
+    from appcommander.Script import Script
 else:
     Script = object
     # Screen = object

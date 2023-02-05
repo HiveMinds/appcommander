@@ -7,8 +7,8 @@ from typeguard import typechecked
 
 # pylint: disable=R0801
 if TYPE_CHECKING:
-    from src.appcommander.Screen import Screen
-    from src.appcommander.Script import Script
+    from appcommander.Screen import Screen
+    from appcommander.Script import Script
 else:
     Screen = object
     Script = object

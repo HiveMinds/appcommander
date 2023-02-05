@@ -7,8 +7,8 @@ from typing import Dict, List, Tuple
 
 from typeguard import typechecked
 
-from src.appcommander.helper import make_path_if_not_exists
-from src.appcommander.verification.verify_phone_connection import (
+from appcommander.helper import make_path_if_not_exists
+from appcommander.verification.verify_phone_connection import (
     assert_app_is_installed,
 )
 

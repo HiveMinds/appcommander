@@ -3,12 +3,12 @@ from typing import TYPE_CHECKING, Dict, List, Union, cast
 
 from typeguard import typechecked
 
-from src.appcommander.helper import dict_contains_other_dict
+from appcommander.helper import dict_contains_other_dict
 
 # pylint: disable=R0801
 if TYPE_CHECKING:
-    from src.appcommander.Screen import Screen
-    from src.appcommander.Script import Script
+    from appcommander.Screen import Screen
+    from appcommander.Script import Script
 else:
     Screen = object
     Script = object

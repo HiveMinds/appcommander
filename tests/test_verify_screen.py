@@ -4,7 +4,7 @@ from typing import Dict, List
 
 from typeguard import typechecked
 
-from src.appcommander.helper import (
+from appcommander.helper import (
     load_json_file_into_dict,
     required_objects_in_screen,
 )

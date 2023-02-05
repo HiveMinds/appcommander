@@ -5,17 +5,17 @@ import networkx as nx
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
-from src.appcommander.helper import (
+from appcommander.helper import (
     export_screen_data,
     get_screen_as_dict,
     is_expected_screen,
 )
-from src.appcommander.script_orientation import get_expected_screens
+from appcommander.script_orientation import get_expected_screens
 
 # pylint: disable=R0801
 if TYPE_CHECKING:
-    from src.appcommander.Screen import Screen
-    from src.appcommander.Script import Script
+    from appcommander.Screen import Screen
+    from appcommander.Script import Script
 else:
     Screen = object
     Script = object

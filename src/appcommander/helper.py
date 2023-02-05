@@ -9,11 +9,11 @@ import xmltodict
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
-from src.appcommander.run_bash_code import run_bash_command
+from appcommander.run_bash_code import run_bash_command
 
 if TYPE_CHECKING:
-    from src.appcommander.Screen import Screen
-    from src.appcommander.Script import Script
+    from appcommander.Screen import Screen
+    from appcommander.Script import Script
 else:
     Screen = object
     Script = object

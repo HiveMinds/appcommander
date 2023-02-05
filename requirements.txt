@@ -10,3 +10,5 @@ pytest-cov
 typeguard
 # Control Android apps through their user interface (UI).
 uiautomator
+# Parse xml files into Python dictionaries.
+xmltodict

@@ -6,10 +6,10 @@ from typing import Callable, Dict, List
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
-from src.appcommander.helper import export_screen_data_if_valid
-from src.appcommander.Screen import Screen
-from src.appcommander.Script import Script
-from src.appcommander.verification.status_verification import can_proceed
+from appcommander.helper import export_screen_data_if_valid
+from appcommander.Screen import Screen
+from appcommander.Script import Script
+from appcommander.verification.status_verification import can_proceed
 
 
 @typechecked
