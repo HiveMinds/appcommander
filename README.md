@@ -154,3 +154,24 @@ that installs the latest changes into the pip package locally (into your conda
 environment).
 
 <!-- Un-wrapped URL's (Badges and Hyperlinks) -->
+
+### Show your app-flow
+
+To show how your script works, run (along with any additional input args
+required for that script):
+
+```sh
+python -m src.appcommander -a <package_name> -v <app_version> -f \
+<additional arguments>
+```
+
+For example:
+
+```sh
+python -m src.appcommander -a "at.bitfire.davdroid" -v "4.2.6" -f  -nu \
+<some_filler> -np <some_filler> -o <some_filler>
+python -m src.appcommander -a "at.bitfire.davdroid" -v "4.2.6" -f -nu \
+asdf -np asdf -o asdf
+python -m src.appcommander -a org.torproject.android -v "16.6.3 RC 1" \
+-f -t "DAVx5"
+```

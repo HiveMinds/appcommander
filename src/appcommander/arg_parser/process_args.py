@@ -32,11 +32,12 @@ def process_args(args: argparse.Namespace) -> None:
         input_data["torifying_apps"] = get_verified_apps_to_torify(
             app_name_mappings, args.torify
         )
-    if args.nextcloud_username and args.onion_url:
+    if args.nextcloud_username:
         input_data["nextcloud_username"] = args.nextcloud_username
         input_data["nextcloud_password"] = args.nextcloud_password
         # TODO: prompt user for pwd. or safely communicate from
         # Collabora Online.
+    if args.onion_url:
         input_data["onion_url"] = args.onion_url
 
     apk_script = Script(
