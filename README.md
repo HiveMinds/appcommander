@@ -125,6 +125,8 @@ pip install twine
 Followed by updating the package with:
 
 ```bash
+rm -r dist
+rm -r build
 python3 setup.py sdist bdist_wheel
 python -m twine upload dist/\*
 ```
