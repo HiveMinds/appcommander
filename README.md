@@ -149,6 +149,7 @@ If you want to quickly test if your changes work, you can go into the root dir
 of this project and run:
 
 ```bash
+python3 setup.py sdist bdist_wheel
 pip install -e .
 ```
 
