@@ -60,5 +60,9 @@ class Screen_flow:
 
         # Screen 6: set the name of the Nextcloud account in DAVx5.
         self.G.add_edge(6, 7, actions=[0])
+        self.G.add_edge(6, 8, actions=[0])
 
+        # Screen 7 set permissions.
         self.G.add_edge(7, 8, actions=[0])
+        
+        # Screen 8: toggle calendar sync on for respective calendars.

@@ -39,13 +39,17 @@ def install_self_signed_root_ca_on_android(
 
 
 @typechecked
-def get_calendar_names(
+def get_unsynced_get_calendar_names(
     sub_screen_dict: Dict,
 ) -> List[str]:
     """Returns the list of the calendar names that are to be synced."""
     calendar_names_list: List[str] = []
     calendar_list = sub_screen_dict["node"]["node"]
     for index in list(range(0, len(calendar_list))):
+        print(f'calendar_list[index]["node"][1]={calendar_list[index]["node"][1]}')
         calendar_name = calendar_list[index]["node"][1]["@text"]
-        calendar_names_list.append(calendar_name)
+        
+        # Only add calendar names that are not enabled/toggled on.
+        if calendar_list[index]["node"][1]["@checked"] == "false":
+            calendar_names_list.append(calendar_name)
     return calendar_names_list
