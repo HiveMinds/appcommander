@@ -22,7 +22,9 @@ def install_self_signed_root_ca_on_android(
     # Verify the file exists.
     for filepath in [bash_script_path, ca_local_filepath]:
         if not Path(filepath).is_file():
-            raise Exception(f"Error, filepath:{filepath} does not exist.")
+            raise FileNotFoundError(
+                f"Error, filepath:{filepath} does not exist."
+            )
 
     # TODO: execute commands individually with intermediate Python
     # verification, instead of in Bash script.
@@ -46,9 +48,11 @@ def get_unsynced_get_calendar_names(
     calendar_names_list: List[str] = []
     calendar_list = sub_screen_dict["node"]["node"]
     for index in list(range(0, len(calendar_list))):
-        print(f'calendar_list[index]["node"][1]={calendar_list[index]["node"][1]}')
+        print(
+            f'cal,,_list[index]["node"][1]={calendar_list[index]["node"][1]}'
+        )
         calendar_name = calendar_list[index]["node"][1]["@text"]
-        
+
         # Only add calendar names that are not enabled/toggled on.
         if calendar_list[index]["node"][1]["@checked"] == "false":
             calendar_names_list.append(calendar_name)

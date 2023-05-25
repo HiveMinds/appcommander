@@ -28,7 +28,7 @@ def assert_phone_is_connected() -> None:
                     found_device = True
 
     if not found_device:
-        raise Exception("Error, no adb dev is found.")
+        raise ConnectionError("Error, no adb dev is found.")
 
     # TODO: check if more than one devs are connected, and if yes, raise
     # exception if user did not specify the desired dev name.
@@ -51,7 +51,7 @@ def assert_app_is_installed(package_name: str) -> None:
     )
 
     if package_name not in installed_packages:
-        raise Exception(
+        raise LookupError(
             f"Error, the app:'{package_name}' with package name:'"
             + f"{package_name}', is not yet installed:"
             + f"{sorted(installed_packages)}"

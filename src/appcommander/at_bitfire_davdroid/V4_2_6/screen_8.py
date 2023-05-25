@@ -8,7 +8,9 @@ import networkx as nx
 from typeguard import typechecked
 from uiautomator import AutomatorDevice
 
-from appcommander.at_bitfire_davdroid.V4_2_6.helper import get_unsynced_get_calendar_names
+from appcommander.at_bitfire_davdroid.V4_2_6.helper import (
+    get_unsynced_get_calendar_names,
+)
 from appcommander.helper import get_screen_as_dict
 from appcommander.org_torproject_android.V16_6_3_RC_1.helper import (
     get_torified_item_index_dict,
@@ -100,7 +102,9 @@ def actions_0(dev: AutomatorDevice, screen: Screen, script: Script) -> Dict:
         required_object, unpacked_screen_dict, {}
     )
 
-    unsynced_cal_names = get_unsynced_get_calendar_names(sub_screen_dict=item_dict)
+    unsynced_cal_names = get_unsynced_get_calendar_names(
+        sub_screen_dict=item_dict
+    )
     for calendar_name in unsynced_cal_names:
         dev(text=calendar_name).click()
 

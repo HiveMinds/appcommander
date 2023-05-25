@@ -79,5 +79,5 @@ def process_args(args: argparse.Namespace) -> None:
         )
 
         run_script(apk_script, device)
-        print(f'OUT run_script')
+        print("OUT run_script")
     print("SOMETHING")

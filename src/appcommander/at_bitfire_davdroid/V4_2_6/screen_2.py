@@ -68,7 +68,7 @@ def actions_0(dev: AutomatorDevice, screen: Screen, script: Script) -> Dict:
     request".
     """
     # TODO: Was not able to connect to tor. Restart orbot and try again.
-    raise Exception(
+    raise ConnectionError(
         "Error, was not able to connect to TOR server, please:"
         + " Ensure your Nextcloud server is running and reachable over tor,"
         + " and ensure Orbot is torifying DAVx5, and connected to TOR."

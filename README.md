@@ -145,12 +145,31 @@ Then you can rebuild and locally re-install the `appcommander` pip package the c
 apk-ct
 ```
 
-If you want to quickly test if your changes work, you can go into the root dir
-of this project and run:
+### Updating
+
+Build the pip package with:
 
 ```bash
+pip install --upgrade pip setuptools wheel
+pip install twine
+```
+
+Install the pip package locally with:
+
+```bash
+rm -r dist
+rm -r build
 python3 setup.py sdist bdist_wheel
 pip install -e .
+```
+
+Upload the pip package to the world with:
+
+```bash
+rm -r dist
+rm -r build
+python3 setup.py sdist bdist_wheel
+python3 -m twine upload dist/\*
 ```
 
 that installs the latest changes into the pip package locally (into your conda

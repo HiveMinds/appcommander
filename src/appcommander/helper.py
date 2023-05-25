@@ -33,7 +33,9 @@ def output_json(output_dir: str, filename: str, screen_dict: Dict) -> None:
 
     # Verify the file exists.
     if not Path(output_path).is_file():
-        raise Exception(f"Error, filepath:{output_path} was not created.")
+        raise FileNotFoundError(
+            f"Error, filepath:{output_path} was not created."
+        )
 
 
 @typechecked
@@ -42,7 +44,9 @@ def load_json_file_into_dict(
 ) -> Dict:
     """Loads a json file into dict from a filepath."""
     if not Path(json_filepath).is_file():
-        raise Exception(f"Error, filepath does not exist:{json_filepath}")
+        raise FileNotFoundError(
+            f"Error, filepath does not exist:{json_filepath}"
+        )
 
     with open(json_filepath, encoding="utf-8") as json_file:
         the_dict = json.load(json_file)
@@ -56,7 +60,9 @@ def make_path_if_not_exists(path: str) -> None:
     if not os.path.exists(path):
         os.makedirs(path)
     if not os.path.exists(path):
-        raise Exception(f"Error, path:{path} did not exist after creation.")
+        raise FileExistsError(
+            f"Error, path:{path} did not exist after creation."
+        )
 
 
 @typechecked
@@ -139,7 +145,6 @@ def export_screen_data(
     for extension in [".json", ".png"]:
         output_path = f"{output_dir}{output_name}{extension}"
         if not Path(output_path).is_file() or overwrite:
-
             if extension == ".json":
                 if screen_dict == {}:
                     screen_dict = get_screen_as_dict(
@@ -155,7 +160,9 @@ def export_screen_data(
 
         # Verify the file exists.
         if not Path(output_path).is_file():
-            raise Exception(f"Error, filepath:{output_path} was not created.")
+            raise FileNotFoundError(
+                f"Error, filepath:{output_path} was not created."
+            )
 
 
 @typechecked
@@ -207,7 +214,6 @@ def is_expected_screen(
             return False
         # Retry and return True if the required objects were found.
         for _ in range(0, expected_screen.max_retries):
-
             # Reload the screen data again.
             unpacked_screen_dict = get_screen_as_dict(
                 dev=dev,

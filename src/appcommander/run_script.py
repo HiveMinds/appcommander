@@ -83,7 +83,6 @@ def run_script(script: Script, dev: AutomatorDevice) -> None:
 
         # Perform next action.
         if next_actions is not None:
-
             # Compose the information needed for the actions.
 
             # Perform the actual action.

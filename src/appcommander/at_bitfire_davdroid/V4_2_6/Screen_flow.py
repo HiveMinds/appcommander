@@ -64,5 +64,5 @@ class Screen_flow:
 
         # Screen 7 set permissions.
         self.G.add_edge(7, 8, actions=[0])
-        
+
         # Screen 8: toggle calendar sync on for respective calendars.

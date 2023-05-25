@@ -44,15 +44,14 @@ class Screen:
 
         self.is_start = is_start
         self.max_retries: int = max_retries
-
         """Sets the required objects for this screen.
 
         (If these objects are not found within the screen information
-        returned by the dev, the screen will not be recogniszed. If
-        it is, the screen is recognised by the: is_expected_screen function.
+        returned by the dev, the screen will not be recogniszed. If it
+        is, the screen is recognised by the: is_expected_screen
+        function.
         """
         self.required_objects: List[Dict[str, str]] = required_objects
-
         """Some buttons/obtjects in the screen may appear depending on
         parameters that are not predictable in advance, e.g. whether some
         server responds or not.

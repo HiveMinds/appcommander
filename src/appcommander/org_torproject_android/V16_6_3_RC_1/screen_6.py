@@ -90,7 +90,6 @@ def actions_0(dev: AutomatorDevice, screen: Screen, script: Script) -> Dict:
             f"Error, torifying_apps not specified:{torifying_apps}"
         )
     for app_name, _ in torifying_apps.items():
-
         # Refresh the Orbot settings screen.
         dev(descriptionMatches="Refresh Apps").click()
 

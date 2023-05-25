@@ -90,7 +90,6 @@ def current_screen_is_expected(
             retry=retry,
             unpacked_screen_dict=unpacked_screen_dict,
         ):
-
             return (
                 True,
                 int(str(expected_screen.screen_nr)),

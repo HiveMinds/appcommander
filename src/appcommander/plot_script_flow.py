@@ -205,7 +205,6 @@ def set_node_images(
         if Path(img_path).is_file():
             icons[screen_nr] = img_path
         else:
-
             icons[screen_nr] = "Unknown_screen.png"
 
         # TODO: verify file exists, use dummy file otherwise.

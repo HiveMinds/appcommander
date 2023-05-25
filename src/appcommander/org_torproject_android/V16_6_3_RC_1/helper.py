@@ -22,7 +22,8 @@ def get_torified_item_index_dict(
 ) -> Dict:  # -> Dict[str, str]:
     """Parses the screen dictionary and returns the index of the item of the
     app that you want to torify. The item is found by checking if it has a
-    "node" key, which has a List of 3 elements as value (each in the form of a
+    "node" key, which has a List of 3 elements as value (each in the form of a.
+
     dict):
      - the app icon.
      - the app name
@@ -32,7 +33,8 @@ def get_torified_item_index_dict(
     that app in the Orbot configuration/torify apps screen. This method returns
     the complete item dictionary including the 3 node children.
 
-    It recursively looks through the screen dict until it has found the app."""
+    It recursively looks through the screen dict until it has found the app.
+    """
 
     if dict_contains_other_dict(required_object, unpacked_screen_dict):
         return cast(Dict, parent_dict)
@@ -49,7 +51,6 @@ def get_torified_item_index_dict(
                     parent_dict=unpacked_screen_dict,
                 )
         if isinstance(unpacked_screen_dict["node"], List):
-
             # A item in the Orbot app consists of an icon, app_name and
             # checkbox. So if the length of this node List is three, and it
             # contains the app name in the dict of the first index of the list
