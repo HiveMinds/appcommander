@@ -52,7 +52,8 @@ def screen_8() -> Screen:
         required_objects: List[Dict[str, str]],
         optional_objects: List[Dict[str, str]],
         script: Script,
-    ) -> Union[Callable[[AutomatorDevice, Screen, Script], Dict], None]:
+        # ) -> Union[Callable[[AutomatorDevice, Screen, Script], Dict], None]:
+    ) -> Union[Callable, None]:
         """Looks at the required objects and optional objects and determines
         which actions to take next.
         An example of the next actions could be the following List:
