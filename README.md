@@ -169,7 +169,7 @@ Upload the pip package to the world with:
 ```bash
 rm -r dist
 rm -r build
-python3 setup.py sdist bdist_wheel
+python -m build
 python3 -m twine upload dist/\*
 ```
 
