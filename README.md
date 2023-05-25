@@ -44,6 +44,7 @@ Connect your phone, and tell this code which app you want to automate, and how:
 
 ```bash
 python -m src.appcommander -a org.torproject.android -v "16.6.3 RC 1" -t "DAVx5"
+appcommander -a org.torproject.android -v "16.6.3 RC 1" -t DAVx5
 ```
 
 which is the same as:
@@ -159,7 +160,7 @@ Install the pip package locally with:
 ```bash
 rm -r dist
 rm -r build
-python3 setup.py sdist bdist_wheel
+python -m build
 pip install -e .
 ```
 
