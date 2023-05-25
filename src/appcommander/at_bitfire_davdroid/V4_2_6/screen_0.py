@@ -75,6 +75,17 @@ def actions_0(dev: AutomatorDevice, screen: Screen, script: Script) -> Dict:
     request".
     """
 
+    # Override the base url without port, to the base url with port.
+    onion_url_with_port: str = (
+        f"https://{script.input_data.onion_url}:"
+        + f"{script.input_data.external_nextcloud_port}/remote.php"
+        + f"/dav/principals/users/{script.input_data.nextcloud_username}"
+    )
+    # TODO: include verification that the url in text box is as expected.
+    dev(resourceId="at.bitfire.davdroid:id/loginUrlBaseUrlEdittext").set_text(
+        onion_url_with_port
+    )
+
     # Click the ok button.
     dev(resourceId="at.bitfire.davdroid:id/login").click()
 
