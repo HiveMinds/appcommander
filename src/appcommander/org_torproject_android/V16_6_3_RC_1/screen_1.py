@@ -52,8 +52,6 @@ def screen_1() -> Screen:
         Then the app goes to the next screen and waits a pre-determined
         amount, and optionally retries a pre-determined amount of attempts.
         """
-        print("STOP")
-        print(type(actions_0))
         return actions_0
 
     return Screen(

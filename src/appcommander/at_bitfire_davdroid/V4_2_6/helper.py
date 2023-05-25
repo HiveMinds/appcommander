@@ -48,9 +48,6 @@ def get_unsynced_get_calendar_names(
     calendar_names_list: List[str] = []
     calendar_list = sub_screen_dict["node"]["node"]
     for index in list(range(0, len(calendar_list))):
-        print(
-            f'cal,,_list[index]["node"][1]={calendar_list[index]["node"][1]}'
-        )
         calendar_name = calendar_list[index]["node"][1]["@text"]
 
         # Only add calendar names that are not enabled/toggled on.
