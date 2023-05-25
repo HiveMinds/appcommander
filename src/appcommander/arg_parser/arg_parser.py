@@ -40,6 +40,15 @@ def parse_cli_args() -> argparse.Namespace:
 
     # Take a screenshot and store the UI information in a .json file.
     parser.add_argument(
+        "-ep",
+        "--external-nextcloud-port",
+        action="store",
+        type=int,
+        help=("Specify the port on which Nextcloud is reachable (over tor)."),
+    )
+
+    # Take a screenshot and store the UI information in a .json file.
+    parser.add_argument(
         "-f",
         "--export_script_flow",
         action="store_true",

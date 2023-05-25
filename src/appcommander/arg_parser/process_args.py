@@ -39,6 +39,8 @@ def process_args(args: argparse.Namespace) -> None:
         # Collabora Online.
     if args.onion_url:
         input_data["onion_url"] = args.onion_url
+    if args.external_nextcloud_port:
+        input_data["external_nextcloud_port"] = args.external_nextcloud_port
 
     apk_script = Script(
         app_name=app_name,

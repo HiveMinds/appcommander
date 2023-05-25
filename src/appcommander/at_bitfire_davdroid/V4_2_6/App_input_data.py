@@ -15,12 +15,14 @@ class App_input_data:
         nextcloud_password: str,
         nextcloud_username: str,
         onion_url: str,
+        external_nextcloud_port: int,
     ) -> None:
         """Creates the networkx graph with the screen nrs as nodes, and the
         action lists as edges."""
         self.nextcloud_password: str = nextcloud_password
         self.nextcloud_username: str = nextcloud_username
         self.onion_url: str = onion_url
+        self.external_nextcloud_port: int = external_nextcloud_port
 
     @typechecked
     def launch_app(
@@ -35,7 +37,7 @@ class App_input_data:
         command = (
             "adb shell am start -a android.intent.action.VIEW -d caldavs://"
             + f"{self.nextcloud_username}:{self.nextcloud_password}@"
-            + f"{self.onion_url}/remote.php"
+            + f"{self.onion_url}:{self.external_nextcloud_port}/remote.php"
             + f"/dav/principals/users/{self.nextcloud_username}"
         )
 
